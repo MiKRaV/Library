@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>by.htp.library</groupId>
+  <artifactId>LibraryWeb</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>dao</module>
+    <module>service</module>
+    <module>web</module>
+  </modules>
+  <packaging>pom</packaging>
+
+  <name>LibraryWeb</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.1</version>
+        <executions>
+          <execution>
+            <id>deploy-to-integrationtest</id>
+            <goals>
+              <goal>redeploy-only</goal>
+            </goals>
+            <phase>deploy</phase>
+            <configuration>
+              <url>http://localhost:8080/manager</url>
+              <server>myserver</server>
+              <path>/${project.build.finalName}</path>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
