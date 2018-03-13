@@ -5,7 +5,11 @@
              version="2.0">
     <persistence-unit name="by.htp.library" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>by.htp.library.pojos.User</class>
+        <class>by.htp.library.pojo.User</class>
+        <class>by.htp.library.pojo.UserData</class>
+        <class>by.htp.library.pojo.Author</class>
+        <class>by.htp.library.pojo.Book</class>
+        <class>by.htp.library.pojo.Genre</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
@@ -14,6 +18,26 @@
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value="Mkr73091"/>
             <property name="hibernate.dialect.storage_engine" value="innodb"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.connection.pool_size" value="10"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="by.htp.library.test" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>by.htp.library.pojo.User</class>
+        <class>by.htp.library.pojo.UserData</class>
+        <class>by.htp.library.pojo.Author</class>
+        <class>by.htp.library.pojo.Book</class>
+        <class>by.htp.library.pojo.Genre</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:libtest"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
             <property name="hibernate.use_sql_comments" value="true"/>
             <property name="hibernate.show_sql" value="true"/>
