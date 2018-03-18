@@ -1,8 +1,7 @@
-package by.htp.library.pojo;
+package by.htp.library.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -21,8 +20,8 @@ public class UserData {
             strategy = "foreign",
             parameters = @Parameter(name = "property", value = "user"))
     @GeneratedValue(generator = "one-one")
-    @Column(name = "F_LOGIN")
-    private String login;
+    @Column(name = "F_USER_ID")
+    private Integer id;
 
     @Column(name = "F_NAME")
     private String name;
@@ -30,7 +29,7 @@ public class UserData {
     @Column(name = "F_SURNAME")
     private String surname;
 
-    @Column(name = "F_EMAIL")
+    @Column(name = "F_EMAIL" , unique = true)
     private String email;
 
     @Column(name = "F_COUNT_BOOK")
@@ -49,7 +48,7 @@ public class UserData {
         if (getClass() != obj.getClass())
             return false;
         UserData other = (UserData) obj;
-        if (!login.equals(other.login))
+        if (!id.equals(other.id))
             return false;
         if (!name.equals(other.name))
             return false;
@@ -66,7 +65,7 @@ public class UserData {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + login.hashCode();
+        result = prime * result + id.hashCode();
         result = prime * result + name.hashCode();
         result = prime * result + surname.hashCode();
         result = prime * result + email.hashCode();
@@ -76,7 +75,7 @@ public class UserData {
 
     @Override
     public String toString() {
-        return "UserData[login=" + login + ", name=" + name + ", surname=" + surname +
+        return "UserData[id=" + id + ", name=" + name + ", surname=" + surname +
                 ", email=" + email + ", countBook=" + countBook + "]";
     }
 }

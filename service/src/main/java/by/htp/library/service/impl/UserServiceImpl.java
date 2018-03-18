@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void registration(User user) throws ServiceException {
 		// validation
+		/*
 		if(!validator.validate(user.getLogin(), UserParameters.LOGIN)) {
 			throw new ServiceException("Incorrect login");
 		} else if(!validator.validate(user.getPassword(), UserParameters.PASSWORD)) {
@@ -61,6 +62,7 @@ public class UserServiceImpl implements UserService {
 		} catch (DAOException e) {
 			throw new ServiceException("Registration failed: " + e.getMessage(), e);
 		}
+		*/
 	}
 	
 	//��������� ������ ���� �������������

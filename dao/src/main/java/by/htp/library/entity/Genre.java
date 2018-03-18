@@ -1,4 +1,4 @@
-package by.htp.library.pojo;
+package by.htp.library.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

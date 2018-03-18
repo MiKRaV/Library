@@ -1,7 +1,7 @@
-package by.htp.library.pojo;
+package by.htp.library.entity;
 
 import by.htp.library.dao.util.EMUtil;
-import by.htp.library.pojo.helper.UserHelper;
+import by.htp.library.entity.helper.UserHelper;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,14 +14,14 @@ public class UserTest {
     public void crudTest() {
         EntityManager em = EMUtil.getEntityManager("by.htp.library.test");
         em.getTransaction().begin();
-        User user = new User("MiKRaV", "123456", UserHelper.TYPE_ADMIN, UserHelper.STATUS_ACTIVE, null);
+        User user = new User(null,"MiKRaV", "123456", UserHelper.TYPE_ADMIN, UserHelper.STATUS_ACTIVE, null);
         UserData userData = new UserData(null, "Mikhail", "Kravchenya",
                 "mkravchenya@mail.ru", 0,  user);
         user.setUserData(userData);
         em.persist(user);
         em.getTransaction().commit();
         em.clear();
-        String userID = user.getLogin();
+        int userID = user.getId();
         User userFromDB = em.find(User.class, userID);
         Assert.assertEquals(user.getLogin(), userFromDB.getLogin());
 

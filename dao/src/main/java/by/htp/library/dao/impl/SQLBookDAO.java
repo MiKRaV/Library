@@ -15,14 +15,16 @@ import by.htp.library.dao.helper.DAOBookHelper;
 
 public class SQLBookDAO implements BookDAO {
 
-	private ConnectionPool conPool = ConnectionPool.getConnectionPool();
+	private ConnectionPool conPool;
+			//conPool = ConnectionPool.getConnectionPool();
 
 	//ДОБАВЛЕНИЕ КНИГИ
 	public void addBook(Book book) throws DAOException {
+		/*
 		Connection con = null;
 		
 		String title = book.getTitle();
-		ArrayList<Author> authors = book.getAuthors(); 
+		ArrayList<Author> authors = book.getAuthors();
 		
 		if(isBookExist(title, authors)) {
 			throw new DAOException("This book already exist");
@@ -73,7 +75,7 @@ public class SQLBookDAO implements BookDAO {
 		} finally {
 			conPool.putback(con);
 		}
-		
+		*/
 	}
 
 	public List<Book> searchBookByTitle(String title) throws DAOException {
@@ -83,6 +85,7 @@ public class SQLBookDAO implements BookDAO {
 
 	//ПОЛУЧЕНИЕ СПИСКА ВСЕХ КНИГ
 	public List<Book> getAllBooks() throws DAOException {
+		/*
 		Connection con = null;
 		ArrayList<Book> bookList = null;
 
@@ -123,6 +126,9 @@ public class SQLBookDAO implements BookDAO {
 		}
 
 		return bookList;
+		*/
+		//stub
+		return null;
 	}
 
 	//ПРОВЕРКА, СУЩЕСТВУЕТ ЛИ АВТОР
@@ -161,6 +167,7 @@ public class SQLBookDAO implements BookDAO {
 
 	//ПРОВЕРКА, СУЩЕСТВУЕТ ЛИ КНИГА
 	public boolean isBookExist(String title, List<Author> authors) throws DAOException {
+		/*
 		Connection con = null;
 		
 		try {
@@ -192,47 +199,14 @@ public class SQLBookDAO implements BookDAO {
     			}
 			}
 			
-			/*
-			PreparedStatement pstmtBook = con.prepareStatement("SELECT * FROM books");
-	    	ResultSet rsBook = pstmtBook.executeQuery();
-	    	String idBook = "";
-	    	int countAuthors;
-	    	
-	    	while(rsBook.next()) {
-	    		if (rsBook.getString("title").equals(title)) {
-        			idBook = rsBook.getString("id_book");
-        			PreparedStatement pstmtAuthors = con.prepareStatement("SELECT * " + 
-        					"FROM authors" + 
-        					"WHERE id_author IN" + 
-        					"(SELECT id_author FROM books_authors WHERE id_book = ?)");
-        			pstmtAuthors.setString(1, idBook);
-        			ResultSet rsAuthors = pstmtAuthors.executeQuery();
-        			countAuthors = 0;
-        			
-        			while(rsAuthors.next()) {
-        				String surname = rsAuthors.getString("surname");
-        				String name = rsAuthors.getString("name");
-        				
-        				for(Author author : authors) {
-            				if(surname.equals(author.getSurname()) && name.equals(author.getName())) {
-            					countAuthors++;
-            					break;
-            				}
-            			}
-        			}
-        			
-        			if(countAuthors == authors.size()) {
-        				return true;
-        			}
-        		}
-	    	}
-	    	*/
+
 	    	
 		} catch (SQLException e) {
 			throw new DAOException("Sorry", e);
 		} finally {
 			conPool.putback(con);
         }
+        */
 		
 		return false;
 	}

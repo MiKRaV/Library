@@ -1,8 +1,6 @@
-package by.htp.library.pojo;
+package by.htp.library.entity;
 
 import by.htp.library.dao.util.EMUtil;
-import by.htp.library.pojo.Author;
-import by.htp.library.pojo.Book;
 import org.junit.Assert;
 import org.junit.Test;
 

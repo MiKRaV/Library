@@ -1,19 +1,55 @@
 package by.htp.library.dao.impl;
 
-import by.htp.library.dao.DAO;
+import by.htp.library.dao.BaseDAO;
+import by.htp.library.dao.DAOFactory;
 import by.htp.library.dao.exception.DAOException;
+import by.htp.library.dao.helper.BaseDAOHelper;
 import by.htp.library.dao.util.EMUtil;
-import by.htp.library.pojo.Author;
-import by.htp.library.pojo.Book;
+import by.htp.library.entity.Author;
+import by.htp.library.entity.Book;
+import by.htp.library.entity.User;
+import by.htp.library.entity.UserData;
+import by.htp.library.entity.helper.UserHelper;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.List;
 
-public class DAOImplTest {
-    DAO dao = new DAOImpl();
+public class BaseDAOImplTest {
+    BaseDAO baseDao;
     EntityManager em;
+
+    @Before
+    public void init() {
+        baseDao = DAOFactory.getInstance().getBaseDAO();
+        em = EMUtil.getEntityManager("by.htp.library.test");
+
+        User user1 = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
+                UserHelper.STATUS_ACTIVE, null);
+        UserData userData1 = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", 3, user1);
+        user1.setUserData(userData1);
+
+        User user2 = new User(null, "Ivanchik", "123456", UserHelper.TYPE_READER,
+                UserHelper.STATUS_ACTIVE, null);
+        UserData userData2 = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", 6, user2);
+        user2.setUserData(userData2);
+
+        User user3 = new User(null, "Vovchik", "123456", UserHelper.TYPE_READER,
+                UserHelper.STATUS_ACTIVE, null);
+        UserData userData3 = new UserData(null, "Vladimir", "Vladimirov", "vovchik@mail.ru", 1, user3);
+        user3.setUserData(userData3);
+
+        em.getTransaction().begin();
+        em.persist(user1);
+        em.persist(user2);
+        em.persist(user3);
+        em.getTransaction().commit();
+
+        em.close();
+    }
 
     @Test
     public void addTest() {
@@ -25,11 +61,10 @@ public class DAOImplTest {
         book.getAuthors().add(author1);
         book.getAuthors().add(author2);
         try {
-            dao.add(book);
+            baseDao.add(book);
         } catch (DAOException e) {
             e.printStackTrace();
         }
-        em = EMUtil.getEntityManager("by.htp.library.test");
         Book bookFromDB = em.find(Book.class, book.getId());
         Assert.assertEquals(book.getTitle(), bookFromDB.getTitle());
 
@@ -46,14 +81,13 @@ public class DAOImplTest {
         Author author2 = new Author(null, "Bert", "Bates", books);
         book.getAuthors().add(author1);
         book.getAuthors().add(author2);
-        em = EMUtil.getEntityManager("by.htp.library.test");
         em.getTransaction().begin();
         em.persist(book);
         em.getTransaction().commit();
         em.clear();
         Book bookFromDB;
         try {
-            bookFromDB = (Book) dao.find(Book.class, book.getId());
+            bookFromDB = (Book) baseDao.find(Book.class, book.getId());
             Assert.assertNotNull(bookFromDB);
         } catch (DAOException e) {
             e.printStackTrace();
@@ -63,8 +97,21 @@ public class DAOImplTest {
     }
 
     @Test
+    public void findAllTest() {
+        List<User> users = null;
+        try {
+            users = baseDao.findAll(User.class, 1, 2);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
+        for (User user : users) {
+            System.out.println(user + " " + user.getUserData());
+        }
+    }
+
+    @Test
     public void changeTest() {
-        em = EMUtil.getEntityManager("by.htp.library.test");
         ArrayList<Book> books = new ArrayList<>();
         Book book = new Book("Head First Java");
         books.add(book);
@@ -79,7 +126,7 @@ public class DAOImplTest {
         em.clear();
         book.getAuthors().get(0).setName("Gosha");
         try {
-            dao.change(book);
+            baseDao.change(book);
         } catch (DAOException e) {
             e.printStackTrace();
         }
@@ -93,7 +140,6 @@ public class DAOImplTest {
 
     @Test
     public void removeTest() {
-        em = EMUtil.getEntityManager("by.htp.library.test");
         ArrayList<Book> books = new ArrayList<>();
         Book book = new Book("Head First Java");
         books.add(book);
@@ -109,7 +155,7 @@ public class DAOImplTest {
         Integer bookID = book.getId();
         Book bookFromBD = em.find(Book.class, bookID);
         try {
-            dao.remove(bookFromBD);
+            baseDao.remove(bookFromBD);
         } catch (DAOException e) {
             e.printStackTrace();
         }

@@ -1,353 +1,175 @@
 package by.htp.library.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
+
+import by.htp.library.dao.util.EMUtil;
 import by.htp.library.entity.User;
 import by.htp.library.dao.UserDAO;
-import by.htp.library.dao.db.ConnectionPool;
 import by.htp.library.dao.exception.DAOException;
-import by.htp.library.dao.helper.DAOUserHelper;
-import by.htp.library.entity.UserParameters;
+import by.htp.library.dao.helper.UserDAOHelper;
+import by.htp.library.entity.UserData;
+import by.htp.library.entity.helper.UserHelper;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.*;
 
 public class SQLUserDAO implements UserDAO{
 	
-	private ConnectionPool conPool = ConnectionPool.getConnectionPool();
+	private by.htp.library.dao.BaseDAO baseDAO = new BaseDAOImpl();
+	private EntityManager em = EMUtil.getEntityManager();
+	private CriteriaBuilder cb = em.getCriteriaBuilder();
 
-	//��������� ������������
+	//LOGINATION
+	@Override
 	public User logination(String login, String password) throws DAOException {
-		Connection con = null;
-		User user = null;
-		
+		User user;
+
+		if(!isUserExist(login)) {
+			throw new DAOException(UserDAOHelper.MESSAGE_USER_DOES_NOT_EXIST);
+		}
+
+		CriteriaQuery<User> criteria = cb.createQuery(User.class);
+		Root<User> userRoot = criteria.from(User.class);
+		Predicate predicate = cb.and(
+				cb.equal(userRoot.get(UserHelper.LOGIN), login),
+				cb.equal(userRoot.get(UserHelper.PASSWORD), password)
+		);
+		criteria.select(userRoot).where(predicate);
+
 		try {
-			con = conPool.retrieve();
-			
-			if(!isUserExist(login)) {
-				throw new DAOException("Such a user does not exist");
-			}
-			
-			PreparedStatement pstmt = con.prepareStatement(DAOUserHelper.SELECT_FULL_USER_DATA_BY_LOGIN);
-			pstmt.setString(1, login);
-        	ResultSet rs = pstmt.executeQuery();
-        	rs.next();
-        	
-        	if(rs.getString(DAOUserHelper.PASSWORD).equals(password)) {
-    			String name = rs.getString(DAOUserHelper.NAME);
-				String surname = rs.getString(DAOUserHelper.SURNAME);
-				String email = rs.getString(DAOUserHelper.EMAIL);
-				String userType = rs.getString(DAOUserHelper.TYPE);
-				int countBook = Integer.parseInt(rs.getString(DAOUserHelper.COUNT_BOOK));
-				String userStatus = rs.getString(DAOUserHelper.USER_STATUS);
-				user = new User(login, password, name, surname, email, userType, countBook, userStatus);
-    			
-    			rs.close();
-                pstmt.close();
-    		} else {
-    			rs.close();
-                pstmt.close();
-    			throw new DAOException("Inavalid password");
-    		}
-            
-        } catch (SQLException e) {
-        	throw new DAOException("Sorry", e);
-        } finally {
-            conPool.putback(con);
-        }
-		
+			user = em.createQuery(criteria).getSingleResult();
+		} catch (NoResultException e) {
+			throw new DAOException(UserDAOHelper.MESSAGE_INVALID_PASSWORD);
+		}
+
 		return user;
 	}
 
-	//����������� ������������
+	//REGISTRATION
+	@Override
 	public void registration(User user) throws DAOException {
-		Connection con = null;
-		String email = user.getEmail();
-		
 		if(isUserExist(user.getLogin())) {
-			throw new DAOException("User alreay exist");
+			throw new DAOException(UserDAOHelper.MESSAGE_USER_EXIST);
 		}
-		
-		try {
-			con = conPool.retrieve();
-			
-			PreparedStatement pstmt = con.prepareStatement(DAOUserHelper.SELECT_EMAIL_BY_EMAIL);
-			pstmt.setString(1, email);
-        	ResultSet rs = pstmt.executeQuery();
-        	
-        	if(rs.next() && rs.getString(DAOUserHelper.EMAIL).equals(email)) {
-        		throw new DAOException("This e-mail is already registered. Please use another e-mail.");
-        	}
-        	
-        	con.setAutoCommit(false);
-        	pstmt = con.prepareStatement(DAOUserHelper.START_TRANSACTION);
-        	pstmt.executeUpdate();
-        	
-        	pstmt = con.prepareStatement(DAOUserHelper.INSERT_USERS);
-        	pstmt.setString(1, user.getLogin());
-        	pstmt.setString(2, user.getPassword());
-        	pstmt.executeUpdate();
-        	
-        	pstmt = con.prepareStatement(DAOUserHelper.INSERT_USERS_DATA);
-        	pstmt.setString(1, user.getName());
-        	pstmt.setString(2, user.getSurname());
-        	pstmt.setString(3, user.getEmail());
-        	pstmt.setString(4, user.getUserType());
-        	pstmt.setString(5, Integer.toString(user.getCountBook()));
-        	pstmt.setString(6, user.getUserStatus());
-        	pstmt.executeUpdate();
-        	
-        	con.commit();
-        	
-        	System.out.println("Registration was succesfully!");
-        	
-        	rs.close();
-            pstmt.close();
-            
-        } catch (SQLException e) {
-        	try {
-				con.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-        	throw new DAOException("Sorry", e);
-        } finally {
-        	conPool.putback(con);
-        }
-	}
-	
-	//��������� ������ �������������
-	public ArrayList<User> getAllUsersList() throws DAOException {
-		Connection con = null;
-		ArrayList<User> userList = null;
-		
-		try {
-			con = conPool.retrieve();
-			
-			userList = new ArrayList<User>();
-			
-			PreparedStatement pstmtUser = con.prepareStatement(DAOUserHelper.SELECT_ALL_USERS);
-			ResultSet rsUser = pstmtUser.executeQuery();
-			
-			while(rsUser.next()) {
-				String login = rsUser.getString(DAOUserHelper.LOGIN);
-				String password = rsUser.getString(DAOUserHelper.PASSWORD);
-				String name = rsUser.getString(DAOUserHelper.NAME);
-				String surname = rsUser.getString(DAOUserHelper.SURNAME);
-				String email = rsUser.getString(DAOUserHelper.EMAIL);
-				String userType = rsUser.getString(DAOUserHelper.TYPE);
-				userList.add(new User(login, password, name, surname, email, userType));
-			}
-			
-		} catch (SQLException e) {
-			throw new DAOException("Sorry! Error when retrieving user list.", e);
-		} finally {
-			conPool.putback(con);
-        }
-		
-		return userList;
-	}
-	
-	//�������� ������������
-	public void removeUser(String login) throws DAOException {
-		Connection con = null;
-		
-		if(!isUserExist(login)) {
-			throw new DAOException("Such a user does not exist");
+
+		CriteriaQuery<User> criteria = cb.createQuery(User.class);
+		Root<User> root = criteria.from(User.class);
+		Join<User, UserData> userDataJoin = root.join(UserHelper.USER_DATA);
+		criteria.where(cb.equal(userDataJoin.get(UserHelper.EMAIL) , user.getUserData().getEmail()));
+		List<User> users = em.createQuery(criteria).getResultList();
+
+		if (!users.isEmpty()) {
+			throw new DAOException(UserDAOHelper.MESSAGE_EMAIL_REGISTERED);
 		}
-		
-		try {
-			con = conPool.retrieve();
-			
-			PreparedStatement pstmt = con.prepareStatement(DAOUserHelper.SELECT_ID_USER_BY_LOGIN);
-			pstmt.setString(1, login);
-			ResultSet rs = pstmt.executeQuery();
-			rs.next();
-			String id = rs.getString(DAOUserHelper.ID_USER);
-			
-			con.setAutoCommit(false);
-        	pstmt = con.prepareStatement(DAOUserHelper.START_TRANSACTION);
-        	pstmt.executeUpdate();
-        	
-        	pstmt = con.prepareStatement(DAOUserHelper.DELETE_USER_DATA_BY_ID);
-			pstmt.setString(1, id);
-			pstmt.executeUpdate();
-        	
-        	pstmt = con.prepareStatement(DAOUserHelper.DELETE_USER_BY_ID);
-			pstmt.setString(1, id);
-			pstmt.executeUpdate();
-			
-			con.commit();
-			
-			rs.close();
-            pstmt.close();
-        	
-        	System.out.println("User deletion successful!");
-		} catch (SQLException e) {
-			try {
-				con.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			throw new DAOException("Sorry", e);
-		} finally {
-			conPool.putback(con);
-        }
+
+		baseDAO.add(user);
 	}
 
-	//��������, ���������� �� ������������
+	//CHEK IF THE USER EXISTS
+	@Override
 	public boolean isUserExist(String login) throws DAOException {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
+		CriteriaQuery<User> criteria = cb.createQuery(User.class);
+		Root<User> userRoot = criteria.from(User.class);
+		criteria.select(userRoot)
+				.where(cb.equal(userRoot.get(UserHelper.LOGIN), login));
 		try {
-			con = conPool.retrieve();
-			
-			pstmt = con.prepareStatement(DAOUserHelper.SELECT_LOGIN_BY_LOGIN);
-			pstmt.setString(1, login);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next() && rs.getString(DAOUserHelper.LOGIN).equals(login)) {
-				pstmt.close();
-	        	rs.close();
-				return true;
-			}
-			
-			pstmt.close();
-        	rs.close();
-        		
-		} catch (SQLException e) {
-			throw new DAOException("Sorry", e);
-		} finally {
-			conPool.putback(con);
-			
-        }
-		
-		return false;
-	}
-
-	//�������������� ������ ������������
-	@SuppressWarnings("resource")
-	public void changeUserData(User user, UserParameters data, String dataValue) throws DAOException {
-		
-		Connection con = null;
-		
-		try {
-			con = conPool.retrieve();
-			PreparedStatement pstmt = con.prepareStatement(DAOUserHelper.SELECT_ID_USER_BY_LOGIN);
-			pstmt.setString(1, user.getLogin());
-			ResultSet rs = pstmt.executeQuery();
-			rs.next();
-			String id = rs.getString(DAOUserHelper.ID_USER);
-			
-			switch(data) {
-			case PASSWORD:
-				pstmt = con.prepareStatement(DAOUserHelper.UPDATE_PASSWORD_BY_ID_USER);
-	        	break;
-			case NAME:
-				pstmt = con.prepareStatement(DAOUserHelper.UPDATE_NAME_BY_ID_USER);
-	        	break;
-			case SURNAME:
-				pstmt = con.prepareStatement(DAOUserHelper.UPDATE_SURNAME_BY_ID_USER);
-	        	break;
-			case EMAIL:
-				pstmt = con.prepareStatement(DAOUserHelper.UPDATE_EMAIL_BY_ID_USER);
-	        	break;
-			default:
-				break;
-			}
-			
-			pstmt.setString(1, dataValue);
-        	pstmt.setString(2, id);
-        	pstmt.executeUpdate();
-			
-			pstmt.close();
-			rs.close();
-			
-		} catch (SQLException e) {
-			throw new DAOException("Sorry! Couldn't make changes to the database", e);
-		} finally {
-			conPool.putback(con);
-        }
-		
-	}
-
-	//����� ������������ �� ������
-	public User findUserByLogin(String login) throws DAOException {
-		Connection con = null;
-		User user = null;
-		
-		if(!isUserExist(login)) {
-			throw new DAOException("Such a user does not exist");
+			em.createQuery(criteria).getSingleResult();
+		} catch (NoResultException e) {
+			return false;
 		}
-		
+		return true;
+	}
+
+	//CHEK IF THE USER DELETED
+	@Override
+	public boolean isUserRemoved(String login) throws DAOException {
+		Session session = em.unwrap(Session.class);
+		Query query = session.createQuery(UserDAOHelper.SELECT_STATUS_BY_LOGIN);
+		query.setParameter(UserHelper.LOGIN, login);
+		String status = (String) query.getSingleResult();
+		return status.equals(UserHelper.STATUS_DELETED);
+	}
+
+	//CHANGING USER DATA
+	@Override
+	public void changeUserData(User user) throws DAOException {
+		baseDAO.change(user);
+	}
+
+	//GETTING A LIST OF ALL USERS
+	@Override
+	public List<User> getAllUsersList(int pageNumber, int pageSize) throws DAOException {
+		return baseDAO.findAll(User.class, pageNumber, pageSize);
+	}
+
+	//REMOVING USER
+	@Override
+	public void removeUser(String login) throws DAOException {
+		if(!isUserExist(login)) {
+			throw new DAOException(UserDAOHelper.MESSAGE_USER_DOES_NOT_EXIST);
+		} else if (isUserRemoved(login)) {
+			throw new DAOException(UserDAOHelper.MESSAGE_USER_DELETED);
+		}
+
+		Session session = em.unwrap(Session.class);
+		Transaction transaction = session.beginTransaction();
+		Query query = session.createQuery(UserDAOHelper.UPDATE_USER_STATUS_BY_LOGIN);
+		query.setParameter(UserHelper.LOGIN, login);
+		query.setParameter(UserHelper.STATUS, UserHelper.STATUS_DELETED);
+		query.executeUpdate();
+		transaction.commit();
+	}
+
+	//USER SEARCH BY LOGIN
+	@Override
+	public User findUserByLogin(String login) throws DAOException {
+		if(!isUserExist(login)) {
+			throw new DAOException(UserDAOHelper.MESSAGE_USER_DOES_NOT_EXIST);
+		}
+
+		User user = null;
+
+		CriteriaQuery<User> criteria = cb.createQuery(User.class);
+		Root<User> userRoot = criteria.from(User.class);
+		criteria.select(userRoot)
+				.where(cb.equal(userRoot.get(UserHelper.LOGIN), login));
 		try {
-			con = conPool.retrieve();
-			
-			PreparedStatement pstmt = con.prepareStatement(DAOUserHelper.SELECT_FULL_USER_DATA_BY_LOGIN);
-			pstmt.setString(1, login);
-			ResultSet rs = pstmt.executeQuery();
-			rs.next();
-			
-			String name = rs.getString(DAOUserHelper.NAME);
-			String surname = rs.getString(DAOUserHelper.SURNAME);
-			String email = rs.getString(DAOUserHelper.EMAIL);
-			String userType = rs.getString(DAOUserHelper.TYPE);
-			int countBook = Integer.parseInt(rs.getString(DAOUserHelper.COUNT_BOOK));
-			String userStatus = rs.getString(DAOUserHelper.USER_STATUS);
-			user = new User(login, name, surname, email, userType, countBook, userStatus);
-			
-			rs.close();
-            pstmt.close();
-			
-		} catch (SQLException e) {
-			throw new DAOException("Sorry", e);
-        } finally {
-            conPool.putback(con);
-        }
-		
+			user = em.createQuery(criteria).getSingleResult();
+		} catch (NoResultException e) {
+			throw new DAOException(UserDAOHelper.MESSAGE_FAIL_USER_SEARCHING);
+		}
 		return user;
 	}
 
-	//����������/������������� ������������
+	//BLOCK/UNLOCK USER
+	@Override
 	public void blockUnlockUser(String login) throws DAOException {
-		Connection con = null;
-		
 		if(!isUserExist(login)) {
-			throw new DAOException("Such a user does not exist");
+			throw new DAOException(UserDAOHelper.MESSAGE_USER_DOES_NOT_EXIST);
+		} else if (isUserRemoved(login)) {
+			throw new DAOException(UserDAOHelper.MESSAGE_USER_DELETED);
 		}
-		
-		try {
-			con = conPool.retrieve();
-			
-			PreparedStatement pstmt = con.prepareStatement(DAOUserHelper.SELECT_FULL_USER_DATA_BY_LOGIN);
-			pstmt.setString(1, login);
-			ResultSet rs = pstmt.executeQuery();
-			rs.next();
-			
-			String id = rs.getString(DAOUserHelper.ID_USER);
-			String userStatus = rs.getString(DAOUserHelper.USER_STATUS);
-			
-			pstmt = con.prepareStatement(DAOUserHelper.UPDATE_USER_STATUS_BY_ID_USER);
-			pstmt.setString(2, id);
-			
-			if(userStatus.equals(DAOUserHelper.USER_STATUS_ACTIVE)) {
-				pstmt.setString(1, DAOUserHelper.USER_STATUS_BLOCKED);
-			} else if(userStatus.equals(DAOUserHelper.USER_STATUS_BLOCKED)) {
-				pstmt.setString(1, DAOUserHelper.USER_STATUS_ACTIVE);
-			}
-        	
-        	pstmt.executeUpdate();
-        	
-        	rs.close();
-            pstmt.close();
-		} catch (SQLException e) {
-			throw new DAOException("Sorry", e);
-		} finally {
-            conPool.putback(con);
-        }
-		
-	}
 
+		Session session = em.unwrap(Session.class);
+		Transaction transaction = session.beginTransaction();
+		Query query = session.createQuery(UserDAOHelper.SELECT_STATUS_BY_LOGIN);
+		query.setParameter(UserHelper.LOGIN, login);
+		String status = (String) query.getSingleResult();
+		query = session.createQuery(UserDAOHelper.UPDATE_USER_STATUS_BY_LOGIN);
+		query.setParameter(UserHelper.LOGIN, login);
+
+		switch (status) {
+			case UserHelper.STATUS_ACTIVE :
+				query.setParameter(UserHelper.STATUS, UserHelper.STATUS_BLOCKED);
+				break;
+			case UserHelper.STATUS_BLOCKED :
+				query.setParameter(UserHelper.STATUS, UserHelper.STATUS_ACTIVE);
+		}
+		query.executeUpdate();
+		transaction.commit();
+	}
 }

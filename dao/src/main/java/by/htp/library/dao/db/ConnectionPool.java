@@ -46,21 +46,15 @@ public class ConnectionPool {
 	private Connection getConnection() {
 		Connection con = null;
 
-
-
 		Properties properties = new Properties();
 		Thread currentTread = Thread.currentThread();
 		ClassLoader classLoader = currentTread.getContextClassLoader();
-		InputStream input = classLoader.getResourceAsStream("/properties/DB.properties");
+		InputStream input = classLoader.getResourceAsStream("/resources/properties/DB.properties");
 
-		if (input != null) {
-			try {
-				properties.load(input);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("Properties file not found!");
+		try {
+			properties.load(input);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		String url = properties.getProperty("url");
@@ -75,7 +69,7 @@ public class ConnectionPool {
 		return con;
 	}
 
-	public synchronized Connection retrieve() throws SQLException {
+	public synchronized Connection retrieve() {
 		Connection newConn = null;
 		if (availableConns.size() == 0) {
 			newConn = getConnection();

@@ -1,40 +1,35 @@
 package by.htp.library.entity;
 
-public class Author {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity @Table(name = "T_AUTHOR")
+public class Author implements Serializable {
+    @Id
+    @GeneratedValue
+    @Column(name = "F_AUTHOR_ID")
+    private Integer id;
+
+    @Column(name = "F_SURNAME")
     private String surname;
+
+    @Column(name = "F_NAME")
     private String name;
 
-    public Author() {
-        super();
-    }
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "T_AUTHOR_BOOK", joinColumns = {@JoinColumn(name = "F_AUTHOR_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "F_BOOK_ID")})
+    private List<Book> books = new ArrayList<>();
 
-    public Author(String surname, String name) {
-        super();
-        this.surname = surname;
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((surname == null) ? 0 : surname.hashCode());
-        return result;
-    }
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -44,20 +39,27 @@ public class Author {
         if (getClass() != obj.getClass())
             return false;
         Author other = (Author) obj;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
+        if (!id.equals(other.id))
             return false;
-        if (surname == null) {
-            if (other.surname != null)
-                return false;
-        } else if (!surname.equals(other.surname))
+        if (!surname.equals(other.surname))
+            return false;
+        if (!name.equals(other.name))
             return false;
         return true;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id.hashCode();
+        result = prime * result + surname.hashCode();
+        result = prime * result + name.hashCode();
+        return result;
+    }
+
     @Override
     public String toString() {
-        return "Author [surname=" + surname + ", name=" + name + "]";
+        return "Author[id=" + id.toString() + ", surname=" + surname + ", name=" + name + "]";
     }
 }
