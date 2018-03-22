@@ -8,21 +8,25 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.htp.library.controller.FrontController;
 import by.htp.library.controller.command.Command;
+import by.htp.library.controller.helper.RequestParameters;
+import by.htp.library.controller.helper.SessionAttributes;
+import by.htp.library.controller.helper.WebHelper;
 
 public class ChangeLocalCommand implements Command{
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		request.getSession(true).setAttribute("local", request.getParameter("local"));
+		request.getSession(true).setAttribute(SessionAttributes.LOCAL,
+				request.getParameter(RequestParameters.LOCAL));
 		
 		String prevUrl = "";
 		
-		if(!FrontController.isAttributeExecute(request, "url")) {
-			prevUrl = "http://localhost:8080/LybraryWeb/";
-			request.getSession(true).setAttribute("url", prevUrl);
+		if(!FrontController.isAttributeExecute(request, SessionAttributes.URL)) {
+			prevUrl = WebHelper.START_URL;
+			request.getSession(true).setAttribute(SessionAttributes.URL, prevUrl);
 		} else {
-			prevUrl = request.getSession().getAttribute("url").toString(); 
+			prevUrl = request.getSession().getAttribute(SessionAttributes.URL).toString();
 		}
 	
 		response.sendRedirect(prevUrl);

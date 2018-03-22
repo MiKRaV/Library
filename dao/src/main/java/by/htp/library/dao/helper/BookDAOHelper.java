@@ -1,6 +1,6 @@
 package by.htp.library.dao.helper;
 
-public class DAOBookHelper {
+public class BookDAOHelper {
 	
 	public static final String ID_BOOK = "id_book";
 	public static final String STATUS_BOOK = "status_book";
@@ -27,5 +27,7 @@ public class DAOBookHelper {
 			" JOIN authors USING(id_author)";
 	
 	public static final String INSERT_BOOKS = "INSERT INTO books (status_book, genre, title) VALUES (?,?,?)";
+
+	public static final String MESSAGE_BOOK_ALREADY_EXIST = "This book already exist";
 	
 }

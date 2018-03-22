@@ -9,7 +9,6 @@
         <class>by.htp.library.entity.UserData</class>
         <class>by.htp.library.entity.Author</class>
         <class>by.htp.library.entity.Book</class>
-        <class>by.htp.library.entity.Genre</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
@@ -18,7 +17,7 @@
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value="Mkr73091"/>
             <property name="hibernate.dialect.storage_engine" value="innodb"/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.use_sql_comments" value="true"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.connection.pool_size" value="10"/>
@@ -30,7 +29,6 @@
         <class>by.htp.library.entity.UserData</class>
         <class>by.htp.library.entity.Author</class>
         <class>by.htp.library.entity.Book</class>
-        <class>by.htp.library.entity.Genre</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>

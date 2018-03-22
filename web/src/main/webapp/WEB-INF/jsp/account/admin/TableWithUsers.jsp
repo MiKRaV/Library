@@ -40,6 +40,18 @@
 			</th>
 	</table>
 
+	<form action="FrontController" method="post">
+		Кол-во элементов:
+		<input type="hidden" name="command" value="getAllUsers">
+		<select name="pageSize" required>
+			<option value="1">1</option>
+			<option value="5">5</option>
+			<option selected value="10">10</option>
+			<option value="20">20</option>
+		</select>
+		<input type="submit" value="Применить">
+	</form>
+
 	<table border="1">
 		<tr>
 			<th><c:out value="${login}" /></th>
@@ -51,14 +63,42 @@
   		<c:forEach var="user" items="${userList}">
   			<tr>
     			<td>${user.login}</td>
-    			<td>${user.name}</td>
-    			<td>${user.surname}</td>
-    			<td>${user.email}</td>
-    			<td>${user.userType}</td>
+    			<td>${user.userData.name}</td>
+    			<td>${user.userData.surname}</td>
+    			<td>${user.userData.email}</td>
+    			<td>${user.type}</td>
   			</tr>
   		</c:forEach>
 	</table>
-	
+
+	<table border="0">
+		<tr>
+			<%--For displaying Previous link except for the 1st page --%>
+			<c:if test="${currentPage != 1}">
+				<td>
+					<form action="FrontController" method="post">
+						<input type="hidden" name="command" value="getAllUsers"/>
+						<input type="hidden" name="page" value="${currentPage - 1}">
+						<input type="submit" value="Previous">
+					</form>
+				</td>
+			</c:if>
+				<td>
+					<c:out value="${currentPage}" />
+				</td>
+			<%--For displaying Next link --%>
+			<c:if test="${currentPage lt pageCount}">
+				<td>
+					<form action="FrontController" method="post">
+						<input type="hidden" name="command" value="getAllUsers"/>
+						<input type="hidden" name="page" value="${currentPage + 1}">
+						<input type="submit" value="Next">
+					</form>
+				</td>
+			</c:if>
+		</tr>
+	</table>
+
 	<form action="FrontController" method="post">
 		<input type="hidden" name="command" value="goToAccount"/>
 		<input type="submit" value="${goToAccount_button}">

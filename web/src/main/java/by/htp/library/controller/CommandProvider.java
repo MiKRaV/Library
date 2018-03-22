@@ -25,6 +25,7 @@ import by.htp.library.controller.command.impl.RegistrationCommand;
 import by.htp.library.controller.command.impl.RemoveUserCommand;
 import by.htp.library.controller.command.impl.SearchByTitleCommand;
 import by.htp.library.controller.command.impl.StartAppCommand;
+import by.htp.library.controller.helper.CommandName;
 
 public class CommandProvider {
 	
@@ -37,14 +38,14 @@ public class CommandProvider {
 		commands.put("searchByTitle", new SearchByTitleCommand());
 		commands.put("isUserExist", new IsUserExistCommand());
 		commands.put("changeUserData", new ChangeUserDataCommand());
-		commands.put("startAppLogination", new StartAppCommand());
-		commands.put("startAppRegistration", new StartAppCommand());
+		commands.put(CommandName.START_APP_LOGINATION.getCommandName(), new StartAppCommand());
+		commands.put(CommandName.START_APP_REGISTARTION.getCommandName(), new StartAppCommand());
 		commands.put("getAllUsers", new GetAllUsersCommand());
 		commands.put("getAllBooks", new GetAllBooksCommand());
 		commands.put("changeLocal", new ChangeLocalCommand());
 		commands.put("goToAccount", new GoToAccountCommand());
 		commands.put("logOutCommand", new LogOutCommand());
-		commands.put("goToPageForLogUser", new GoToPageForLogUserCommand());
+		commands.put(CommandName.GO_TO_PAGE_FOR_LOG_USER.getCommandName(), new GoToPageForLogUserCommand());
 		commands.put("removeUser", new RemoveUserCommand());
 		commands.put("goToUserRemovePage", new GoToUserRemovePage());
 		commands.put("goToStartPage", new GoToStartPage());
@@ -56,7 +57,6 @@ public class CommandProvider {
 	}
 	
 	public Command getCommand(String commandName) {
-		
 		return commands.get(commandName);
 	}
 

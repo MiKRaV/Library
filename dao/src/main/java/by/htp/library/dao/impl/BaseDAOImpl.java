@@ -3,6 +3,7 @@ package by.htp.library.dao.impl;
 import by.htp.library.dao.exception.DAOException;
 import by.htp.library.dao.helper.BaseDAOHelper;
 import by.htp.library.dao.util.EMUtil;
+import org.hibernate.Criteria;
 
 import javax.persistence.EntityManager;
 import javax.persistence.RollbackException;
@@ -25,7 +26,7 @@ public class BaseDAOImpl<T> implements by.htp.library.dao.BaseDAO<T> {
             em.getTransaction().commit();
         } catch (RollbackException e) {
             em.getTransaction().rollback();
-            throw new DAOException();
+            throw new DAOException(BaseDAOHelper.MESSAGE_ADD_ERROR);
         } finally {
             em.close();
         }
@@ -41,7 +42,7 @@ public class BaseDAOImpl<T> implements by.htp.library.dao.BaseDAO<T> {
             em.getTransaction().commit();
         } catch (RollbackException e) {
             em.getTransaction().rollback();
-            throw new DAOException();
+            throw new DAOException(BaseDAOHelper.MESSAGE_FIND_ERROR);
         } finally {
             em.close();
         }
@@ -71,7 +72,7 @@ public class BaseDAOImpl<T> implements by.htp.library.dao.BaseDAO<T> {
             em.getTransaction().commit();
         } catch (RollbackException e) {
             em.getTransaction().rollback();
-            throw new DAOException();
+            throw new DAOException(BaseDAOHelper.MESSAGE_CHANGE_ERROR);
         } finally {
             em.close();
         }
@@ -86,9 +87,18 @@ public class BaseDAOImpl<T> implements by.htp.library.dao.BaseDAO<T> {
             em.getTransaction().commit();
         } catch (RollbackException e) {
             em.getTransaction().rollback();
-            throw new DAOException();
+            throw new DAOException(BaseDAOHelper.MESSAGE_REMOVE_ERROR);
         } finally {
             em.close();
         }
+    }
+
+    @Override
+    public long getCount(Class<T> tClass) throws DAOException {
+        em = EMUtil.getEntityManager();
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
+        criteria.select(cb.count(criteria.from(tClass)));
+        return em.createQuery(criteria).getSingleResult();
     }
 }

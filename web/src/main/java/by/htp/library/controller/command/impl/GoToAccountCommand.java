@@ -16,7 +16,7 @@ public class GoToAccountCommand implements Command{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		User user = (User) request.getSession().getAttribute("user");
-		String userType = user.getUserType();
+		String userType = user.getType();
 		
 		String goToPage = "";
 		

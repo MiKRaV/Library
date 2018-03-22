@@ -1,6 +1,6 @@
 package by.htp.library.service;
 
-import by.htp.library.entity.UserParameters;
+import by.htp.library.entity.helper.UserParameters;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

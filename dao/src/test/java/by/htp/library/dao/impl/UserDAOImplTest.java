@@ -14,7 +14,7 @@ import org.junit.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-public class SQLUserDAOTest {
+public class UserDAOImplTest {
     private static EntityManager em;
     private static UserDAO userDAO;
 
@@ -25,7 +25,7 @@ public class SQLUserDAOTest {
 
         User user = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
                 UserHelper.STATUS_ACTIVE, null);
-        UserData data = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", 0, user);
+        UserData data = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", user);
         user.setUserData(data);
 
         em.getTransaction().begin();
@@ -68,7 +68,7 @@ public class SQLUserDAOTest {
     public void registartionTest() {
         User user = new User(null, "Ivanchik", "123456", UserHelper.TYPE_ADMIN,
                 UserHelper.STATUS_ACTIVE, null);
-        UserData data = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", 0, user);
+        UserData data = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", user);
         user.setUserData(data);
 
         try {

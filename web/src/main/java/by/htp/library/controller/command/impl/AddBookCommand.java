@@ -24,7 +24,7 @@ public class AddBookCommand implements Command {
 		
 		String authorSurname = request.getParameter("surname");
 		String authorName = request.getParameter("name");
-		Author author = new Author(authorSurname, authorName);
+		Author author = new Author(null, authorSurname, authorName, null);
 		String title = request.getParameter("title");
 		String genre = request.getParameter("genre");
 		String status = "available";
@@ -39,7 +39,7 @@ public class AddBookCommand implements Command {
 		String url = request.getRequestURL().toString();
 		
 		try {
-			book = new Book(authors, title, status, genre);
+			book = new Book(null,  title, genre, authors);
 			bookService.addBook(book);
 			message = "Book successfully added!";
 		} catch (ServiceException e) {

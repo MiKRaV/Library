@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import by.htp.library.controller.command.Command;
+import by.htp.library.controller.helper.*;
 
 public class StartAppCommand implements Command {
 
@@ -15,28 +16,19 @@ public class StartAppCommand implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String goToPage = "";
-		String url = request.getRequestURL().toString();
-		
-		if(request.getParameter("command").equals("startAppLogination")) {
-			goToPage = "/WEB-INF/jsp/logination.jsp";
-			url = url + "?command=startAppLogination";
-		} else if(request.getParameter("command").equals("startAppRegistration")) {
-			goToPage = "/WEB-INF/jsp/registration.jsp";
-			url = url + "?command=startAppRegistration";
+		String url = "";
+		String command = request.getParameter(RequestParameters.COMMAND);
+
+		if (command.equals(CommandName.START_APP_LOGINATION.getCommandName())) {
+			goToPage = WebHelper.pageGenerator(Pages.LOGINATION);
+			url = WebHelper.urlGenerator(request, CommandName.START_APP_LOGINATION);
+		} else if (command.equals(CommandName.START_APP_REGISTARTION.getCommandName())) {
+			goToPage = WebHelper.pageGenerator(Pages.REGISTRATION);
+			url = WebHelper.urlGenerator(request, CommandName.START_APP_REGISTARTION);
 		}
 		
-		request.getSession().setAttribute("url", url);
-		
-		//System.out.println(url);
-		//System.out.println("goToPage: " + goToPage);
-		
-		//System.out.println("ContextPath: " + request.getContextPath());
-		//System.out.println("RequestURI: " + request.getRequestURI());
-		//System.out.println("RequestURL: " + request.getRequestURL());
-		
+		request.getSession().setAttribute(SessionAttributes.URL, url);
 		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
 		dispatcher.forward(request, response);
-		
 	}
-
 }

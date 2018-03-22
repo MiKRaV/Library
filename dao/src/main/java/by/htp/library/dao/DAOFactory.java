@@ -1,16 +1,16 @@
 package by.htp.library.dao;
 
 import by.htp.library.dao.impl.BaseDAOImpl;
-import by.htp.library.dao.impl.SQLBookDAO;
-import by.htp.library.dao.impl.SQLUserDAO;
+import by.htp.library.dao.impl.BookDAOImpl;
+import by.htp.library.dao.impl.UserDAOImpl;
 
 public class DAOFactory {
 	
 	private static final DAOFactory instance = new DAOFactory();
 	
 	private final by.htp.library.dao.BaseDAO baseDao = new BaseDAOImpl();
-	private final UserDAO userDAO = new SQLUserDAO();
-	private final BookDAO bookDAO = new SQLBookDAO();
+	private final UserDAO userDAO = new UserDAOImpl();
+	private final BookDAO bookDAO = new BookDAOImpl();
 	
 	private DAOFactory() {}
 

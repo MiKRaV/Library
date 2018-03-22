@@ -17,7 +17,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
 
-public class SQLUserDAO implements UserDAO{
+public class UserDAOImpl implements UserDAO{
 	
 	private by.htp.library.dao.BaseDAO baseDAO = new BaseDAOImpl();
 	private EntityManager em = EMUtil.getEntityManager();
@@ -100,6 +100,11 @@ public class SQLUserDAO implements UserDAO{
 		baseDAO.change(user);
 	}
 
+	@Override
+	public List<User> getAllUsersList() throws DAOException {
+		return null;
+	}
+
 	//GETTING A LIST OF ALL USERS
 	@Override
 	public List<User> getAllUsersList(int pageNumber, int pageSize) throws DAOException {
@@ -171,5 +176,10 @@ public class SQLUserDAO implements UserDAO{
 		}
 		query.executeUpdate();
 		transaction.commit();
+	}
+
+	@Override
+	public long getUserCount() throws DAOException {
+		return baseDAO.getCount(User.class);
 	}
 }

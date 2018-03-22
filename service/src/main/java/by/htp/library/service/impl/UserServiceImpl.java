@@ -1,6 +1,6 @@
 package by.htp.library.service.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import by.htp.library.entity.User;
 import by.htp.library.dao.DAOFactory;
@@ -8,21 +8,22 @@ import by.htp.library.dao.UserDAO;
 import by.htp.library.dao.exception.DAOException;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.UserService;
-import by.htp.library.entity.UserParameters;
+import by.htp.library.entity.helper.UserParameters;
 import by.htp.library.service.Validator;
+import by.htp.library.service.helper.ServiceMessages;
 
 public class UserServiceImpl implements UserService {
 	
 	private Validator validator = new Validator();
 
-	//�����������
+	//LOGINATION
 	@Override
 	public User logination(String login, String password) throws ServiceException {
 		// validation
 		if(!validator.validate(login, UserParameters.LOGIN)) {
-			throw new ServiceException("Incorrect login");
+			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN.getMessage());
 		} else if(!validator.validate(password, UserParameters.PASSWORD)) {
-			throw new ServiceException("Incorrect password");
+			throw new ServiceException(ServiceMessages.INCORRECT_PASSWORD.getMessage());
 		}
 
 		User user = null;
@@ -32,27 +33,25 @@ public class UserServiceImpl implements UserService {
 			UserDAO userDAO = daoFactory.getUserDAO();
 			user = userDAO.logination(login, password);
 		} catch (DAOException e) {
-			throw new ServiceException("Logination failed: " + e.getMessage(), e);
+			throw new ServiceException(ServiceMessages.LOGINATION_FAILED.getMessage() + " : " + e.getMessage(), e);
 		}
-
 		return user;
 	}
 
-	//�����������
+	//REGISTRATION
 	@Override
 	public void registration(User user) throws ServiceException {
 		// validation
-		/*
 		if(!validator.validate(user.getLogin(), UserParameters.LOGIN)) {
-			throw new ServiceException("Incorrect login");
+			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN.getMessage());
 		} else if(!validator.validate(user.getPassword(), UserParameters.PASSWORD)) {
-			throw new ServiceException("Incorrect password");
-		} else if(!validator.validate(user.getName(), UserParameters.NAME)) {
-			throw new ServiceException("Incorrect name");
-		} else if(!validator.validate(user.getSurname(), UserParameters.SURNAME)) {
-			throw new ServiceException("Incorrect surname");
-		} else if(!validator.validate(user.getEmail(), UserParameters.EMAIL)) {
-			throw new ServiceException("Incorrect e-mail");
+			throw new ServiceException(ServiceMessages.INCORRECT_PASSWORD.getMessage());
+		} else if(!validator.validate(user.getUserData().getName(), UserParameters.NAME)) {
+			throw new ServiceException(ServiceMessages.INCORRECT_NAME.getMessage());
+		} else if(!validator.validate(user.getUserData().getSurname(), UserParameters.SURNAME)) {
+			throw new ServiceException(ServiceMessages.INCORRECT_SURNAME.getMessage());
+		} else if(!validator.validate(user.getUserData().getEmail(), UserParameters.EMAIL)) {
+			throw new ServiceException(ServiceMessages.INCORRECT_EMAIL.getMessage());
 		}
 		
 		try {
@@ -60,16 +59,29 @@ public class UserServiceImpl implements UserService {
 			UserDAO userDAO = daoFactory.getUserDAO();
 			userDAO.registration(user);
 		} catch (DAOException e) {
-			throw new ServiceException("Registration failed: " + e.getMessage(), e);
+			throw new ServiceException(ServiceMessages.REGISTRATION_FAILED.getMessage() + " : " + e.getMessage(), e);
 		}
-		*/
+
 	}
-	
+
+	@Override
+	public List<User> getAllUsersList(int pageNumber, int pageSize) throws ServiceException {
+		List<User> users = null;
+		DAOFactory daoFactory = DAOFactory.getInstance();
+		UserDAO userDAO = daoFactory.getUserDAO();
+		try {
+			users = userDAO.getAllUsersList(pageNumber, pageSize);
+		} catch (DAOException e) {
+			throw new ServiceException(ServiceMessages.USERS_LIST_NOT_RECEIVED.getMessage());
+		}
+		return users;
+	}
+
 	//��������� ������ ���� �������������
 	@Override
-	public ArrayList<User> getAllUsersList() throws ServiceException {
+	public List<User> getAllUsersList() throws ServiceException {
 		
-		ArrayList<User> userList = null;
+		List<User> userList = null;
 		
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
@@ -112,7 +124,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
 			UserDAO userDAO = daoFactory.getUserDAO();
-			userDAO.changeUserData(user, data, dataValue);
+			userDAO.changeUserData(user);
 		} catch (DAOException e) {
 			throw new ServiceException("smth wrong", e);
 		}
@@ -173,7 +185,20 @@ public class UserServiceImpl implements UserService {
 		}
 		
 	}
-	
-	
+
+	@Override
+	public long getUserCount() throws ServiceException {
+		long userCount;
+		DAOFactory daoFactory;
+		try {
+			daoFactory = DAOFactory.getInstance();
+			UserDAO userDAO = daoFactory.getUserDAO();
+			userCount = userDAO.getUserCount();
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
+		return userCount;
+	}
+
 
 }

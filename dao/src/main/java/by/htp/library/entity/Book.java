@@ -12,19 +12,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity @Table(name = "T_BOOK")
+@Entity
 public class Book implements Serializable{
     @Id
     @GeneratedValue
-    @Column(name = "F_BOOK_ID")
     private Integer id;
-
-    @Column(name = "F_TITLE")
     private String title;
-
-    @ManyToOne
-    @JoinColumn(name = "F_GENRE_ID")
-    private Genre genre;
+    private String genre;
 
     @ManyToMany(mappedBy = "books", cascade = CascadeType.ALL)
     private List<Author> authors = new ArrayList<>();

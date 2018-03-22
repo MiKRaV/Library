@@ -7,8 +7,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import by.htp.library.controller.helper.*;
 import by.htp.library.entity.User;
 import by.htp.library.controller.command.Command;
+import by.htp.library.entity.UserData;
+import by.htp.library.entity.helper.UserHelper;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.ServiceFactory;
 import by.htp.library.service.UserService;
@@ -20,48 +23,36 @@ public class RegistrationCommand implements Command {
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
 		
-		String login = request.getParameter("login");
-		String password = request.getParameter("password");
-		String name = request.getParameter("name");
-		String surname = request.getParameter("surname");
-		String email = request.getParameter("e-mail");
-		String userType = request.getParameter("userType");
-		int countBook = 0;
-		String userStatus = "active";
-		
-		//System.out.println(login);
-		//System.out.println(password);
-		//System.out.println(name);
-		//System.out.println(surname);
-		//System.out.println(email);
-		//System.out.println(userType);
+		String login = request.getParameter(RequestParameters.USER_LOGIN);
+		String password = request.getParameter(RequestParameters.USER_PASSWORD);
+		String name = request.getParameter(RequestParameters.USER_NAME);
+		String surname = request.getParameter(RequestParameters.USER_SURNAME);
+		String email = request.getParameter(RequestParameters.USER_EMAIL);
+		String userType = request.getParameter(RequestParameters.USER_TYPE);
+		String userStatus = UserHelper.STATUS_ACTIVE;
 		
 		String goToPage = "";
-		String errorMessage = "";
-		String url = request.getRequestURL().toString();
+		String url;
 		User user = null;
 		
 		try {
-			user = new User(login, password, name, surname, email, userType, countBook, userStatus);
+			user = new User(null, login, password, userType, userStatus, null);
+			UserData userData = new UserData(null, name, surname, email, user);
+			user.setUserData(userData);
 			userService.registration(user);
-			goToPage = "/WEB-INF/jsp/account/RegistrationMessage.jsp";
-			request.getSession().setAttribute("goToPage", goToPage);
-			request.getSession().setAttribute("user", user);
-			url = url + "?command=goToPageForLogUser";
-			request.getSession().setAttribute("url", url);
+			goToPage = WebHelper.pageGenerator(Pages.REGISTRATION_MESSAGE);
+			request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
+			request.getSession().setAttribute(SessionAttributes.USER, user);
+			url = WebHelper.urlGenerator(request, CommandName.GO_TO_PAGE_FOR_LOG_USER);
+			request.getSession().setAttribute(SessionAttributes.URL, url);
 		} catch (ServiceException e) {
 			e.printStackTrace();
-			goToPage = "/WEB-INF/jsp/registration.jsp";
-			url = url + "?command=startRegistration";
-			errorMessage = e.getMessage();
-			request.setAttribute("errorMessage", errorMessage);
+			goToPage = WebHelper.pageGenerator(Pages.REGISTRATION);
+			url = WebHelper.urlGenerator(request, CommandName.START_APP_REGISTARTION);
+			request.setAttribute(RequestAttributes.ERROR_MESSAGE, e.getMessage());
 		}
-		
-		System.out.println(user);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
 		dispatcher.forward(request, response);
-		
 	}
-
 }

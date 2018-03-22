@@ -24,22 +24,22 @@ public class BaseDAOImplTest {
 
     @Before
     public void init() {
-        baseDao = DAOFactory.getInstance().getBaseDAO();
         em = EMUtil.getEntityManager("by.htp.library.test");
+        baseDao = DAOFactory.getInstance().getBaseDAO();
 
         User user1 = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
                 UserHelper.STATUS_ACTIVE, null);
-        UserData userData1 = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", 3, user1);
+        UserData userData1 = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", user1);
         user1.setUserData(userData1);
 
         User user2 = new User(null, "Ivanchik", "123456", UserHelper.TYPE_READER,
                 UserHelper.STATUS_ACTIVE, null);
-        UserData userData2 = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", 6, user2);
+        UserData userData2 = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", user2);
         user2.setUserData(userData2);
 
         User user3 = new User(null, "Vovchik", "123456", UserHelper.TYPE_READER,
                 UserHelper.STATUS_ACTIVE, null);
-        UserData userData3 = new UserData(null, "Vladimir", "Vladimirov", "vovchik@mail.ru", 1, user3);
+        UserData userData3 = new UserData(null, "Vladimir", "Vladimirov", "vovchik@mail.ru", user3);
         user3.setUserData(userData3);
 
         em.getTransaction().begin();
@@ -48,7 +48,7 @@ public class BaseDAOImplTest {
         em.persist(user3);
         em.getTransaction().commit();
 
-        em.close();
+        em.clear();
     }
 
     @Test
@@ -68,7 +68,7 @@ public class BaseDAOImplTest {
         Book bookFromDB = em.find(Book.class, book.getId());
         Assert.assertEquals(book.getTitle(), bookFromDB.getTitle());
 
-        em.close();
+        em.clear();
     }
 
     @Test
@@ -93,7 +93,7 @@ public class BaseDAOImplTest {
             e.printStackTrace();
         }
 
-        em.close();
+        em.clear();
     }
 
     @Test
@@ -135,7 +135,7 @@ public class BaseDAOImplTest {
         Author authorFromDB = bookFromDB.getAuthors().get(0);
         Assert.assertEquals("Gosha", authorFromDB.getName());
 
-        em.close();
+        em.clear();
     }
 
     @Test
@@ -163,6 +163,17 @@ public class BaseDAOImplTest {
         bookFromBD = em.find(Book.class, bookID);
         Assert.assertNull(bookFromBD);
 
-        em.close();
+        em.clear();
+    }
+
+    @Test
+    public void getCountTest() {
+        long userCount = 0;
+        try {
+            userCount = baseDao.getCount(User.class);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+        Assert.assertEquals(userCount, 3);
     }
 }

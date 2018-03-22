@@ -12,17 +12,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity @Table(name = "T_AUTHOR")
+@Entity
 public class Author implements Serializable {
     @Id
     @GeneratedValue
-    @Column(name = "F_AUTHOR_ID")
     private Integer id;
-
-    @Column(name = "F_SURNAME")
     private String surname;
-
-    @Column(name = "F_NAME")
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)

@@ -12,7 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "T_USER_DATA")
 public class UserData {
     @Id
     @GenericGenerator(
@@ -20,20 +19,12 @@ public class UserData {
             strategy = "foreign",
             parameters = @Parameter(name = "property", value = "user"))
     @GeneratedValue(generator = "one-one")
-    @Column(name = "F_USER_ID")
     private Integer id;
-
-    @Column(name = "F_NAME")
     private String name;
-
-    @Column(name = "F_SURNAME")
     private String surname;
 
-    @Column(name = "F_EMAIL" , unique = true)
+    @Column(unique = true)
     private String email;
-
-    @Column(name = "F_COUNT_BOOK")
-    private int countBook;
 
     @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
@@ -56,8 +47,6 @@ public class UserData {
             return false;
         if (!email.equals(other.email))
             return false;
-        if (countBook != other.countBook)
-            return false;
         return true;
     }
 
@@ -69,13 +58,12 @@ public class UserData {
         result = prime * result + name.hashCode();
         result = prime * result + surname.hashCode();
         result = prime * result + email.hashCode();
-        result = prime * result + countBook;
         return result;
     }
 
     @Override
     public String toString() {
         return "UserData[id=" + id + ", name=" + name + ", surname=" + surname +
-                ", email=" + email + ", countBook=" + countBook + "]";
+                ", email=" + email + "]";
     }
 }

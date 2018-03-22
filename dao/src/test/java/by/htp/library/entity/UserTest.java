@@ -16,7 +16,7 @@ public class UserTest {
         em.getTransaction().begin();
         User user = new User(null,"MiKRaV", "123456", UserHelper.TYPE_ADMIN, UserHelper.STATUS_ACTIVE, null);
         UserData userData = new UserData(null, "Mikhail", "Kravchenya",
-                "mkravchenya@mail.ru", 0,  user);
+                "mkravchenya@mail.ru",  user);
         user.setUserData(userData);
         em.persist(user);
         em.getTransaction().commit();

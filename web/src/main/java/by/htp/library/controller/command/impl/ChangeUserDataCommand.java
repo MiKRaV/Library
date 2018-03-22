@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.htp.library.entity.User;
 import by.htp.library.controller.command.Command;
+import by.htp.library.entity.helper.UserParameters;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.ServiceFactory;
-import by.htp.library.entity.UserParameters;
 import by.htp.library.service.UserService;
 
 public class ChangeUserDataCommand implements Command {
