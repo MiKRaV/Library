@@ -17,6 +17,10 @@
 <fmt:message bundle="${loc}" key="local.tableWithAllUsers.column.name.surname" var="surname" />
 <fmt:message bundle="${loc}" key="local.tableWithAllUsers.column.name.email" var="email" />
 <fmt:message bundle="${loc}" key="local.tableWithAllUsers.column.name.userType" var="userType" />
+<fmt:message bundle="${loc}" key="local.tableWithAllUsers.message.userCount" var="userCount" />
+<fmt:message bundle="${loc}" key="local.button.name.apply" var="apply_button" />
+<fmt:message bundle="${loc}" key="local.button.name.previous" var="previous_button" />
+<fmt:message bundle="${loc}" key="local.button.name.next" var="next_button" />
 <fmt:message bundle="${loc}" key="local.button.name.goToAccount" var="goToAccount_button" />
 <fmt:message bundle="${loc}" key="local.button.name.logOut" var="logOutButton" />
 
@@ -41,7 +45,7 @@
 	</table>
 
 	<form action="FrontController" method="post">
-		Кол-во элементов:
+		<c:out value="${userCount}" />:
 		<input type="hidden" name="command" value="getAllUsers">
 		<select name="pageSize" required>
 			<option value="1">1</option>
@@ -49,7 +53,7 @@
 			<option selected value="10">10</option>
 			<option value="20">20</option>
 		</select>
-		<input type="submit" value="Применить">
+		<input type="submit" value="${apply_button}">
 	</form>
 
 	<table border="1">
@@ -79,20 +83,20 @@
 					<form action="FrontController" method="post">
 						<input type="hidden" name="command" value="getAllUsers"/>
 						<input type="hidden" name="page" value="${currentPage - 1}">
-						<input type="submit" value="Previous">
+						<input type="submit" value="${previous_button}">
 					</form>
 				</td>
 			</c:if>
-				<td>
-					<c:out value="${currentPage}" />
-				</td>
+			<td>
+				<c:out value="${currentPage}" />
+			</td>
 			<%--For displaying Next link --%>
 			<c:if test="${currentPage lt pageCount}">
 				<td>
 					<form action="FrontController" method="post">
 						<input type="hidden" name="command" value="getAllUsers"/>
 						<input type="hidden" name="page" value="${currentPage + 1}">
-						<input type="submit" value="Next">
+						<input type="submit" value="${next_button}">
 					</form>
 				</td>
 			</c:if>

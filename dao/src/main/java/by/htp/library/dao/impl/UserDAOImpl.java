@@ -2,6 +2,8 @@ package by.htp.library.dao.impl;
 
 import java.util.List;
 
+import by.htp.library.dao.BaseDAO;
+import by.htp.library.dao.DAOFactory;
 import by.htp.library.dao.util.EMUtil;
 import by.htp.library.entity.User;
 import by.htp.library.dao.UserDAO;
@@ -18,8 +20,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.*;
 
 public class UserDAOImpl implements UserDAO{
-	
-	private by.htp.library.dao.BaseDAO baseDAO = new BaseDAOImpl();
+
 	private EntityManager em = EMUtil.getEntityManager();
 	private CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -43,15 +44,17 @@ public class UserDAOImpl implements UserDAO{
 		try {
 			user = em.createQuery(criteria).getSingleResult();
 		} catch (NoResultException e) {
+			em.clear();
 			throw new DAOException(UserDAOHelper.MESSAGE_INVALID_PASSWORD);
 		}
-
+		em.clear();
 		return user;
 	}
 
 	//REGISTRATION
 	@Override
 	public void registration(User user) throws DAOException {
+		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
 		if(isUserExist(user.getLogin())) {
 			throw new DAOException(UserDAOHelper.MESSAGE_USER_EXIST);
 		}
@@ -63,10 +66,11 @@ public class UserDAOImpl implements UserDAO{
 		List<User> users = em.createQuery(criteria).getResultList();
 
 		if (!users.isEmpty()) {
+			em.clear();
 			throw new DAOException(UserDAOHelper.MESSAGE_EMAIL_REGISTERED);
 		}
-
 		baseDAO.add(user);
+		em.clear();
 	}
 
 	//CHEK IF THE USER EXISTS
@@ -79,8 +83,10 @@ public class UserDAOImpl implements UserDAO{
 		try {
 			em.createQuery(criteria).getSingleResult();
 		} catch (NoResultException e) {
+			em.clear();
 			return false;
 		}
+		em.clear();
 		return true;
 	}
 
@@ -91,23 +97,21 @@ public class UserDAOImpl implements UserDAO{
 		Query query = session.createQuery(UserDAOHelper.SELECT_STATUS_BY_LOGIN);
 		query.setParameter(UserHelper.LOGIN, login);
 		String status = (String) query.getSingleResult();
+		em.clear();
 		return status.equals(UserHelper.STATUS_DELETED);
 	}
 
 	//CHANGING USER DATA
 	@Override
-	public void changeUserData(User user) throws DAOException {
-		baseDAO.change(user);
-	}
-
-	@Override
-	public List<User> getAllUsersList() throws DAOException {
-		return null;
+	public User changeUserData(User user) throws DAOException {
+		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
+		return (User) baseDAO.change(user);
 	}
 
 	//GETTING A LIST OF ALL USERS
 	@Override
 	public List<User> getAllUsersList(int pageNumber, int pageSize) throws DAOException {
+		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
 		return baseDAO.findAll(User.class, pageNumber, pageSize);
 	}
 
@@ -127,6 +131,7 @@ public class UserDAOImpl implements UserDAO{
 		query.setParameter(UserHelper.STATUS, UserHelper.STATUS_DELETED);
 		query.executeUpdate();
 		transaction.commit();
+		em.clear();
 	}
 
 	//USER SEARCH BY LOGIN
@@ -145,8 +150,10 @@ public class UserDAOImpl implements UserDAO{
 		try {
 			user = em.createQuery(criteria).getSingleResult();
 		} catch (NoResultException e) {
+			em.clear();
 			throw new DAOException(UserDAOHelper.MESSAGE_FAIL_USER_SEARCHING);
 		}
+		em.clear();
 		return user;
 	}
 
@@ -176,10 +183,13 @@ public class UserDAOImpl implements UserDAO{
 		}
 		query.executeUpdate();
 		transaction.commit();
+		em.clear();
 	}
 
+	//GETTING USER COUNT
 	@Override
 	public long getUserCount() throws DAOException {
+		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
 		return baseDAO.getCount(User.class);
 	}
 }

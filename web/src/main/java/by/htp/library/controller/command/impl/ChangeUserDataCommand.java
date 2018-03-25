@@ -7,6 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import by.htp.library.controller.exception.WebException;
+import by.htp.library.controller.helper.*;
 import by.htp.library.entity.User;
 import by.htp.library.controller.command.Command;
 import by.htp.library.entity.helper.UserParameters;
@@ -19,115 +21,60 @@ public class ChangeUserDataCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		User user = (User) request.getSession().getAttribute("user");
+		User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
 		
-		String goToPage = "/WEB-INF/jsp/account/UserDataPage.jsp";
-		String url = request.getRequestURL().toString();
-		url = url + "?command=goToUserDataPage";
-		String parameter = request.getParameter("parameter");
+		String goToPage = WebHelper.pageGenerator(Pages.USER_DATA);
+		String url = WebHelper.urlGenerator(request, CommandName.GO_TO_USER_DATA_PAGE);
+		String userParameter = request.getParameter(RequestParameters.USER_PARAMETER);
 		String message = "";
-		
-		switch(parameter) {
-		case "password":
-			String oldPassword = request.getParameter("oldPassword");
-			String newPassword = request.getParameter("newPassword");
-			String confirmPassword = request.getParameter("confirmPassword");
-			if(!oldPassword.equals(user.getPassword())) {
-				message = "Invalid password";
-				break;
-			} else if (!newPassword.equals(confirmPassword)) {
-				message = "Passwords do not match";
-				break;
+		UserParameters parameter = null;
+		String newValue = null;
+
+		try {
+			switch (userParameter) {
+				case RequestParameters.USER_PASSWORD:
+					String oldPassword = request.getParameter(RequestParameters.USER_OLD_PASSWORD);
+					String newPassword = request.getParameter(RequestParameters.USER_NEW_PASSWORD);
+					String confirmPassword = request.getParameter(RequestParameters.USER_CONFIRM_PASSWORD);
+					if(!oldPassword.equals(user.getPassword())) {
+						throw new WebException(Messages.INVALID_PASSWORD);
+					} else if (!newPassword.equals(confirmPassword)) {
+						throw new WebException(Messages.PASSWORDS_DO_NOT_MATCH);
+					}
+					parameter = UserParameters.PASSWORD;
+					newValue = newPassword;
+					break;
+				case RequestParameters.USER_NAME:
+					parameter = UserParameters.NAME;
+					newValue = request.getParameter(RequestParameters.USER_NEW_NAME);
+					break;
+				case RequestParameters.USER_SURNAME:
+					parameter = UserParameters.SURNAME;
+					newValue = request.getParameter(RequestParameters.USER_NEW_SURNAME);
+					break;
+				case RequestParameters.USER_EMAIL:
+					parameter = UserParameters.EMAIL;
+					newValue = request.getParameter(RequestParameters.USER_NEW_EMAIL);
+					break;
 			}
-			try {
-				userService.changeUserData(user, UserParameters.PASSWORD, newPassword);
-				user = userService.logination(user.getLogin(), newPassword);
-				request.getSession().setAttribute("user", user);
-				message = "Password changed successfully!";
-			} catch (ServiceException e) {
-				e.printStackTrace();
-				message = e.getMessage();
-			}
-			
-			break;
-		case "name":
-			String newName = request.getParameter("newName");
-			try {
-				userService.changeUserData(user, UserParameters.NAME, newName);
-				user = userService.logination(user.getLogin(), user.getPassword());
-				request.getSession().setAttribute("user", user);
-				message = "Name changed successfully!";
-			} catch (ServiceException e) {
-				e.printStackTrace();
-				message = e.getMessage();
-			}
-			break;
-		case "surname":
-			String newSurname = request.getParameter("newSurname");
-			try {
-				userService.changeUserData(user, UserParameters.SURNAME, newSurname);
-				user = userService.logination(user.getLogin(), user.getPassword());
-				request.getSession().setAttribute("user", user);
-				message = "Surname changed successfully!";
-			} catch (ServiceException e) {
-				e.printStackTrace();
-				message = e.getMessage();
-			}
-			break;
-		case "email":
-			String newEmail = request.getParameter("newEmail");
-			try {
-				userService.changeUserData(user, UserParameters.EMAIL, newEmail);
-				user = userService.logination(user.getLogin(), user.getPassword());
-				request.getSession().setAttribute("user", user);
-				message = "E-mail changed successfully!";
-			} catch (ServiceException e) {
-				e.printStackTrace();
-				message = e.getMessage();
-			}
-			break;
+			user = userService.changeUserData(user, parameter, newValue);
+            request.getSession().setAttribute(SessionAttributes.USER, user);
+            message = parameter.getParameter().toUpperCase() + " changed successfully!";
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			message = e.getMessage();
+		} catch (WebException e) {
+			e.printStackTrace();
+			message = e.getMessage();
 		}
 		
-		//String name = request.getParameter("name");
-		//String surname = request.getParameter("surname");
-		//String email = request.getParameter("e-mail");
-		
-		request.getSession().setAttribute("url", url);
-		request.setAttribute("message", message);
+		request.getSession().setAttribute(SessionAttributes.URL, url);
+		request.setAttribute(SessionAttributes.MESSAGE, message);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
 		dispatcher.forward(request, response);
 		
 	}
-	
-	//������ �����
-	/*
-	public String execute(String request) {
-		
-		String[] params = request.split("\\s+");
-		
-		ServiceFactory serviceFactory = ServiceFactory.getInstance();
-		UserService userService = serviceFactory.getUserService();
-		String login = params[1];
-		String password = params[2];
-		String data = params[3];
-		String dataValue= params[4];
-		String response = null;
-	
-		try {
-			User user = userService.logination(login, password);
-			
-			userService.changeUserData(user, data, dataValue);
-			response = "Data of user \"" + login + "\" changed successfully";
-		} catch (ServiceException e) {
-			System.out.println(e.getMessage());
-		}
-		return response;
-	}
-	*/
-
-	
-
 }

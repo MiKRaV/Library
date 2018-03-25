@@ -49,6 +49,8 @@
 				</form>
 			</th>
 	</table>
+
+	<c:out value="${message}" />
 	
 	<form action="FrontController" method="post">
 		<input type="hidden" name="command" value="addBook"/>

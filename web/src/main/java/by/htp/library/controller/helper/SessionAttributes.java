@@ -5,5 +5,8 @@ public class SessionAttributes {
     public static final String GO_TO_PAGE = "goToPage";
     public static final String USER = "user";
     public static final String LOCAL = "local";
+    public static final String MESSAGE = "message";
+    public static final String ERROR_MESSAGE = "errorMessage";
+    public static final String FOUND_USER = "foundUser";
 
 }

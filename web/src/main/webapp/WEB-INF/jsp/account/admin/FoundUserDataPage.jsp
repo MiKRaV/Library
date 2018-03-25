@@ -17,7 +17,6 @@
 <fmt:message bundle="${loc}" key="local.field.name.surname" var="surname" />
 <fmt:message bundle="${loc}" key="local.field.name.email" var="email" />
 <fmt:message bundle="${loc}" key="local.field.name.userType" var="userType" />
-<fmt:message bundle="${loc}" key="local.field.name.countBook" var="countBook" />
 <fmt:message bundle="${loc}" key="local.field.name.userStatus" var="userStatus" />
 <fmt:message bundle="${loc}" key="local.field.name.actions" var="actions" />
 <fmt:message bundle="${loc}" key="local.button.name.blockUnlock" var="blockUnlockButton" />
@@ -53,18 +52,16 @@
 			<th><c:out value="${surname}" /></th>
 			<th><c:out value="${email}" /></th>
 			<th><c:out value="${userType}" /></th>
-			<th><c:out value="${countBook}" /></th>
 			<th><c:out value="${userStatus}" /></th>
 			<th><c:out value="${actions}" /></th>
 		</tr>
   		<tr>
     		<td>${foundUser.login}</td>
-   			<td>${foundUser.name}</td>
-    		<td>${foundUser.surname}</td>
-    		<td>${foundUser.email}</td>
-    		<td>${foundUser.userType}</td>
-    		<td>${foundUser.countBook}</td>
-    		<td>${foundUser.userStatus}</td>
+   			<td>${foundUser.userData.name}</td>
+    		<td>${foundUser.userData.surname}</td>
+    		<td>${foundUser.userData.email}</td>
+    		<td>${foundUser.type}</td>
+    		<td>${foundUser.status}</td>
     		<td>
     			<form action="FrontController" method="post">
 					<input type="hidden" name="command" value="blockUnlockUser"/>

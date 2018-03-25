@@ -1,29 +1,37 @@
 package by.htp.library.dao.impl;
 
+import by.htp.library.dao.AuthorDAO;
+import by.htp.library.dao.BaseDAO;
 import by.htp.library.dao.BookDAO;
 import by.htp.library.dao.DAOFactory;
 import by.htp.library.dao.exception.DAOException;
+import by.htp.library.dao.helper.DAOMessages;
 import by.htp.library.dao.util.EMUtil;
 import by.htp.library.entity.Author;
 import by.htp.library.entity.Book;
+import by.htp.library.entity.helper.AuthorHelper;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BooKDAOImplTest {
 
-    private static EntityManager em;
-    private static BookDAO bookDAO;
+    private static EntityManager em = EMUtil.getEntityManager("by.htp.library");;
+    private static CriteriaBuilder cb = em.getCriteriaBuilder();
+    private static AuthorDAO authorDAO = new AuthorDAOImpl();
+    private static BookDAO bookDAO = new BookDAOImpl();
 
     @BeforeClass
     public static void init() {
-        em = EMUtil.getEntityManager("by.htp.library");
-        bookDAO = DAOFactory.getInstance().getBookDAO();
-
         List<Book> pushkinBooks = new ArrayList<>();
         Author pushkin = new Author(null, "Pushkin", "Aleksandr", pushkinBooks);
         pushkinBooks.add(new Book());
@@ -43,17 +51,31 @@ public class BooKDAOImplTest {
     }
 
     @Test
-    public void isAuthorExistTest() {
-        boolean authorExist;
-        boolean authorNotExist;
+    public void addBookTest() {
+        List<Book> pushkinBooks = new ArrayList<>();
+        Book mciry = new Book(null, "Mciry", "fiction", null);
+        pushkinBooks.add(mciry);
+        List<Author> authors = new ArrayList<>();
+        Author pushkin = new Author(null, "Pushkin", "Aleksandr", pushkinBooks);
+        authors.add(pushkin);
+        mciry.setAuthors(authors);
         try {
-            authorExist = bookDAO.isAuthorExist("Aleksandr", "Pushkin");
-            Assert.assertTrue(authorExist);
-            authorNotExist = bookDAO.isAuthorExist("Aleksandr", "NePuskin");
-            Assert.assertFalse(authorNotExist);
+            bookDAO.addBook(mciry);
         } catch (DAOException e) {
             e.printStackTrace();
         }
+
+        Author author = null;
+        CriteriaQuery<Author> criteria = cb.createQuery(Author.class);
+        Root<Author> root = criteria.from(Author.class);
+        Predicate predicate = cb.and(
+                cb.equal(root.get(AuthorHelper.NAME), pushkin.getName()),
+                cb.equal(root.get(AuthorHelper.SURNAME), pushkin.getSurname())
+        );
+        criteria.select(root).where(predicate);
+        author = em.createQuery(criteria).getSingleResult();
+
+        //Assert.assertTrue(author.getBooks().size() > 1);
     }
 
     @Test

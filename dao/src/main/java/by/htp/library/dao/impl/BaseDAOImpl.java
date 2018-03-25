@@ -59,12 +59,14 @@ public class BaseDAOImpl<T> implements by.htp.library.dao.BaseDAO<T> {
         TypedQuery<T> typedQuery = em.createQuery(criteria);
         typedQuery.setFirstResult(pageSize * (pageNumber - 1));
         typedQuery.setMaxResults(pageSize);
+        List<T> tList = typedQuery.getResultList();
+        em.close();
 
-        return typedQuery.getResultList();
+        return tList;
     }
 
     @Override
-    public void change(T obj) throws DAOException {
+    public T change(T obj) throws DAOException {
         em = EMUtil.getEntityManager();
         try {
             em.getTransaction().begin();
@@ -76,6 +78,7 @@ public class BaseDAOImpl<T> implements by.htp.library.dao.BaseDAO<T> {
         } finally {
             em.close();
         }
+        return obj;
     }
 
     @Override
@@ -99,6 +102,8 @@ public class BaseDAOImpl<T> implements by.htp.library.dao.BaseDAO<T> {
         cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
         criteria.select(cb.count(criteria.from(tClass)));
-        return em.createQuery(criteria).getSingleResult();
+        long count = em.createQuery(criteria).getSingleResult();
+        em.close();
+        return count;
     }
 }

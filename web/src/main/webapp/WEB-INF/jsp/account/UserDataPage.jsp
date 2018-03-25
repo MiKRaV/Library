@@ -52,22 +52,22 @@
 	
 	<form id="password" action="FrontController" method="post">
 		<input type="hidden" name="command" value="changeUserData">
-		<input type="hidden" name="parameter" value="password">
+		<input type="hidden" name="userParameter" value="password">
 	</form>
 	
 	<form id="name" action="FrontController" method="post">
 		<input type="hidden" name="command" value="changeUserData"/>
-		<input type="hidden" name="parameter" value="name"/>
+		<input type="hidden" name="userParameter" value="name"/>
 	</form>
 	
 	<form id="surname" action="FrontController" method="post">
 		<input type="hidden" name="command" value="changeUserData"/>
-		<input type="hidden" name="parameter" value="surname"/>
+		<input type="hidden" name="userParameter" value="surname"/>
 	</form>
 	
 	<form id="email" action="FrontController" method="post">
 		<input type="hidden" name="command" value="changeUserData"/>
-		<input type="hidden" name="parameter" value="email"/>
+		<input type="hidden" name="userParameter" value="email"/>
 	</form>
 	
 	<table>
@@ -93,7 +93,7 @@
 		</tr>
 		<tr>
 			<td><b><c:out value="${name}" /></b>:</td>
-			<td><c:out value="${user.name}" /></td>
+			<td><c:out value="${user.userData.name}" /></td>
 		</tr>
 		<tr>
 			<td><c:out value="${newName}" />:</td>
@@ -102,7 +102,7 @@
 		</tr>
 		<tr>
 			<td><b><c:out value="${surname}" /></b>:</td>
-			<td><c:out value="${user.surname}" /></td>
+			<td><c:out value="${user.userData.surname}" /></td>
 		</tr>
 		<tr>
 			<td><c:out value="${newSurname}" />:</td>
@@ -111,7 +111,7 @@
 		</tr>
 		<tr>
 			<td><b><c:out value="${email}" /></b>:</td>
-			<td><c:out value="${user.email}" /></td>
+			<td><c:out value="${user.userData.email}" /></td>
 		</tr>
 		<tr>
 			<td><c:out value="${newEmail}" />:</td>

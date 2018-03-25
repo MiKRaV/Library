@@ -8,6 +8,7 @@ public interface BookService {
 	
 	void addBook(Book book) throws ServiceException;
 	List<Book> searchByTitle(String title) throws ServiceException;
-	List<Book> getAllBooks() throws ServiceException;
+	List<Book> getAllBooks(int pageNumber, int pageSize) throws ServiceException;
 	boolean isAuthorExist(String name, String surname) throws ServiceException;
+	long getBookCount() throws ServiceException;
 }

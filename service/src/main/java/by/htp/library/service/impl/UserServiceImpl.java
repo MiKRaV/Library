@@ -21,9 +21,9 @@ public class UserServiceImpl implements UserService {
 	public User logination(String login, String password) throws ServiceException {
 		// validation
 		if(!validator.validate(login, UserParameters.LOGIN)) {
-			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN.getMessage());
+			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN);
 		} else if(!validator.validate(password, UserParameters.PASSWORD)) {
-			throw new ServiceException(ServiceMessages.INCORRECT_PASSWORD.getMessage());
+			throw new ServiceException(ServiceMessages.INCORRECT_PASSWORD);
 		}
 
 		User user = null;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 			UserDAO userDAO = daoFactory.getUserDAO();
 			user = userDAO.logination(login, password);
 		} catch (DAOException e) {
-			throw new ServiceException(ServiceMessages.LOGINATION_FAILED.getMessage() + " : " + e.getMessage(), e);
+			throw new ServiceException(ServiceMessages.LOGINATION_FAILED + " : " + e.getMessage(), e);
 		}
 		return user;
 	}
@@ -43,15 +43,15 @@ public class UserServiceImpl implements UserService {
 	public void registration(User user) throws ServiceException {
 		// validation
 		if(!validator.validate(user.getLogin(), UserParameters.LOGIN)) {
-			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN.getMessage());
+			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN);
 		} else if(!validator.validate(user.getPassword(), UserParameters.PASSWORD)) {
-			throw new ServiceException(ServiceMessages.INCORRECT_PASSWORD.getMessage());
+			throw new ServiceException(ServiceMessages.INCORRECT_PASSWORD);
 		} else if(!validator.validate(user.getUserData().getName(), UserParameters.NAME)) {
-			throw new ServiceException(ServiceMessages.INCORRECT_NAME.getMessage());
+			throw new ServiceException(ServiceMessages.INCORRECT_NAME);
 		} else if(!validator.validate(user.getUserData().getSurname(), UserParameters.SURNAME)) {
-			throw new ServiceException(ServiceMessages.INCORRECT_SURNAME.getMessage());
+			throw new ServiceException(ServiceMessages.INCORRECT_SURNAME);
 		} else if(!validator.validate(user.getUserData().getEmail(), UserParameters.EMAIL)) {
-			throw new ServiceException(ServiceMessages.INCORRECT_EMAIL.getMessage());
+			throw new ServiceException(ServiceMessages.INCORRECT_EMAIL);
 		}
 		
 		try {
@@ -59,11 +59,12 @@ public class UserServiceImpl implements UserService {
 			UserDAO userDAO = daoFactory.getUserDAO();
 			userDAO.registration(user);
 		} catch (DAOException e) {
-			throw new ServiceException(ServiceMessages.REGISTRATION_FAILED.getMessage() + " : " + e.getMessage(), e);
+			throw new ServiceException(ServiceMessages.REGISTRATION_FAILED + " : " + e.getMessage(), e);
 		}
 
 	}
 
+	//GETTING A LIST OF ALL USERS
 	@Override
 	public List<User> getAllUsersList(int pageNumber, int pageSize) throws ServiceException {
 		List<User> users = null;
@@ -72,33 +73,17 @@ public class UserServiceImpl implements UserService {
 		try {
 			users = userDAO.getAllUsersList(pageNumber, pageSize);
 		} catch (DAOException e) {
-			throw new ServiceException(ServiceMessages.USERS_LIST_NOT_RECEIVED.getMessage());
+			throw new ServiceException(ServiceMessages.USERS_LIST_NOT_RECEIVED);
 		}
 		return users;
 	}
 
-	//��������� ������ ���� �������������
+	//CHECK IF THE USER EXISTS
 	@Override
-	public List<User> getAllUsersList() throws ServiceException {
-		
-		List<User> userList = null;
-		
-		try {
-			DAOFactory daoFactory = DAOFactory.getInstance();
-			UserDAO userDAO = daoFactory.getUserDAO();
-			userList = userDAO.getAllUsersList();
-		} catch (DAOException e) {
-			throw new ServiceException("List of users not received: " + e.getMessage(), e);
-		}
-		return userList;
-	}
-
-	@Override//������ �����!!!
 	public boolean isUserExist(String login) throws ServiceException {
 		// validation
-			if (login == null || login.isEmpty()) {
-				throw new ServiceException("Invalid Login");
-			}
+		if(!validator.validate(login, UserParameters.LOGIN))
+			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN);
 		
 		boolean isUserExist = false;
 		
@@ -107,36 +92,52 @@ public class UserServiceImpl implements UserService {
 			UserDAO userDAO = daoFactory.getUserDAO();
 			isUserExist = userDAO.isUserExist(login);
 		} catch (DAOException e) {
-			throw new ServiceException("smth wrong", e);
+			throw new ServiceException(ServiceMessages.EXIST_USER_ERROR, e);
 		}
 		
 		return isUserExist;
 	}
 
-	//�������������� ������ ������������
-	@Override//
-	public void changeUserData(User user, UserParameters data, String dataValue) throws ServiceException {
+	//CHANGING USER DATA
+	@Override
+	public User changeUserData(User user, UserParameters data, String dataValue) throws ServiceException {
 		// validation	
 		if (!validator.validate(dataValue, data)) {
-			throw new ServiceException("Incorrect value");
+			throw new ServiceException(ServiceMessages.INCORRECT_VALUE);
+		}
+
+		switch (data) {
+			case PASSWORD:
+				user.setPassword(dataValue);
+				break;
+			case NAME:
+				user.getUserData().setName(dataValue);
+				break;
+			case SURNAME:
+				user.getUserData().setSurname(dataValue);
+				break;
+			case EMAIL:
+				user.getUserData().setEmail(dataValue);
+				break;
 		}
 		
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
 			UserDAO userDAO = daoFactory.getUserDAO();
-			userDAO.changeUserData(user);
+			user = userDAO.changeUserData(user);
 		} catch (DAOException e) {
-			throw new ServiceException("smth wrong", e);
+			throw new ServiceException(ServiceMessages.UPDATE_USER_ERROR, e);
 		}
-		
+
+		return user;
 	}
 
-	//�������� ������������
+	//REMOVING USER
 	@Override
 	public void removeUser(String login) throws ServiceException {
 		//validation
 		if(!validator.validate(login, UserParameters.LOGIN)) {
-			throw new ServiceException("Incorrect login");
+			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN);
 		}
 		
 		try {
@@ -144,16 +145,15 @@ public class UserServiceImpl implements UserService {
 			UserDAO userDAO = daoFactory.getUserDAO();
 			userDAO.removeUser(login);
 		} catch (DAOException e) {
-			throw new ServiceException("Removing failed: " + e.getMessage(), e);
+			throw new ServiceException(ServiceMessages.REMOVING_FAILED, e);
 		}
-		
 	}
 
-	//����� ������������ �� ������
+	//SEARCH FOR A USER BY NAME
 	@Override
 	public User findUserByLogin(String login) throws ServiceException {
 		if(!validator.validate(login, UserParameters.LOGIN)) {
-			throw new ServiceException("Incorrect login");
+			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN);
 		}
 		
 		User user = null;
@@ -163,16 +163,16 @@ public class UserServiceImpl implements UserService {
 			UserDAO userDAO = daoFactory.getUserDAO();
 			user = userDAO.findUserByLogin(login);
 		} catch (DAOException e) {
-			throw new ServiceException("User search failed: " + e.getMessage(), e);
+			throw new ServiceException(ServiceMessages.USER_SEARCH_FAILED, e);
 		}
-		
 		return user;
 	}
 
+	//BLOCK/UNLOCK USER
 	@Override
 	public void blockUnlockUser(String login) throws ServiceException {
 		if(!validator.validate(login, UserParameters.LOGIN)) {
-			throw new ServiceException("Incorrect login");
+			throw new ServiceException(ServiceMessages.INCORRECT_LOGIN);
 		}
 		
 		DAOFactory daoFactory;
@@ -181,11 +181,11 @@ public class UserServiceImpl implements UserService {
 			UserDAO userDAO = daoFactory.getUserDAO();
 			userDAO.blockUnlockUser(login);
 		} catch (DAOException e) {
-			throw new ServiceException("User lock/unlock operation failed: " + e.getMessage(), e);
+			throw new ServiceException(ServiceMessages.BLOCK_UNLOCK_USER_FAILED + " : " + e.getMessage(), e);
 		}
-		
 	}
 
+	//GETTING THE COUNT OF USERS
 	@Override
 	public long getUserCount() throws ServiceException {
 		long userCount;

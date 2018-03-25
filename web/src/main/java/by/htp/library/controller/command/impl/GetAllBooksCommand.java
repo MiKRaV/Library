@@ -2,12 +2,14 @@ package by.htp.library.controller.command.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import by.htp.library.controller.helper.*;
 import by.htp.library.entity.Book;
 import by.htp.library.controller.command.Command;
 import by.htp.library.service.BookService;
@@ -19,31 +21,45 @@ public class GetAllBooksCommand implements Command{
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ArrayList<Book> bookList = null;
+		List<Book> bookList = null;
 		
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		BookService bookService = serviceFactory.getBookService();
-		
+
 		String goToPage = "";
+		String url = "";
+		int pageSize = 1;
+		int page = 1;
+		long bookCount;
+		int pageCount;
 		
 		try {
-			bookList = (ArrayList<Book>) bookService.getAllBooks();
-			goToPage = "/WEB-INF/jsp/account/reader/TableWithAllBooks.jsp";	
+			if (request.getParameter(RequestParameters.PAGE) != null)
+				page = Integer.parseInt(request.getParameter(RequestParameters.PAGE));
+
+			if (request.getParameter(RequestParameters.PAGE_SIZE) != null)
+				pageSize = Integer.parseInt(request.getParameter(RequestParameters.PAGE_SIZE));
+
+			bookCount = bookService.getBookCount();
+			pageCount = (int) Math.ceil(bookCount / pageSize);
+
+			bookList = bookService.getAllBooks(page, pageSize);
+			goToPage = WebHelper.pageGenerator(Pages.TABLE_WITH_BOOKS);
+			url = WebHelper.urlGenerator(request, CommandName.GET_ALL_BOOKS);
+
+			request.setAttribute(RequestAttributes.PAGE_COUNT, pageCount);
+			request.setAttribute(RequestAttributes.CURRENT_PAGE, page);
+			request.setAttribute(RequestAttributes.BOOK_LIST, bookList);
+			request.getSession().setAttribute(SessionAttributes.URL, url);
+			request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
 		} catch (ServiceException e) {
 			e.printStackTrace();
-			goToPage = "error.jsp";
+			goToPage = WebHelper.pageGenerator(Pages.TABLE_WITH_BOOKS);
+			String errorMessage = e.getMessage();
+			request.setAttribute(RequestAttributes.ERROR_MESSAGE, errorMessage);
 		}
 		
-		String url = request.getRequestURL().toString();
-		url = url + "?command=getAllBooks";
-		
-		request.getSession().setAttribute("url", url);
-		request.getSession().setAttribute("goToPage", goToPage);
-		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-		request.setAttribute("bookList", bookList);
 		dispatcher.forward(request, response);
-		
 	}
-
 }

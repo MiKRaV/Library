@@ -8,16 +8,17 @@ import by.htp.library.dao.DAOFactory;
 import by.htp.library.dao.exception.DAOException;
 import by.htp.library.service.BookService;
 import by.htp.library.service.ServiceException;
+import by.htp.library.service.helper.ServiceMessages;
 
 public class BookServiceImpl implements BookService{
 
-	//���������� �����
+	//ADDING A BOOK
 	@Override
 	public void addBook(Book book) throws ServiceException {
 		//validation
 		if((book.getAuthors() == null || book.getAuthors().isEmpty()) || 
 				(book.getTitle() == null || book.getTitle().isEmpty())) {
-			throw new ServiceException("Invalid parameters of the book");
+			throw new ServiceException(ServiceMessages.INVALID_BOOK_PARAMETERS);
 		}
 		
 		try {
@@ -25,9 +26,8 @@ public class BookServiceImpl implements BookService{
 			BookDAO bookDAO = daoFactory.getBookDAO();
 			bookDAO.addBook(book);
 		} catch (DAOException e) {
-			throw new ServiceException("smth wrong", e);
+			throw new ServiceException(ServiceMessages.FAILURE_ADDING_BOOK, e);
 		}
-		
 	}
 
 	//������ �����!!!
@@ -51,19 +51,17 @@ public class BookServiceImpl implements BookService{
 		return books;
 	}
 
+	//GETTING A LIST OF ALL BOOKS
 	@Override
-	public List<Book> getAllBooks() throws ServiceException {
-		
+	public List<Book> getAllBooks(int pageNumber, int pageSize) throws ServiceException {
 		List<Book> books = null;
-		
+		DAOFactory daoFactory = DAOFactory.getInstance();
+		BookDAO bookDAO = daoFactory.getBookDAO();
 		try {
-			DAOFactory daoFactory = DAOFactory.getInstance();
-			BookDAO bookDAO = daoFactory.getBookDAO();
-			books = bookDAO.getAllBooks();
+			books = bookDAO.getAllBooks(pageNumber, pageSize);
 		} catch (DAOException e) {
-			throw new ServiceException("smth wrong", e);
+			throw new ServiceException(ServiceMessages.BOOK_LIST_NOT_RECEIVED, e);
 		}
-		
 		return books;
 	}
 
@@ -71,6 +69,21 @@ public class BookServiceImpl implements BookService{
 	public boolean isAuthorExist(String name, String surname) throws ServiceException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	//GETTING BOOK COUNT
+	@Override
+	public long getBookCount() throws ServiceException {
+		long bookCount;
+		DAOFactory daoFactory;
+		try {
+			daoFactory = DAOFactory.getInstance();
+			BookDAO bookDAO = daoFactory.getBookDAO();
+			bookCount = bookDAO.getBookCount();
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
+		return bookCount;
 	}
 
 }

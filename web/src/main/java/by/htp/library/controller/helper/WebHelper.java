@@ -11,7 +11,9 @@ public class WebHelper {
     }
 
     public static String pageGenerator(Pages page) {
-        return "/WEB-INF/jsp/" + page.getPage();
+        if (page == Pages.START)
+            return page.getPage();
+        else
+            return "/WEB-INF/jsp/" + page.getPage();
     }
-
 }

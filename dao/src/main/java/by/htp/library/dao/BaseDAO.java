@@ -8,7 +8,7 @@ public interface BaseDAO<T> {
     void add(T obj) throws DAOException;
     T find(Class<T> tClass, Object obj) throws DAOException;
     List<T> findAll(Class<T> tClass, int pageNumber, int pageSize) throws DAOException;
-    void change(T obj) throws DAOException;
+    T change(T obj) throws DAOException;
     void remove(T obj) throws DAOException;
     long getCount(Class<T> tClass) throws DAOException;
 }

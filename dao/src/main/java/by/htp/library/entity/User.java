@@ -10,17 +10,23 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity @Table(name = "T_USER")
 public class User implements Serializable{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "F_USER_ID")
     private Integer id;
 
-    @Column(unique = true)
+    @Column(name = "F_LOGIN", unique = true)
     private String login;
 
+    @Column(name = "F_PASSWORD")
     private String password;
+
+    @Column(name = "F_TYPE")
     private String type;
+
+    @Column(name = "F_STATUS")
     private String status;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)

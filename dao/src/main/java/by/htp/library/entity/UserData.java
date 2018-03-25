@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity @Table(name = "T_USER_DATA")
 public class UserData {
     @Id
     @GenericGenerator(
@@ -19,11 +19,16 @@ public class UserData {
             strategy = "foreign",
             parameters = @Parameter(name = "property", value = "user"))
     @GeneratedValue(generator = "one-one")
+    @Column(name = "F_USER_ID")
     private Integer id;
+
+    @Column(name = "F_NAME")
     private String name;
+
+    @Column(name = "F_SURNAME")
     private String surname;
 
-    @Column(unique = true)
+    @Column(name = "F_EMAIL", unique = true)
     private String email;
 
     @OneToOne(fetch = FetchType.LAZY)

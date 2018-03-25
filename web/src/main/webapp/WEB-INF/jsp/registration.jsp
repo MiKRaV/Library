@@ -62,7 +62,7 @@
 		<input type="text" name="surname" value=""/><br/>
 	
 		<c:out value="${email}" />:<br/>
-		<input type="text" name="e-mail" value=""/><br/>
+		<input type="text" name="email" value=""/><br/>
 	
 		<c:out value="${userType}" />:<br/>
 		<input type="radio" name="userType" value="admin"> <c:out value="${administrator}" /><br/>

@@ -10,9 +10,8 @@ public interface UserService {
 	User logination(String login, String password) throws ServiceException;
 	void registration(User user) throws ServiceException;
 	boolean isUserExist(String login) throws ServiceException;
-	void changeUserData(User user, UserParameters data, String dataValue) throws ServiceException;
+	User changeUserData(User user, UserParameters data, String dataValue) throws ServiceException;
 	List<User> getAllUsersList(int pageNumber, int pageSize) throws ServiceException;
-	List<User> getAllUsersList() throws ServiceException;
 	void removeUser(String login) throws ServiceException;
 	User findUserByLogin(String login) throws ServiceException;
 	void blockUnlockUser(String login) throws ServiceException;

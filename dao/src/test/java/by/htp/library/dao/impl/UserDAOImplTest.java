@@ -20,7 +20,7 @@ public class UserDAOImplTest {
 
     @BeforeClass
     public static void init() {
-        em = EMUtil.getEntityManager("by.htp.library");
+        em = EMUtil.getEntityManager("by.htp.library.test");
         userDAO = DAOFactory.getInstance().getUserDAO();
 
         User user = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,

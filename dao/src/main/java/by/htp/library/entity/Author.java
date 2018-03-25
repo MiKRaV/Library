@@ -12,15 +12,20 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity @Table(name = "T_AUTHOR")
 public class Author implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "F_AUTHOR_ID")
     private Integer id;
+
+    @Column(name = "F_SURNAME")
     private String surname;
+
+    @Column(name = "F_NAME")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "T_AUTHOR_BOOK", joinColumns = {@JoinColumn(name = "F_AUTHOR_ID")},
             inverseJoinColumns = {@JoinColumn(name = "F_BOOK_ID")})
     private List<Book> books = new ArrayList<>();
