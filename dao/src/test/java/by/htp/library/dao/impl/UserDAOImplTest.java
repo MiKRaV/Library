@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 
 public class UserDAOImplTest {
     private static EntityManager em;
@@ -24,7 +25,7 @@ public class UserDAOImplTest {
         userDAO = DAOFactory.getInstance().getUserDAO();
 
         User user = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null);
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
         UserData data = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", user);
         user.setUserData(data);
 
@@ -67,7 +68,7 @@ public class UserDAOImplTest {
     @Test
     public void registartionTest() {
         User user = new User(null, "Ivanchik", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null);
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
         UserData data = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", user);
         user.setUserData(data);
 

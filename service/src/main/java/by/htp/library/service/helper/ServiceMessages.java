@@ -22,5 +22,6 @@ public class ServiceMessages {
     public static final String INVALID_BOOK_PARAMETERS = "Invalid parameters of the book";
     public static final String FAILURE_ADDING_BOOK = "Failure when adding a book";
     public static final String BOOK_LIST_NOT_RECEIVED = "List of books not received";
+    public static final String BOOK_ALREADY_IN_BASKET = "The book is already in the basket";
 
 }

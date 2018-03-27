@@ -4,26 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import by.htp.library.controller.command.Command;
-import by.htp.library.controller.command.impl.AddBookCommand;
-import by.htp.library.controller.command.impl.BlockUnlockUserCommand;
-import by.htp.library.controller.command.impl.ChangeLocalCommand;
-import by.htp.library.controller.command.impl.ChangeUserDataCommand;
-import by.htp.library.controller.command.impl.FindUserCommand;
-import by.htp.library.controller.command.impl.GetAllBooksCommand;
-import by.htp.library.controller.command.impl.GetAllUsersCommand;
-import by.htp.library.controller.command.impl.GoToAccountCommand;
-import by.htp.library.controller.command.impl.GoToAddingBookPage;
-import by.htp.library.controller.command.impl.GoToPageForLogUserCommand;
-import by.htp.library.controller.command.impl.GoToSearchUserPageCommand;
-import by.htp.library.controller.command.impl.GoToStartPage;
-import by.htp.library.controller.command.impl.GoToUserDataPageCommand;
-import by.htp.library.controller.command.impl.GoToUserRemovePage;
-import by.htp.library.controller.command.impl.LogOutCommand;
-import by.htp.library.controller.command.impl.LoginationCommand;
-import by.htp.library.controller.command.impl.RegistrationCommand;
-import by.htp.library.controller.command.impl.RemoveUserCommand;
-import by.htp.library.controller.command.impl.SearchByTitleCommand;
-import by.htp.library.controller.command.impl.StartAppCommand;
+import by.htp.library.controller.command.impl.*;
 import by.htp.library.controller.helper.CommandName;
 
 import static by.htp.library.controller.helper.CommandName.*;
@@ -54,6 +35,9 @@ public class CommandProvider {
 		commands.put(FIND_USER.getCommandName(), new FindUserCommand());
 		commands.put(BLOCK_UNLOCK_USER.getCommandName(), new BlockUnlockUserCommand());
 		commands.put(GO_TO_ADDING_BOOK_PAGE.getCommandName(), new GoToAddingBookPage());
+		commands.put(ADD_BOOK_TO_BASKET.getCommandName(), new AddBookToBasketCommand());
+		commands.put(GO_TO_PAGE.getCommandName(), new GoToPageCommand());
+		commands.put(REMOVE_BOOK_FROM_BASKET.getCommandName(), new RemoveBookFromBasket());
 	}
 	
 	public Command getCommand(String commandName) {

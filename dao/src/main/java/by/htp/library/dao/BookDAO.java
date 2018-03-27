@@ -15,5 +15,8 @@ public interface BookDAO {
 	void removeBook(Book book) throws DAOException;
 	boolean isBookExist(String title, List<Author> authors) throws DAOException;
 	long getBookCount() throws DAOException;
+	void addBookToBasket(Book book) throws DAOException;
+	void removeBookFromBasket(Book book) throws DAOException;
+	Book updateBook(Book book) throws DAOException;
 
 }

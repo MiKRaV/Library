@@ -28,17 +28,17 @@ public class BaseDAOImplTest {
         baseDao = DAOFactory.getInstance().getBaseDAO();
 
         User user1 = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null);
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
         UserData userData1 = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", user1);
         user1.setUserData(userData1);
 
         User user2 = new User(null, "Ivanchik", "123456", UserHelper.TYPE_READER,
-                UserHelper.STATUS_ACTIVE, null);
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
         UserData userData2 = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", user2);
         user2.setUserData(userData2);
 
         User user3 = new User(null, "Vovchik", "123456", UserHelper.TYPE_READER,
-                UserHelper.STATUS_ACTIVE, null);
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
         UserData userData3 = new UserData(null, "Vladimir", "Vladimirov", "vovchik@mail.ru", user3);
         user3.setUserData(userData3);
 
@@ -111,7 +111,7 @@ public class BaseDAOImplTest {
     }
 
     @Test
-    public void changeTest() {
+    public void updateTest() {
         ArrayList<Book> books = new ArrayList<>();
         Book book = new Book("Head First Java");
         books.add(book);
@@ -126,7 +126,7 @@ public class BaseDAOImplTest {
         em.clear();
         book.getAuthors().get(0).setName("Gosha");
         try {
-            baseDao.change(book);
+            baseDao.update(book);
         } catch (DAOException e) {
             e.printStackTrace();
         }

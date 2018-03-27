@@ -8,5 +8,7 @@ public class SessionAttributes {
     public static final String MESSAGE = "message";
     public static final String ERROR_MESSAGE = "errorMessage";
     public static final String FOUND_USER = "foundUser";
+    public static final String BOOK = "book";
+    public static final String BOOK_LIST = "bookList";
 
 }

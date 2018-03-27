@@ -13,6 +13,7 @@
 <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
 <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
 <fmt:message bundle="${loc}" key="local.readerMainPage.message" var="message" />
+<fmt:message bundle="${loc}" key="local.button.name.basket" var="basket_button" />
 <fmt:message bundle="${loc}" key="local.readerMainPage.button.name.getAllBooks" var="getAllBooksButton" />
 <fmt:message bundle="${loc}" key="local.button.name.logOut" var="logOutButton" />
 <fmt:message bundle="${loc}" key="local.button.name.editData" var="editDataButton" />
@@ -20,7 +21,6 @@
 </head>
 
 <body>
-	<c:out value="${message}" />
 
 	<table border="0">
 		<tr>
@@ -39,6 +39,14 @@
 				</form>
 			</th>
 	</table>
+
+	<c:out value="${message}" />
+
+	<form action="FrontController" method="post">
+		<input type="hidden" name="command" value="goToPage"/>
+		<input type="hidden" name="page" value="/WEB-INF/jsp/account/reader/Basket.jsp"/>
+		<input type="submit" value="${basket_button}: ${user.basket.size()}">
+	</form>
 	
 	<form action="FrontController" method="post">
 		<input type="hidden" name="command" value="goToUserDataPage"/>

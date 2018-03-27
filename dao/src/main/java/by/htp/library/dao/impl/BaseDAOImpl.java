@@ -66,7 +66,7 @@ public class BaseDAOImpl<T> implements by.htp.library.dao.BaseDAO<T> {
     }
 
     @Override
-    public T change(T obj) throws DAOException {
+    public T update(T obj) throws DAOException {
         em = EMUtil.getEntityManager();
         try {
             em.getTransaction().begin();

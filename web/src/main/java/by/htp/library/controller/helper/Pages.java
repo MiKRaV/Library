@@ -15,7 +15,8 @@ public enum Pages {
     ADDING_BOOK("account/admin/AddingBook.jsp"),
     START("index.jsp"),
     READER_MAIN_PAGE("account/reader/ReaderMainPage.jsp"),
-    TABLE_WITH_BOOKS("account/TableWithBooks.jsp");
+    TABLE_WITH_BOOKS("account/TableWithBooks.jsp"),
+    BASKET("account/reader/Basket.jsp");
 
     private String page;
 

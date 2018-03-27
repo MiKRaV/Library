@@ -103,9 +103,9 @@ public class UserDAOImpl implements UserDAO{
 
 	//CHANGING USER DATA
 	@Override
-	public User changeUserData(User user) throws DAOException {
+	public User updateUser(User user) throws DAOException {
 		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
-		return (User) baseDAO.change(user);
+		return (User) baseDAO.update(user);
 	}
 
 	//GETTING A LIST OF ALL USERS

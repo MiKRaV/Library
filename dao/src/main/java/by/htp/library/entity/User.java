@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +32,9 @@ public class User implements Serializable{
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private UserData userData;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private List<Book> basket;
 
     @Override
     public boolean equals(Object obj) {

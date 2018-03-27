@@ -53,7 +53,7 @@ public class BooKDAOImplTest {
     @Test
     public void addBookTest() {
         List<Book> pushkinBooks = new ArrayList<>();
-        Book mciry = new Book(null, "Mciry", "fiction", null);
+        Book mciry = new Book(null, "Mciry", "fiction", null, null);
         pushkinBooks.add(mciry);
         List<Author> authors = new ArrayList<>();
         Author pushkin = new Author(null, "Pushkin", "Aleksandr", pushkinBooks);

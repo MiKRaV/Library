@@ -10,6 +10,12 @@ public class WebHelper {
         return request.getRequestURL().toString() + "?command=" + commandName.getCommandName();
     }
 
+    /*
+    public static String urlGenerator(HttpServletRequest request, String page) {
+        return request.getRequestURL().toString() + "?command=" + commandName.getCommandName();
+    }
+    */
+
     public static String pageGenerator(Pages page) {
         if (page == Pages.START)
             return page.getPage();

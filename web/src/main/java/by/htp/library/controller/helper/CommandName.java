@@ -21,7 +21,11 @@ public enum CommandName {
 	LOG_OUT("logOutCommand"),
 	GO_TO_ACCOUNT("goToAccount"),
 	SEARCH_BY_TITLE("searchByTitle"),
-	GET_ALL_BOOKS("getAllBooks");
+	GET_ALL_BOOKS("getAllBooks"),
+	ADD_BOOK_TO_BASKET("addBookToBasket"),
+    GO_TO_BASKET("goToBasket"),
+	GO_TO_PAGE("goToPage"),
+	REMOVE_BOOK_FROM_BASKET("removeBookFromBasket");
 	
 	private String commandName;
 

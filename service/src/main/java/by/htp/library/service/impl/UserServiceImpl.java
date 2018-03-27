@@ -2,6 +2,8 @@ package by.htp.library.service.impl;
 
 import java.util.List;
 
+import by.htp.library.dao.BaseDAO;
+import by.htp.library.entity.Book;
 import by.htp.library.entity.User;
 import by.htp.library.dao.DAOFactory;
 import by.htp.library.dao.UserDAO;
@@ -98,9 +100,21 @@ public class UserServiceImpl implements UserService {
 		return isUserExist;
 	}
 
-	//CHANGING USER DATA
 	@Override
-	public User changeUserData(User user, UserParameters data, String dataValue) throws ServiceException {
+	public User updateUser(User user) throws ServiceException {
+		try {
+			DAOFactory daoFactory = DAOFactory.getInstance();
+			UserDAO userDAO = daoFactory.getUserDAO();
+			user = userDAO.updateUser(user);
+		} catch (DAOException e) {
+			throw new ServiceException(ServiceMessages.UPDATE_USER_ERROR, e);
+		}
+		return user;
+	}
+
+	//UPDATE USER DATA
+	@Override
+	public User updateUser(User user, UserParameters data, String dataValue) throws ServiceException {
 		// validation	
 		if (!validator.validate(dataValue, data)) {
 			throw new ServiceException(ServiceMessages.INCORRECT_VALUE);
@@ -124,7 +138,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			DAOFactory daoFactory = DAOFactory.getInstance();
 			UserDAO userDAO = daoFactory.getUserDAO();
-			user = userDAO.changeUserData(user);
+			user = userDAO.updateUser(user);
 		} catch (DAOException e) {
 			throw new ServiceException(ServiceMessages.UPDATE_USER_ERROR, e);
 		}
@@ -200,5 +214,49 @@ public class UserServiceImpl implements UserService {
 		return userCount;
 	}
 
+	//ADDING THE BOOK TO THE BASKET
+	@Override
+	public User addBookToBasket(User user, int bookID) throws ServiceException {
+		DAOFactory daoFactory = DAOFactory.getInstance();
+		BaseDAO baseDAO = daoFactory.getBaseDAO();
 
+		Book book;
+
+		try {
+			book = (Book) baseDAO.find(Book.class, bookID);
+			for (Book bookFromBasket : user.getBasket()) {
+				if (bookFromBasket.getId().equals(book.getId()))
+					throw new ServiceException(ServiceMessages.BOOK_ALREADY_IN_BASKET);
+			}
+			user.getBasket().add(book);
+			book.setUser(user);
+			baseDAO.update(book);
+			user = (User) baseDAO.update(user);
+		} catch (DAOException e) {
+			throw new ServiceException();
+		}
+
+		return user;
+	}
+
+    @Override
+    public User removeBookFromBasket(User user, int bookID) throws ServiceException {
+		DAOFactory daoFactory = DAOFactory.getInstance();
+		BaseDAO baseDAO = daoFactory.getBaseDAO();
+
+		Book book;
+
+		try {
+			book = (Book) baseDAO.find(Book.class, bookID);
+			List<Book> basket = user.getBasket();
+			basket.remove(basket.indexOf(book));
+			book.setUser(null);
+			baseDAO.update(book);
+			user = (User) baseDAO.update(user);
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+
+		return user;
+    }
 }

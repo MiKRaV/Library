@@ -59,7 +59,7 @@ public class ChangeUserDataCommand implements Command {
 					newValue = request.getParameter(RequestParameters.USER_NEW_EMAIL);
 					break;
 			}
-			user = userService.changeUserData(user, parameter, newValue);
+			user = userService.updateUser(user, parameter, newValue);
             request.getSession().setAttribute(SessionAttributes.USER, user);
             message = parameter.getParameter().toUpperCase() + " changed successfully!";
 		} catch (ServiceException e) {

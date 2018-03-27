@@ -24,13 +24,17 @@ public class RequestParameters {
     public static final String AUTHORS_SURNAMES = "surnames[]";
 
     //BOOK
+    public static final String BOOK = "book";
+    public static final String BOOK_ID = "bookID";
     public static final String BOOK_TITLE = "title";
     public static final String BOOK_GENRE = "genre";
+
 
     public static final String COMMAND = "command";
     public static final String LOCAL = "local";
     public static final String PAGE = "page";
     public static final String PAGE_SIZE = "pageSize";
+    public static final String PAGE_COUNT = "pageCount";
 
 
 }

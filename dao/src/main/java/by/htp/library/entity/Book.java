@@ -28,6 +28,10 @@ public class Book implements Serializable{
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "books", cascade = CascadeType.ALL)
     private List<Author> authors = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "F_USER_ID")
+    private User user;
+
     public Book(String title) {
         this.title = title;
     }

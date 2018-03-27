@@ -34,22 +34,26 @@ public class GetAllBooksCommand implements Command{
 		int pageCount;
 		
 		try {
-			if (request.getParameter(RequestParameters.PAGE) != null)
+			if (request.getAttribute(RequestAttributes.CURRENT_PAGE) != null)
+				page = (int) request.getAttribute(RequestAttributes.CURRENT_PAGE);
+			else if (request.getParameter(RequestParameters.PAGE) != null)
 				page = Integer.parseInt(request.getParameter(RequestParameters.PAGE));
 
 			if (request.getParameter(RequestParameters.PAGE_SIZE) != null)
 				pageSize = Integer.parseInt(request.getParameter(RequestParameters.PAGE_SIZE));
 
-			bookCount = bookService.getBookCount();
-			pageCount = (int) Math.ceil(bookCount / pageSize);
-
 			bookList = bookService.getAllBooks(page, pageSize);
-			goToPage = WebHelper.pageGenerator(Pages.TABLE_WITH_BOOKS);
-			url = WebHelper.urlGenerator(request, CommandName.GET_ALL_BOOKS);
+
+			bookCount = bookService.getBookCount(); //total book count
+			pageCount = (int) Math.ceil((bookCount * 1.0 ) / pageSize);
 
 			request.setAttribute(RequestAttributes.PAGE_COUNT, pageCount);
 			request.setAttribute(RequestAttributes.CURRENT_PAGE, page);
 			request.setAttribute(RequestAttributes.BOOK_LIST, bookList);
+			request.setAttribute(RequestAttributes.PAGE_SIZE, pageSize);
+
+			goToPage = WebHelper.pageGenerator(Pages.TABLE_WITH_BOOKS);
+			url = WebHelper.urlGenerator(request, CommandName.GET_ALL_BOOKS);
 			request.getSession().setAttribute(SessionAttributes.URL, url);
 			request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
 		} catch (ServiceException e) {

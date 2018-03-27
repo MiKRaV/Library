@@ -43,7 +43,7 @@ public class BookDAOImpl implements BookDAO {
 			}
 		}
 
-		baseDAO.change(book);
+		baseDAO.update(book);
 	}
 
 	public List<Book> searchBookByTitle(String title) throws DAOException {
@@ -121,5 +121,23 @@ public class BookDAOImpl implements BookDAO {
 	public long getBookCount() throws DAOException {
 		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
 		return baseDAO.getCount(Book.class);
+	}
+
+	@Override
+	public void addBookToBasket(Book book) throws DAOException {
+		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
+		baseDAO.update(book);
+	}
+
+	@Override
+	public void removeBookFromBasket(Book book) throws DAOException {
+		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
+		baseDAO.update(book);
+	}
+
+	@Override
+	public Book updateBook(Book book) throws DAOException {
+		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
+		 return (Book) baseDAO.update(book);
 	}
 }
