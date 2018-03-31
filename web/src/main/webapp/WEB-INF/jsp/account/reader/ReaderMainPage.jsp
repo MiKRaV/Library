@@ -44,7 +44,7 @@
 
 	<form action="FrontController" method="post">
 		<input type="hidden" name="command" value="goToPage"/>
-		<input type="hidden" name="page" value="/WEB-INF/jsp/account/reader/Basket.jsp"/>
+		<input type="hidden" name="page" value="jsp/account/reader/Basket.jsp"/>
 		<input type="submit" value="${basket_button}: ${user.basket.size()}">
 	</form>
 	

@@ -31,10 +31,10 @@ public class GoToAccountCommand implements Command{
 			goToPage = WebHelper.pageGenerator(Pages.ADMIN_MAIN_PAGE);
 		}
 
-		request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
+		//request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
 		
-		String url = WebHelper.urlGenerator(request, CommandName.GO_TO_ACCOUNT);
-		request.getSession().setAttribute(SessionAttributes.URL, url);
+		//String url = WebHelper.urlGenerator(request, CommandName.GO_TO_ACCOUNT);
+		//request.getSession().setAttribute(SessionAttributes.URL, url);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
 		dispatcher.forward(request, response);

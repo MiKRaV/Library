@@ -25,7 +25,7 @@ public class UserDAOImplTest {
         userDAO = DAOFactory.getInstance().getUserDAO();
 
         User user = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
         UserData data = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", user);
         user.setUserData(data);
 
@@ -68,7 +68,7 @@ public class UserDAOImplTest {
     @Test
     public void registartionTest() {
         User user = new User(null, "Ivanchik", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
         UserData data = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", user);
         user.setUserData(data);
 

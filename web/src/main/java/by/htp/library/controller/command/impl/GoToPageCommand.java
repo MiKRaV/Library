@@ -16,11 +16,13 @@ import java.io.IOException;
 public class GoToPageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String goToPage = request.getParameter(RequestParameters.PAGE);
+        String goToPage = request.getParameter(RequestParameters.GO_TO_PAGE);
 
-        String url = WebHelper.urlGenerator(request, CommandName.GO_TO_PAGE);
+        //String url = WebHelper.urlGenerator(request, CommandName.GO_TO_PAGE);
 
-        request.getSession().setAttribute(SessionAttributes.URL, url);
+        //request.getSession().setAttribute(SessionAttributes.URL, url);
+
+        //response.sendRedirect(goToPage);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
         dispatcher.forward(request, response);

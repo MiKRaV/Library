@@ -28,17 +28,17 @@ public class BaseDAOImplTest {
         baseDao = DAOFactory.getInstance().getBaseDAO();
 
         User user1 = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
         UserData userData1 = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", user1);
         user1.setUserData(userData1);
 
         User user2 = new User(null, "Ivanchik", "123456", UserHelper.TYPE_READER,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
         UserData userData2 = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", user2);
         user2.setUserData(userData2);
 
         User user3 = new User(null, "Vovchik", "123456", UserHelper.TYPE_READER,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
         UserData userData3 = new UserData(null, "Vladimir", "Vladimirov", "vovchik@mail.ru", user3);
         user3.setUserData(userData3);
 

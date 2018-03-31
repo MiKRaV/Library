@@ -29,10 +29,15 @@ public class RequestParameters {
     public static final String BOOK_TITLE = "title";
     public static final String BOOK_GENRE = "genre";
 
+    //ORDER
+    public static final String ORDER_ID = "orderID";
+    public static final String ORDER_STATUS = "orderStatus";
+
 
     public static final String COMMAND = "command";
     public static final String LOCAL = "local";
     public static final String PAGE = "page";
+    public static final String GO_TO_PAGE = "goToPage";
     public static final String PAGE_SIZE = "pageSize";
     public static final String PAGE_COUNT = "pageCount";
 

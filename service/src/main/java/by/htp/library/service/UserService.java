@@ -20,4 +20,5 @@ public interface UserService {
 	long getUserCount() throws ServiceException;
 	User addBookToBasket(User user, int bookID) throws ServiceException;
 	User removeBookFromBasket(User user, int bookID) throws ServiceException;
+	User clearBasket(User user) throws ServiceException;
 }

@@ -10,5 +10,7 @@ public class Messages {
     public static final String BOOK_NOT_ADDED_TO_BASKET = "Book not added to basket";
     public static final String BOOK_REMOVED_FROM_BASKET = "The book was deleted from the basket";
     public static final String BOOK_NOT_REMOVED_FROM_BASKET = "Book not deleted from the basket";
+    public static final String BASKET_CLEARED_SUCCESSFULLY = "Basket cleared successfully";
+    public static final String ORDER_IS_PROCESSED = "Order is processed";
 
 }

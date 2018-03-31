@@ -32,6 +32,10 @@ public class Book implements Serializable{
     @JoinColumn(name = "F_USER_ID")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "F_ORDER_ID")
+    private Order order;
+
     public Book(String title) {
         this.title = title;
     }

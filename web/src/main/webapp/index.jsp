@@ -6,7 +6,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
+	<link rel="stylesheet" href="stylesheet/index.css">
+<title>Library</title>
 
 <fmt:setLocale value="${sessionScope.local}" />
 <fmt:setBundle basename="localization.local" var="loc" />
@@ -18,17 +19,19 @@
 </head>
 <body>
 
+	<c:set var="url" value="index.jsp" scope="session"/>
+
 	<table border="0">
 		<tr>
 			<th>
-				<form action="FrontController" method="get">
+				<form class="formLocal" action="FrontController" method="get">
 					<input type="hidden" name="command" value="changeLocal" />
 					<input type="hidden" name="local" value="ru" /> 
 					<input type="submit" value="${ru_button}" />
 				</form>
 			</th>
 			<th>
-				<form action="FrontController" method="get">
+				<form class="formLocal" action="FrontController" method="get">
 					<input type="hidden" name="command" value="changeLocal" />
 					<input type="hidden" name="local" value="en" /> 
 					<input type="submit" value="${en_button}" /><br />
@@ -37,12 +40,14 @@
 	</table>
 
 	<form action="FrontController" method="post">
-		<input type="hidden" name="command" value="startAppLogination"/>
+		<input type="hidden" name="command" value="goToPage"/>
+		<input type="hidden" name="goToPage" value="jsp/logination.jsp"/>
 		<input type="submit" value="${log_button}">
 	</form>
 	
 	<form action="FrontController" method="post">
-		<input type="hidden" name="command" value="startAppRegistration"/>
+		<input type="hidden" name="command" value="goToPage"/>
+		<input type="hidden" name="goToPage" value="jsp/registration.jsp"/>
 		<input type="submit" value="${reg_button}">
 	</form>
 

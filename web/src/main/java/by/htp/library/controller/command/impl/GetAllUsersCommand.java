@@ -20,10 +20,10 @@ public class GetAllUsersCommand implements Command{
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<User> userList = null;
-		
+
 		ServiceFactory serviceFactory = ServiceFactory.getInstance();
 		UserService userService = serviceFactory.getUserService();
-		
+
 		String goToPage = "";
 		String url = "";
 		int pageSize = 1;
@@ -44,12 +44,12 @@ public class GetAllUsersCommand implements Command{
 			userList = userService.getAllUsersList(page, pageSize);
 
 			goToPage = WebHelper.pageGenerator(Pages.TABLE_WITH_USERS);
-			url = WebHelper.urlGenerator(request, CommandName.GET_ALL_USERS);
+			//url = WebHelper.urlGenerator(request, CommandName.GET_ALL_USERS);
 
-			request.setAttribute(RequestAttributes.PAGE_COUNT, pageCount);
-			request.setAttribute(RequestAttributes.CURRENT_PAGE, page);
-			request.setAttribute(RequestAttributes.USER_LIST, userList);
-			request.getSession().setAttribute(SessionAttributes.URL, url);
+			request.getSession().setAttribute(SessionAttributes.PAGE_COUNT, pageCount);
+			request.getSession().setAttribute(SessionAttributes.CURRENT_PAGE, page);
+			request.getSession().setAttribute(SessionAttributes.USER_LIST, userList);
+			//request.getSession().setAttribute(SessionAttributes.URL, url);
 			request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
 		} catch (ServiceException e) {
 			e.printStackTrace();

@@ -9,6 +9,7 @@
         <class>by.htp.library.entity.UserData</class>
         <class>by.htp.library.entity.Author</class>
         <class>by.htp.library.entity.Book</class>
+        <class>by.htp.library.entity.Order</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
@@ -29,6 +30,7 @@
         <class>by.htp.library.entity.UserData</class>
         <class>by.htp.library.entity.Author</class>
         <class>by.htp.library.entity.Book</class>
+        <class>by.htp.library.entity.Order</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>

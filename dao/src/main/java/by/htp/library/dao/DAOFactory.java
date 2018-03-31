@@ -1,9 +1,6 @@
 package by.htp.library.dao;
 
-import by.htp.library.dao.impl.AuthorDAOImpl;
-import by.htp.library.dao.impl.BaseDAOImpl;
-import by.htp.library.dao.impl.BookDAOImpl;
-import by.htp.library.dao.impl.UserDAOImpl;
+import by.htp.library.dao.impl.*;
 
 public class DAOFactory {
 	
@@ -13,6 +10,7 @@ public class DAOFactory {
 	private final UserDAO userDAO = new UserDAOImpl();
 	private final BookDAO bookDAO = new BookDAOImpl();
 	private final AuthorDAO authorDAO = new AuthorDAOImpl();
+	public final OrderDAO orderDAO = new OrderDAOImpl();
 	
 	private DAOFactory() {}
 
@@ -27,6 +25,8 @@ public class DAOFactory {
 	}
 
 	public AuthorDAO getAuthorDAO() {return authorDAO;}
+
+	public OrderDAO getOrderDAO() {return orderDAO;}
 		
 	public static DAOFactory getInstance() {
 		return instance;

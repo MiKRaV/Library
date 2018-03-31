@@ -36,6 +36,9 @@ public class User implements Serializable{
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Book> basket;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Order> orders;
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

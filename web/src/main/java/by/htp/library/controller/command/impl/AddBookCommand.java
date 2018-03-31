@@ -27,7 +27,7 @@ public class AddBookCommand implements Command {
 		List<Book> books = new ArrayList<>();
 		String title = request.getParameter(RequestParameters.BOOK_TITLE);
 		String genre = request.getParameter(RequestParameters.BOOK_GENRE);
-		Book book = new Book(null,  title, genre, null, null);
+		Book book = new Book(null,  title, genre, null, null, null);
 		books.add(book);
 
 		List<Author> authors = new ArrayList<>();

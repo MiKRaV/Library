@@ -2,7 +2,7 @@ package by.htp.library.entity.helper;
 
 public class UserHelper {
 
-    public static final String ID_USER = "id_user";
+    public static final String ID_USER = "id";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
     public static final String NAME = "name";

@@ -16,7 +16,9 @@ public enum Pages {
     START("index.jsp"),
     READER_MAIN_PAGE("account/reader/ReaderMainPage.jsp"),
     TABLE_WITH_BOOKS("account/TableWithBooks.jsp"),
-    BASKET("account/reader/Basket.jsp");
+    BASKET("account/reader/Basket.jsp"),
+    ORDERS("account/Orders.jsp"),
+    ORDER_INFO("account/OrderInfo.jsp");
 
     private String page;
 

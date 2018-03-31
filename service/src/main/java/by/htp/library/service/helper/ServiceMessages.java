@@ -23,5 +23,14 @@ public class ServiceMessages {
     public static final String FAILURE_ADDING_BOOK = "Failure when adding a book";
     public static final String BOOK_LIST_NOT_RECEIVED = "List of books not received";
     public static final String BOOK_ALREADY_IN_BASKET = "The book is already in the basket";
+    public static final String BOOK_NOT_ADDED_TO_BASKET = "Could not add book to basket";
+    public static final String BOOK_NOT_REMOVED_FROM_BASKET = "Could not remove book from basket";
+    public static final String FAILED_CLEAR_BASKET = "Failed to clear basket";
 
+
+    //ORDER
+    public static final String ORDER_LIST_NOT_RECEIVED = "List of order not received";
+    public static final String ORDER_NOT_CREATED = "Order not created";
+    public static final String ORDER_NOT_RECEIVED = "Did not receive an order";
+    public static final String ORDER_STATUS_IS_NOT_CHANGED = "Order status is not changed";
 }

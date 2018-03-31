@@ -233,7 +233,7 @@ public class UserServiceImpl implements UserService {
 			baseDAO.update(book);
 			user = (User) baseDAO.update(user);
 		} catch (DAOException e) {
-			throw new ServiceException();
+			throw new ServiceException(ServiceMessages.BOOK_NOT_ADDED_TO_BASKET, e);
 		}
 
 		return user;
@@ -254,9 +254,29 @@ public class UserServiceImpl implements UserService {
 			baseDAO.update(book);
 			user = (User) baseDAO.update(user);
 		} catch (DAOException e) {
-			e.printStackTrace();
+			throw new ServiceException(ServiceMessages.BOOK_NOT_REMOVED_FROM_BASKET, e);
 		}
 
 		return user;
     }
+
+	@Override
+	public User clearBasket(User user) throws ServiceException {
+		DAOFactory daoFactory = DAOFactory.getInstance();
+		BaseDAO baseDAO = daoFactory.getBaseDAO();
+
+		List<Book> basket = user.getBasket();
+		try {
+			for (Book book : basket) {
+				book.setUser(null);
+				baseDAO.update(book);
+			}
+			user.getBasket().clear();
+			user = (User) baseDAO.update(user);
+		} catch (DAOException e) {
+			throw new ServiceException(ServiceMessages.FAILED_CLEAR_BASKET, e);
+		}
+
+		return user;
+	}
 }

@@ -32,14 +32,11 @@ public class LoginationCommand implements Command{
 		
 		try {
 			user = userService.logination(login, password);
-			System.out.println(user);
 			if(user != null) {
 				goToPage = WebHelper.pageGenerator(Pages.LOGINATION_MESSAGE);
-				url = WebHelper.urlGenerator(request, CommandName.GO_TO_PAGE_FOR_LOG_USER);
 				request.getSession().setAttribute(SessionAttributes.USER, user);
 			} else {
 				goToPage = WebHelper.pageGenerator(Pages.LOGINATION);
-				url = WebHelper.urlGenerator(request, CommandName.START_APP_LOGINATION);
 				errorMessage = "Try it again"; //set constant
 				request.setAttribute(RequestAttributes.ERROR_MESSAGE, errorMessage);
 			}
@@ -47,13 +44,9 @@ public class LoginationCommand implements Command{
 			// logging
 			e.printStackTrace(); //stub
 			goToPage = WebHelper.pageGenerator(Pages.LOGINATION);
-			url = WebHelper.urlGenerator(request, CommandName.START_APP_LOGINATION);
 			errorMessage = e.getMessage();
 			request.setAttribute(RequestAttributes.ERROR_MESSAGE, errorMessage);
 		}
-		
-		request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
-		request.getSession().setAttribute(SessionAttributes.URL, url);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
 		dispatcher.forward(request, response);

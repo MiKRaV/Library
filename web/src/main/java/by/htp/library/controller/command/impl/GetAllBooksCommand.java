@@ -27,7 +27,7 @@ public class GetAllBooksCommand implements Command{
 		BookService bookService = serviceFactory.getBookService();
 
 		String goToPage = "";
-		String url = "";
+		//String url = "";
 		int pageSize = 1;
 		int page = 1;
 		long bookCount;
@@ -47,14 +47,14 @@ public class GetAllBooksCommand implements Command{
 			bookCount = bookService.getBookCount(); //total book count
 			pageCount = (int) Math.ceil((bookCount * 1.0 ) / pageSize);
 
-			request.setAttribute(RequestAttributes.PAGE_COUNT, pageCount);
-			request.setAttribute(RequestAttributes.CURRENT_PAGE, page);
-			request.setAttribute(RequestAttributes.BOOK_LIST, bookList);
-			request.setAttribute(RequestAttributes.PAGE_SIZE, pageSize);
+			request.getSession().setAttribute(SessionAttributes.PAGE_COUNT, pageCount);
+			request.getSession().setAttribute(SessionAttributes.CURRENT_PAGE, page);
+			request.getSession().setAttribute(SessionAttributes.BOOK_LIST, bookList);
+			request.getSession().setAttribute(SessionAttributes.PAGE_SIZE, pageSize);
 
 			goToPage = WebHelper.pageGenerator(Pages.TABLE_WITH_BOOKS);
-			url = WebHelper.urlGenerator(request, CommandName.GET_ALL_BOOKS);
-			request.getSession().setAttribute(SessionAttributes.URL, url);
+			//url = WebHelper.urlGenerator(request, CommandName.GET_ALL_BOOKS);
+			//request.getSession().setAttribute(SessionAttributes.URL, url);
 			request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
 		} catch (ServiceException e) {
 			e.printStackTrace();

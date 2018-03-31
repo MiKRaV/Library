@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.htp.library.controller.helper.*;
 import by.htp.library.entity.Book;
+import by.htp.library.entity.Order;
 import by.htp.library.entity.User;
 import by.htp.library.controller.command.Command;
 import by.htp.library.entity.UserData;
@@ -34,13 +35,14 @@ public class RegistrationCommand implements Command {
 		String userType = request.getParameter(RequestParameters.USER_TYPE);
 		String userStatus = UserHelper.STATUS_ACTIVE;
 		List<Book> basket = new ArrayList<>();
+		List<Order> orders = new ArrayList<>();
 		
 		String goToPage = "";
 		String url;
 		User user = null;
 		
 		try {
-			user = new User(null, login, password, userType, userStatus, null, basket);
+			user = new User(null, login, password, userType, userStatus, null, basket, orders);
 			UserData userData = new UserData(null, name, surname, email, user);
 			user.setUserData(userData);
 			userService.registration(user);

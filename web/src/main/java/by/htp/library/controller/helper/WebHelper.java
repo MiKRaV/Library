@@ -20,6 +20,6 @@ public class WebHelper {
         if (page == Pages.START)
             return page.getPage();
         else
-            return "/WEB-INF/jsp/" + page.getPage();
+            return "/jsp/" + page.getPage();
     }
 }

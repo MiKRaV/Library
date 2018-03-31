@@ -25,7 +25,12 @@ public enum CommandName {
 	ADD_BOOK_TO_BASKET("addBookToBasket"),
     GO_TO_BASKET("goToBasket"),
 	GO_TO_PAGE("goToPage"),
-	REMOVE_BOOK_FROM_BASKET("removeBookFromBasket");
+	REMOVE_BOOK_FROM_BASKET("removeBookFromBasket"),
+	GET_ORDERS("getOrders"),
+	CLEAR_BASKET("clearBasket"),
+	CREATE_ORDER("createOrder"),
+	GET_ORDER_INFO("getOrderInfo"),
+	CHANGE_ORDER_STATUS("changeOrderStatus");
 	
 	private String commandName;
 

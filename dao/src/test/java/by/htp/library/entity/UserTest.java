@@ -16,7 +16,7 @@ public class UserTest {
         EntityManager em = EMUtil.getEntityManager("by.htp.library.test");
         em.getTransaction().begin();
         User user = new User(null,"MiKRaV", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>());
+                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
         UserData userData = new UserData(null, "Mikhail", "Kravchenya",
                 "mkravchenya@mail.ru",  user);
         user.setUserData(userData);
@@ -34,7 +34,7 @@ public class UserTest {
         em.clear();
         Assert.assertEquals("Gosha", userFromDB.getUserData().getName());
 
-        userFromDB.getBasket().add(new Book(null, "1", "fiction", null, null));
+        userFromDB.getBasket().add(new Book(null, "1", "fiction", null, null, null));
         em.getTransaction().begin();
         em.merge(userFromDB);
         em.getTransaction().commit();
