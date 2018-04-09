@@ -1,0 +1,157 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.select-page-size {
+    display: inline-block;
+    text-align: left;
+    padding: 10px;
+    margin: 10px;
+}
+
+.select-page-size input[type="submit"]{
+    display: inline;
+    width: 130px;
+}
+
+.table-data-container {
+    width: 90%;
+    margin: 50px auto;
+}
+
+.table-data {
+    display: table;
+    margin: auto;
+}
+
+.table-data table {
+    border-collapse: collapse;
+}
+
+.table-data table caption{
+    font-size: 20px;
+}
+
+.table-data .row-header {
+    height: 70px;
+}
+
+.table-data .row-data {
+    height: 50px;
+}
+
+.table-data th {
+    width: 150px;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid black;
+    background-color: grey;
+}
+
+.table-data td {
+    width: 150px;
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+.table-data .cell-id {
+    width: 100px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.table-data .cell-date {
+    width: 200px;
+}
+
+.table-data .cell-order-status {
+    width: 200px;
+}
+
+.table-data .cell-actions {
+    width: 300px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.table-data .cell-actions select {
+    display: inline-block;
+}
+
+.table-data .cell-actions input[type="submit"]{
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    padding: 5px;
+    margin: 5px auto;
+}
+
+.table-data .block-unlock input[type="submit"]{
+    display: block;
+    width: 120px;
+    height: 30px;
+    padding: 5px;
+    margin: 5px auto;
+}
+
+.table-data .cell-book-title {
+    width: 300px;
+    padding: 5px;
+}
+
+.table-data .cell-book-author {
+    width: 200px;
+    padding: 5px;
+}
+
+.table-data .cell-book-genre {
+    width: 200px;
+    padding: 5px;
+}
+
+.table-data .cell-submit input[type="submit"]{
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+    margin: 5px auto;
+}
+
+.table-data tr:nth-child(2n) {
+    background-color: aquamarine;
+}
+
+.table-data tr:nth-child(2n+1) {
+    background-color: beige;
+}
+
+.table-data tr:hover {
+    background-color: darkcyan;
+}
+
+.table-pagination {
+    display: table;
+    border-collapse: collapse;
+    margin: 10px auto;
+}
+
+.table-pagination .row-pagination {
+    display: table-row;
+    height: 50px;
+}
+
+.table-pagination .cell-pagination {
+    display: table-cell;
+    width: 70px;
+}
+
+.table-pagination .cell-pagination input[type="submit"]{
+    width: 70px;
+    height: 30px;
+    padding: 5px;
+}

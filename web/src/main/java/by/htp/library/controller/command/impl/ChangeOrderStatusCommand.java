@@ -21,44 +21,22 @@ public class ChangeOrderStatusCommand implements Command {
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         OrderService orderService = serviceFactory.getOrderService();
 
-        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         int orderID = Integer.parseInt(request.getParameter(RequestParameters.ORDER_ID));
         String orderStatus = request.getParameter(RequestParameters.ORDER_STATUS);
-        List<Order> orderList = null;
+        Order order = null;
         String goToPage = "";
-        String url = "";
-        int pageSize = 10;
-        int page = 1;
-        long orderCount;
-        int pageCount;
 
         try {
-            if (request.getAttribute(RequestAttributes.CURRENT_PAGE) != null)
-                page = (int) request.getAttribute(RequestAttributes.CURRENT_PAGE);
-            else if (request.getParameter(RequestParameters.PAGE) != null)
-                page = Integer.parseInt(request.getParameter(RequestParameters.PAGE));
-
-            if (request.getParameter(RequestParameters.PAGE_SIZE) != null)
-                pageSize = Integer.parseInt(request.getParameter(RequestParameters.PAGE_SIZE));
-
             orderService.changeOrderStatus(orderID, orderStatus);
-
-            orderList = orderService.getAllOrders(user, page, pageSize);
-
-            orderCount = orderService.getTotalOrderCount();
-            pageCount = (int) Math.ceil((orderCount * 1.0 ) / pageSize);
-
-            request.getSession().setAttribute(SessionAttributes.PAGE_COUNT, pageCount);
-            request.getSession().setAttribute(SessionAttributes.CURRENT_PAGE, page);
-            request.getSession().setAttribute(SessionAttributes.ORDER_LIST, orderList);
-            request.getSession().setAttribute(SessionAttributes.PAGE_SIZE, pageSize);
+            order = orderService.getOrder(orderID);
+            request.setAttribute(RequestAttributes.ORDER, order);
         } catch (ServiceException e) {
             e.printStackTrace();
             String errorMessage = e.getMessage();
             request.setAttribute(RequestAttributes.ERROR_MESSAGE, errorMessage);
         }
 
-        goToPage = WebHelper.pageGenerator(Pages.ORDERS);
+        goToPage = WebHelper.pageGenerator(Pages.ORDER_INFO);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
         dispatcher.forward(request, response);

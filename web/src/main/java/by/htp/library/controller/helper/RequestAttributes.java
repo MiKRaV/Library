@@ -8,4 +8,5 @@ public class RequestAttributes {
     public static final String CURRENT_PAGE = "currentPage";
     public static final String BOOK_LIST = "bookList";
     public static final String BOOK = "book";
+    public static final String ORDER = "order";
 }

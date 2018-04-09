@@ -6,7 +6,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
+	<link rel="stylesheet" href="total.css">
+	<link rel="stylesheet" href="user_data.css">
+<title>User profile</title>
 
 	<fmt:setLocale value="${sessionScope.local}" />
 	<fmt:setBundle basename="localization.local" var="loc" />
@@ -27,110 +29,184 @@
 	<fmt:message bundle="${loc}" key="local.button.name.goToAccount" var="goToAccount_button" />
 	<fmt:message bundle="${loc}" key="local.button.name.logOut" var="logOutButton" />
 
+	<c:set var="url" value="jsp/account/UserDataPage.jsp" scope="session"/>
+
 </head>
 <body>
+	<div class="header">
+		<div class="layout-positioner">
+			<div class="table-main-menu">
+				<div class="row-main-menu">
+					<div class="cell-main-menu">
+						<form action="FrontController" method="post">
+							<input type="hidden" name="command" value="logOutCommand"/>
+							<input type="submit" value="${logOutButton}">
+						</form>
+					</div>
+					<div class="cell-main-menu">
+						<form action="FrontController" method="post">
+							<input type="hidden" name="command" value="goToAccount"/>
+							<input type="submit" value="${goToAccount_button}">
+						</form>
+					</div>
+				</div>
+			</div>
 
-<c:set var="url" value="jsp/account/UserDataPage.jsp" scope="session"/>
+			<div class="table-local">
+				<div class="row-local">
+					<div class="cell-local">
+						<form action="FrontController" method="get">
+							<input type="hidden" name="command" value="changeLocal" />
+							<input type="hidden" name="local" value="ru" />
+							<input type="submit" value="${ru_button}" />
+						</form>
+					</div>
+					<div class="cell-local">
+						<form action="FrontController" method="get">
+							<input type="hidden" name="command" value="changeLocal" />
+							<input type="hidden" name="local" value="en" />
+							<input type="submit" value="${en_button}" /><br />
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-	<table>
-		<tr>
-			<th>
-				<form action="FrontController" method="get">
-					<input type="hidden" name="command" value="changeLocal" />
-					<input type="hidden" name="local" value="ru" /> 
-					<input type="submit" value="${ru_button}" />
+	<div class="container-content">
+		<div class="layout-positioner">
+			<div class="message">
+				<c:out value="${message}" />
+			</div>
+			<div class="form-user-data">
+				<form id="password" action="FrontController" method="post">
+					<input type="hidden" name="command" value="changeUserData">
+					<input type="hidden" name="userParameter" value="password">
 				</form>
-			</th>
-			<th>
-				<form action="FrontController" method="get">
-					<input type="hidden" name="command" value="changeLocal" />
-					<input type="hidden" name="local" value="en" /> 
-					<input type="submit" value="${en_button}" /><br />
-				</form>
-			</th>
-	</table>
-	
-	<c:out value="${message}" /><br />
-	
-	<form id="password" action="FrontController" method="post">
-		<input type="hidden" name="command" value="changeUserData">
-		<input type="hidden" name="userParameter" value="password">
-	</form>
-	
-	<form id="name" action="FrontController" method="post">
-		<input type="hidden" name="command" value="changeUserData"/>
-		<input type="hidden" name="userParameter" value="name"/>
-	</form>
-	
-	<form id="surname" action="FrontController" method="post">
-		<input type="hidden" name="command" value="changeUserData"/>
-		<input type="hidden" name="userParameter" value="surname"/>
-	</form>
-	
-	<form id="email" action="FrontController" method="post">
-		<input type="hidden" name="command" value="changeUserData"/>
-		<input type="hidden" name="userParameter" value="email"/>
-	</form>
-	
-	<table>
-    	<tr>
-    		<td><b><c:out value="${login}" /></b>:</td>
-    		<td><c:out value="${user.login}" /></td>
-    	</tr>
-    	<tr>
-    		<td><b><c:out value="${password}" /></b>:</td>
-    	</tr>
-    	<tr>
-    		<td><c:out value="${oldPassword}" />:</td>
-			<td><input type="password" name="oldPassword" value="" form="password" ></td>
-    	</tr>
-    	<tr>
-			<td><c:out value="${newPassword}" />:</td>
-			<td><input type="password" name="newPassword" value="" form="password" ></td>
-		</tr>
-		<tr>
-			<td><c:out value="${confirmPassword}" />:</td>
-			<td><input type="password" name="confirmPassword" value="" form="password" ></td>
-			<td><input type="submit" value="${changeButton}" form="password" ></td>
-		</tr>
-		<tr>
-			<td><b><c:out value="${name}" /></b>:</td>
-			<td><c:out value="${user.userData.name}" /></td>
-		</tr>
-		<tr>
-			<td><c:out value="${newName}" />:</td>
-			<td><input type="text" name="newName" value="" form="name" ></td>
-			<td><input type="submit" value="${changeButton}" form="name" ></td>
-		</tr>
-		<tr>
-			<td><b><c:out value="${surname}" /></b>:</td>
-			<td><c:out value="${user.userData.surname}" /></td>
-		</tr>
-		<tr>
-			<td><c:out value="${newSurname}" />:</td>
-			<td><input type="text" name="newSurname" value="" form="surname" ></td>
-			<td><input type="submit" value="${changeButton}" form="surname" ></td>
-		</tr>
-		<tr>
-			<td><b><c:out value="${email}" /></b>:</td>
-			<td><c:out value="${user.userData.email}" /></td>
-		</tr>
-		<tr>
-			<td><c:out value="${newEmail}" />:</td>
-			<td><input type="text" name="newEmail" value="" form="email" ></td>
-			<td><input type="submit" value="${changeButton}" form="email" ></td>
-		</tr>
-    </table>
-	
-	<form action="FrontController" method="post">
-		<input type="hidden" name="command" value="goToAccount"/>
-		<input type="submit" value="${goToAccount_button}">
-	</form>
-	
-	<form action="FrontController" method="post">
-		<input type="hidden" name="command" value="logOutCommand"/>
-		<input type="submit" value="${logOutButton}">
-	</form>
 
+				<form id="name" action="FrontController" method="post">
+					<input type="hidden" name="command" value="changeUserData"/>
+					<input type="hidden" name="userParameter" value="name"/>
+				</form>
+
+				<form id="surname" action="FrontController" method="post">
+					<input type="hidden" name="command" value="changeUserData"/>
+					<input type="hidden" name="userParameter" value="surname"/>
+				</form>
+
+				<form id="email" action="FrontController" method="post">
+					<input type="hidden" name="command" value="changeUserData"/>
+					<input type="hidden" name="userParameter" value="email"/>
+				</form>
+				<div class="table-user-data">
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<b><c:out value="${login}" /></b>:
+						</div>
+						<div class="cell-user-data">
+							<c:out value="${user.login}" />
+						</div>
+						<div class="cell-user-data"></div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<br><b><c:out value="${password}" /></b>:
+						</div>
+						<div class="cell-user-data"></div>
+						<div class="cell-user-data"></div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<label for="oldPassword"><c:out value="${oldPassword}" />:<label/>
+						</div>
+						<div class="cell-user-data">
+							<input type="password" id="oldPassword" name="oldPassword" value="" form="password" >
+						</div>
+						<div class="cell-user-data"></div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<label for="newPassword"> <c:out value="${newPassword}"/>:<label/>
+						</div>
+						<div class="cell-user-data">
+							<input type="password" id="newPassword" name="newPassword" value="" form="password" >
+						</div>
+						<div class="cell-user-data"></div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<label for="confirmPassword"><c:out value="${confirmPassword}"/>:</label>
+						</div>
+						<div class="cell-user-data">
+							<input type="password" id="confirmPassword" name="confirmPassword" value="" form="password" >
+						</div>
+						<div class="cell-user-data">
+							<input type="submit" value="${changeButton}" form="password" >
+						</div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<br><b><c:out value="${name}" /></b>:
+						</div>
+						<div class="cell-user-data">
+							<br><c:out value="${user.userData.name}" />
+						</div>
+						<div class="cell-user-data"></div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<label for="newName"> <c:out value="${newName}" />:</label>
+						</div>
+						<div class="cell-user-data">
+							<input type="text" id="newName" name="newName" value="" form="name" >
+						</div>
+						<div class="cell-user-data">
+							<input type="submit" value="${changeButton}" form="name" >
+						</div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<br><b><c:out value="${surname}" /></b>:
+						</div>
+						<div class="cell-user-data">
+							<br><c:out value="${user.userData.surname}" />
+						</div>
+						<div class="cell-user-data"></div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<label for="newSurname"><c:out value="${newSurname}" />:</label>
+						</div>
+						<div class="cell-user-data">
+							<input type="text" id="newSurname" name="newSurname" value="" form="surname" >
+						</div>
+						<div class="cell-user-data">
+							<input type="submit" value="${changeButton}" form="surname" >
+						</div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<br><b><c:out value="${email}" /></b>:
+						</div>
+						<div class="cell-user-data">
+							<br><c:out value="${user.userData.email}" />
+						</div>
+						<div class="cell-user-data"></div>
+					</div>
+					<div class="row-user-data">
+						<div class="cell-user-data">
+							<label for="newEmail"><c:out value="${newEmail}" />:</label>
+						</div>
+						<div class="cell-user-data">
+							<input type="text" id="newEmail" name="newEmail" value="" form="email" >
+						</div>
+						<div class="cell-user-data">
+							<input type="submit" value="${changeButton}" form="email" >
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

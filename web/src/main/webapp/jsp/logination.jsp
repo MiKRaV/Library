@@ -15,6 +15,7 @@
 <fmt:message bundle="${loc}" key="local.field.name.login" var="login" />
 <fmt:message bundle="${loc}" key="local.field.name.password" var="password" />
 <fmt:message bundle="${loc}" key="local.logination.button.name.signIn" var="signIn_button" />
+<fmt:message bundle="${loc}" key="local.index.button.name.registration" var="reg_button" />
 <fmt:message bundle="${loc}" key="local.button.name.goToStartPage" var="startPage_button" />
 
 </head>
@@ -51,6 +52,12 @@
 		<input type="password" name="password" value=""/><br/>
 	
 		<input type="submit" value="${signIn_button}">
+	</form>
+
+	<form action="FrontController" method="post">
+		<input type="hidden" name="command" value="goToPage"/>
+		<input type="hidden" name="goToPage" value="jsp/registration.jsp"/>
+		<input type="submit" value="${reg_button}">
 	</form>
 	
 	<form action="FrontController" method="post">

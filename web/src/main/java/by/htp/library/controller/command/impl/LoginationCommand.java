@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import by.htp.library.controller.helper.*;
 import by.htp.library.entity.User;
 import by.htp.library.controller.command.Command;
+import by.htp.library.entity.helper.UserHelper;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.ServiceFactory;
 import by.htp.library.service.UserService;
@@ -33,8 +34,15 @@ public class LoginationCommand implements Command{
 		try {
 			user = userService.logination(login, password);
 			if(user != null) {
-				goToPage = WebHelper.pageGenerator(Pages.LOGINATION_MESSAGE);
+				//goToPage = WebHelper.pageGenerator(Pages.LOGINATION_MESSAGE);
 				request.getSession().setAttribute(SessionAttributes.USER, user);
+				String userType = user.getType();
+				if(userType.equals(UserHelper.TYPE_READER)) {
+					goToPage = WebHelper.pageGenerator(Pages.READER_MAIN_PAGE);
+				} else if(userType.equals(UserHelper.TYPE_ADMIN)) {
+					goToPage = WebHelper.pageGenerator(Pages.ADMIN_MAIN_PAGE);
+				}
+
 			} else {
 				goToPage = WebHelper.pageGenerator(Pages.LOGINATION);
 				errorMessage = "Try it again"; //set constant

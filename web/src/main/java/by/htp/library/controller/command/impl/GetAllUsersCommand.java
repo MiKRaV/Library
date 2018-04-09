@@ -26,7 +26,7 @@ public class GetAllUsersCommand implements Command{
 
 		String goToPage = "";
 		String url = "";
-		int pageSize = 1;
+		int pageSize = 10;
 		int page = 1;
 		long userCount;
 		int pageCount;
