@@ -7,7 +7,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="total.css">
-	<title>Insert title here</title>
+	<title>Admin main page</title>
 
 	<fmt:setLocale value="${sessionScope.local}" />
 	<fmt:setBundle basename="localization.local" var="loc" />
@@ -15,7 +15,6 @@
 	<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
 	<fmt:message bundle="${loc}" key="local.adminMainPage.message" var="message" />
 	<fmt:message bundle="${loc}" key="local.adminMainPage.button.name.getAllUsers" var="getAllUsersButton" />
-	<fmt:message bundle="${loc}" key="local.adminMainPage.button.name.removingUser" var="removingUserButton" />
 	<fmt:message bundle="${loc}" key="local.adminMainPage.button.name.findUser" var="findUserButton" />
 	<fmt:message bundle="${loc}" key="local.readerMainPage.button.name.getAllBooks" var="getAllBooksButton" />
 	<fmt:message bundle="${loc}" key="local.button.name.addBook" var="addBookButton" />
@@ -66,6 +65,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="container-content">
 		<div class="layout-positioner">
 			<div class="message">
@@ -92,13 +92,6 @@
 					<form action="FrontController" method="post">
 						<input type="hidden" name="command" value="getAllUsers"/>
 						<input type="submit" value="${getAllUsersButton}">
-					</form>
-				</div>
-				<div class="action-menu-item">
-					<form action="FrontController" method="post">
-						<input type="hidden" name="command" value="goToPage"/>
-						<input type="hidden" name="goToPage" value="jsp/account/admin/UserRemovePage.jsp"/>
-						<input type="submit" value="${removingUserButton}">
 					</form>
 				</div>
 				<div class="action-menu-item">

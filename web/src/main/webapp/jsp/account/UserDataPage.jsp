@@ -5,10 +5,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="total.css">
 	<link rel="stylesheet" href="user_data.css">
-<title>User profile</title>
+	<title>User profile</title>
 
 	<fmt:setLocale value="${sessionScope.local}" />
 	<fmt:setBundle basename="localization.local" var="loc" />

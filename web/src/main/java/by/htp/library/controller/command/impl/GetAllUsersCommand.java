@@ -32,14 +32,16 @@ public class GetAllUsersCommand implements Command{
 		int pageCount;
 		
 		try {
-			if (request.getParameter(RequestParameters.PAGE) != null)
+			if (request.getAttribute(RequestAttributes.CURRENT_PAGE) != null)
+				page = (int) request.getAttribute(RequestAttributes.CURRENT_PAGE);
+			else if (request.getParameter(RequestParameters.PAGE) != null)
 				page = Integer.parseInt(request.getParameter(RequestParameters.PAGE));
 
 			if (request.getParameter(RequestParameters.PAGE_SIZE) != null)
 				pageSize = Integer.parseInt(request.getParameter(RequestParameters.PAGE_SIZE));
 
 			userCount = userService.getUserCount();
-			pageCount = (int) Math.ceil(userCount / pageSize);
+			pageCount = (int) Math.ceil(userCount * 1.0 / pageSize);
 
 			userList = userService.getAllUsersList(page, pageSize);
 
@@ -49,6 +51,7 @@ public class GetAllUsersCommand implements Command{
 			request.getSession().setAttribute(SessionAttributes.PAGE_COUNT, pageCount);
 			request.getSession().setAttribute(SessionAttributes.CURRENT_PAGE, page);
 			request.getSession().setAttribute(SessionAttributes.USER_LIST, userList);
+			request.getSession().setAttribute(SessionAttributes.PAGE_SIZE, pageSize);
 			//request.getSession().setAttribute(SessionAttributes.URL, url);
 			request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
 		} catch (ServiceException e) {

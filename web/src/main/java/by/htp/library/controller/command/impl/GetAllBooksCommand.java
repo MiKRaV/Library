@@ -28,7 +28,7 @@ public class GetAllBooksCommand implements Command{
 
 		String goToPage = "";
 		//String url = "";
-		int pageSize = 1;
+		int pageSize = 10;
 		int page = 1;
 		long bookCount;
 		int pageCount;

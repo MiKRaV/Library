@@ -8,7 +8,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="total.css">
 	<link rel="stylesheet" href="table.css">
-	<title>Users</title>
+	<title>User data</title>
 
 	<fmt:setLocale value="${sessionScope.local}" />
 	<fmt:setBundle basename="localization.local" var="loc" />
@@ -22,6 +22,7 @@
 	<fmt:message bundle="${loc}" key="local.field.name.userStatus" var="userStatus" />
 	<fmt:message bundle="${loc}" key="local.field.name.actions" var="actions" />
 	<fmt:message bundle="${loc}" key="local.button.name.blockUnlock" var="blockUnlockButton" />
+	<fmt:message bundle="${loc}" key="local.removeUser.button.name.remove" var="remove" />
 	<fmt:message bundle="${loc}" key="local.button.name.goToAccount" var="goToAccount_button" />
 	<fmt:message bundle="${loc}" key="local.button.name.logOut" var="logOutButton" />
 	<fmt:message bundle="${loc}" key="local.button.name.editData" var="editDataButton" />
@@ -101,10 +102,15 @@
 							<td>${foundUser.userData.email}</td>
 							<td>${foundUser.type}</td>
 							<td>${foundUser.status}</td>
-							<td class="block-unlock">
+							<td class="cell-actions">
 								<form action="FrontController" method="post">
 									<input type="hidden" name="command" value="blockUnlockUser"/>
 									<input type="submit" value="${blockUnlockButton}">
+								</form>
+								<form action="FrontController" method="post">
+									<input type="hidden" name="command" value="removeUser"/>
+									<input type="hidden" name="login" value="${foundUser.login}">
+									<input type="submit" value="${remove}">
 								</form>
 							</td>
 						</tr>

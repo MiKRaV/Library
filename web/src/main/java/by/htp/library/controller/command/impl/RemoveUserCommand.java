@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.htp.library.controller.command.Command;
 import by.htp.library.controller.helper.*;
+import by.htp.library.entity.User;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.ServiceFactory;
 import by.htp.library.service.UserService;
@@ -27,15 +28,16 @@ public class RemoveUserCommand implements Command{
 		
 		try {
 			userService.removeUser(login);
-			goToPage = WebHelper.pageGenerator(Pages.REMOVE_USER_MESSAGE);
-			url = WebHelper.urlGenerator(request, CommandName.GO_TO_PAGE_FOR_LOG_USER);
+			User foundUser = userService.findUserByLogin(login);
+			request.getSession().setAttribute(SessionAttributes.FOUND_USER, foundUser);
 		} catch (ServiceException e) {
 			e.printStackTrace();
-			goToPage = WebHelper.pageGenerator(Pages.USER_REMOVE);
-			url = WebHelper.urlGenerator(request, CommandName.GO_TO_USER_REMOVE_PAGE);
 			String errorMessage = e.getMessage();
 			request.setAttribute(SessionAttributes.ERROR_MESSAGE, errorMessage);
 		}
+
+		goToPage = WebHelper.pageGenerator(Pages.FOUND_USER_DATA);
+		url = WebHelper.urlGenerator(request, CommandName.GO_TO_PAGE_FOR_LOG_USER);
 		
 		request.getSession().setAttribute(SessionAttributes.GO_TO_PAGE, goToPage);
 		request.getSession().setAttribute(SessionAttributes.URL, url);

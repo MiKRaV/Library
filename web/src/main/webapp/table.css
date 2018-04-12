@@ -86,7 +86,7 @@ body {
 
 .table-data .cell-actions input[type="submit"]{
     display: inline-block;
-    width: 80px;
+    width: 120px;
     height: 30px;
     padding: 5px;
     margin: 5px auto;
@@ -151,6 +151,28 @@ body {
 }
 
 .table-pagination .cell-pagination input[type="submit"]{
+    width: 70px;
+    height: 30px;
+    padding: 5px;
+}
+
+.table-basket-action {
+    display: table;
+    border-collapse: collapse;
+    margin: 10px auto;
+}
+
+.table-basket-action .row-basket-action {
+    display: table-row;
+    height: 50px;
+}
+
+.table-basket-action .cell-basket-action {
+    display: table-cell;
+    width: 70px;
+}
+
+.table-basket-action .cell-basket-action input[type="submit"]{
     width: 70px;
     height: 30px;
     padding: 5px;
