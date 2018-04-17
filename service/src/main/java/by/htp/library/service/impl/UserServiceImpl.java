@@ -13,7 +13,9 @@ import by.htp.library.service.UserService;
 import by.htp.library.entity.helper.UserParameters;
 import by.htp.library.service.Validator;
 import by.htp.library.service.helper.ServiceMessages;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
 	
 	private Validator validator = new Validator();

@@ -1,31 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>  
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" href="total.css">
-	<link rel="stylesheet" href="table.css">
+	<link rel="stylesheet" href="<c:url value="/css/total.css"/>">
+	<link rel="stylesheet" href="<c:url value="/css/table.css"/>">
 	<title>Users</title>
 
-	<fmt:setLocale value="${sessionScope.local}" />
-	<fmt:setBundle basename="localization.local" var="loc" />
-	<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
-	<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
-	<fmt:message bundle="${loc}" key="local.tableWithAllUsers.column.name.login" var="login" />
-	<fmt:message bundle="${loc}" key="local.tableWithAllUsers.column.name.name" var="name" />
-	<fmt:message bundle="${loc}" key="local.tableWithAllUsers.column.name.surname" var="surname" />
-	<fmt:message bundle="${loc}" key="local.tableWithAllUsers.column.name.email" var="email" />
-	<fmt:message bundle="${loc}" key="local.tableWithAllUsers.column.name.userType" var="userType" />
-	<fmt:message bundle="${loc}" key="local.tableWithAllUsers.message.userCount" var="userCount" />
-	<fmt:message bundle="${loc}" key="local.button.name.apply" var="apply_button" />
-	<fmt:message bundle="${loc}" key="local.button.name.previous" var="previous_button" />
-	<fmt:message bundle="${loc}" key="local.button.name.next" var="next_button" />
-	<fmt:message bundle="${loc}" key="local.button.name.goToAccount" var="goToAccount_button" />
-	<fmt:message bundle="${loc}" key="local.button.name.logOut" var="logOutButton" />
-	<fmt:message bundle="${loc}" key="local.button.name.editData" var="editDataButton" />
+	<spring:message code="local.locbutton.name.ru" var="ru_button" />
+	<spring:message code="local.locbutton.name.en" var="en_button" />
+	<spring:message code="local.tableWithAllUsers.column.name.login" var="login" />
+	<spring:message code="local.tableWithAllUsers.column.name.name" var="name" />
+	<spring:message code="local.tableWithAllUsers.column.name.surname" var="surname" />
+	<spring:message code="local.tableWithAllUsers.column.name.email" var="email" />
+	<spring:message code="local.tableWithAllUsers.column.name.userType" var="userType" />
+	<spring:message code="local.tableWithAllUsers.message.userCount" var="userCount" />
+	<spring:message code="local.button.name.apply" var="apply_button" />
+	<spring:message code="local.button.name.previous" var="previous_button" />
+	<spring:message code="local.button.name.next" var="next_button" />
+	<spring:message code="local.button.name.goToAccount" var="goToAccount_button" />
+	<spring:message code="local.button.name.logOut" var="logOutButton" />
+	<spring:message code="local.button.name.editData" var="editDataButton" />
 
 	<c:set var="url" value="jsp/account/admin/TableWithUsers.jsp" scope="session"/>
 </head>
@@ -35,21 +34,17 @@
 			<div class="table-main-menu">
 				<div class="row-main-menu">
 					<div class="cell-main-menu">
-						<form action="FrontController" method="post">
-							<input type="hidden" name="command" value="logOutCommand"/>
+						<form action="${pageContext.request.contextPath}/start-page" method="post">
 							<input type="submit" value="${logOutButton}">
 						</form>
 					</div>
 					<div class="cell-main-menu">
-						<form action="FrontController" method="post">
-							<input type="hidden" name="command" value="goToPage"/>
-							<input type="hidden" name="goToPage" value="jsp/account/UserDataPage.jsp"/>
+						<form action="${pageContext.request.contextPath}/user-data" method="get">
 							<input type="submit" value="${editDataButton}">
 						</form>
 					</div>
 					<div class="cell-main-menu">
-						<form action="FrontController" method="post">
-							<input type="hidden" name="command" value="goToAccount"/>
+						<form action="${pageContext.request.contextPath}/main-page" method="get">
 							<input type="submit" value="${goToAccount_button}">
 						</form>
 					</div>
@@ -59,18 +54,10 @@
 			<div class="table-local">
 				<div class="row-local">
 					<div class="cell-local">
-						<form action="FrontController" method="get">
-							<input type="hidden" name="command" value="changeLocal" />
-							<input type="hidden" name="local" value="ru" />
-							<input type="submit" value="${ru_button}" />
-						</form>
+						<a href="?lang=ru">${ru_button}</a>
 					</div>
 					<div class="cell-local">
-						<form action="FrontController" method="get">
-							<input type="hidden" name="command" value="changeLocal" />
-							<input type="hidden" name="local" value="en" />
-							<input type="submit" value="${en_button}" /><br />
-						</form>
+						<a href="?lang=en">${en_button}</a>
 					</div>
 				</div>
 			</div>
@@ -81,9 +68,8 @@
 		<div class="layout-positioner">
 			<div class="table-data-container">
 				<div class="select-page-size">
-					<form action="FrontController" method="post">
+					<form action="${pageContext.request.contextPath}/users-list" method="get">
 						<c:out value="${userCount}" />:
-						<input type="hidden" name="command" value="getAllUsers">
 						<select name="pageSize" required>
 							<option value="1">1</option>
 							<option value="5">5</option>
@@ -119,8 +105,7 @@
 							<%--For displaying Previous link except for the 1st page --%>
 							<c:if test="${currentPage gt 1}">
 								<td>
-									<form action="FrontController" method="post">
-										<input type="hidden" name="command" value="getAllUsers"/>
+									<form action="${pageContext.request.contextPath}/users-list" method="get">
 										<input type="hidden" name="pageSize" value="${pageSize}"/>
 										<input type="hidden" name="page" value="${currentPage - 1}">
 										<input type="submit" value="${previous_button}">
@@ -135,8 +120,7 @@
 							<%--For displaying Next link --%>
 							<c:if test="${currentPage lt pageCount}">
 								<td>
-									<form action="FrontController" method="post">
-										<input type="hidden" name="command" value="getAllUsers"/>
+									<form action="${pageContext.request.contextPath}/users-list" method="get">
 										<input type="hidden" name="pageSize" value="${pageSize}"/>
 										<input type="hidden" name="page" value="${currentPage + 1}">
 										<input type="submit" value="${next_button}">

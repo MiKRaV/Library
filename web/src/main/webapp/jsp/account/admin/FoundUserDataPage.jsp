@@ -6,8 +6,8 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" href="total.css">
-	<link rel="stylesheet" href="table.css">
+	<link rel="stylesheet" href="../../../css/total.css">
+	<link rel="stylesheet" href="../../../css/table.css">
 	<title>User data</title>
 
 	<fmt:setLocale value="${sessionScope.local}" />

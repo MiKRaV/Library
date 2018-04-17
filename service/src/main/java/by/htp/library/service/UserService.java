@@ -5,6 +5,7 @@ import java.util.List;
 import by.htp.library.entity.Book;
 import by.htp.library.entity.User;
 import by.htp.library.entity.helper.UserParameters;
+import org.springframework.stereotype.Service;
 
 public interface UserService {
 	

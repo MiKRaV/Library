@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" href="total.css">
+	<link rel="stylesheet" href="../../css/total.css">
 	<title>Добро пожаловть!</title>
 
 	<fmt:setLocale value="${sessionScope.local}" />
