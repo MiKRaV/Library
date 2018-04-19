@@ -1,33 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>   
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" href="../../../css/total.css">
-	<link rel="stylesheet" href="../../../css/book_data.css">
+	<link rel="stylesheet" href="<c:url value="/css/total.css"/>">
+	<link rel="stylesheet" href="<c:url value="/css/book_data.css"/>">
 	<title>Edit book data</title>
 
-	<fmt:setLocale value="${sessionScope.local}" />
-	<fmt:setBundle basename="localization.local" var="loc" />
-	<fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
-	<fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
-	<fmt:message bundle="${loc}" key="local.field.name.author" var="author" />
-	<fmt:message bundle="${loc}" key="local.field.name.name" var="authorName" />
-	<fmt:message bundle="${loc}" key="local.field.name.surname" var="authorSurname" />
-	<fmt:message bundle="${loc}" key="local.field.name.title" var="title" />
-	<fmt:message bundle="${loc}" key="local.field.name.genre" var="genre" />
-	<fmt:message bundle="${loc}" key="local.addBookPage.select.option.name.genreSelection" var="genreSelection" />
-	<fmt:message bundle="${loc}" key="local.addBookPage.select.option.name.fiction" var="fiction" />
-	<fmt:message bundle="${loc}" key="local.addBookPage.select.option.name.technical" var="technical" />
-	<fmt:message bundle="${loc}" key="local.button.name.addBook" var="addBookButton" />
-	<fmt:message bundle="${loc}" key="local.button.name.addMoreAuthor" var="addMoreAuthorButton" />
-	<fmt:message bundle="${loc}" key="local.button.name.remove" var="removeButton" />
-	<fmt:message bundle="${loc}" key="local.button.name.goToAccount" var="goToAccount_button" />
-	<fmt:message bundle="${loc}" key="local.button.name.logOut" var="logOutButton" />
-	<fmt:message bundle="${loc}" key="local.button.name.editData" var="editDataButton" />
+	<spring:message code="local.locbutton.name.ru" var="ru_button" />
+	<spring:message code="local.locbutton.name.en" var="en_button" />
+	<spring:message code="local.field.name.author" var="author" />
+	<spring:message code="local.field.name.name" var="authorName" />
+	<spring:message code="local.field.name.surname" var="authorSurname" />
+	<spring:message code="local.field.name.title" var="title" />
+	<spring:message code="local.field.name.genre" var="genre" />
+	<spring:message code="local.addBookPage.select.option.name.genreSelection" var="genreSelection" />
+	<spring:message code="local.addBookPage.select.option.name.fiction" var="fiction" />
+	<spring:message code="local.addBookPage.select.option.name.technical" var="technical" />
+	<spring:message code="local.button.name.addBook" var="addBookButton" />
+	<spring:message code="local.button.name.addMoreAuthor" var="addMoreAuthorButton" />
+	<spring:message code="local.button.name.remove" var="removeButton" />
+	<spring:message code="local.button.name.goToAccount" var="goToAccount_button" />
+	<spring:message code="local.button.name.logOut" var="logOutButton" />
+	<spring:message code="local.button.name.editData" var="editDataButton" />
 
 	<c:set var="url" value="jsp/account/admin/AddingBook.jsp" scope="session"/>
 
@@ -39,21 +38,17 @@
 			<div class="table-main-menu">
 				<div class="row-main-menu">
 					<div class="cell-main-menu">
-						<form action="FrontController" method="post">
-							<input type="hidden" name="command" value="logOutCommand"/>
+						<form action="${pageContext.request.contextPath}/start-page" method="post">
 							<input type="submit" value="${logOutButton}">
 						</form>
 					</div>
 					<div class="cell-main-menu">
-						<form action="FrontController" method="post">
-							<input type="hidden" name="command" value="goToPage"/>
-							<input type="hidden" name="goToPage" value="jsp/account/UserDataPage.jsp"/>
+						<form action="${pageContext.request.contextPath}/user-data" method="get">
 							<input type="submit" value="${editDataButton}">
 						</form>
 					</div>
 					<div class="cell-main-menu">
-						<form action="FrontController" method="post">
-							<input type="hidden" name="command" value="goToAccount"/>
+						<form action="${pageContext.request.contextPath}/main-page" method="get">
 							<input type="submit" value="${goToAccount_button}">
 						</form>
 					</div>
@@ -63,18 +58,10 @@
 			<div class="table-local">
 				<div class="row-local">
 					<div class="cell-local">
-						<form action="FrontController" method="get">
-							<input type="hidden" name="command" value="changeLocal" />
-							<input type="hidden" name="local" value="ru" />
-							<input type="submit" value="${ru_button}" />
-						</form>
+						<a href="?lang=ru">${ru_button}</a>
 					</div>
 					<div class="cell-local">
-						<form action="FrontController" method="get">
-							<input type="hidden" name="command" value="changeLocal" />
-							<input type="hidden" name="local" value="en" />
-							<input type="submit" value="${en_button}" /><br />
-						</form>
+						<a href="?lang=en">${en_button}</a>
 					</div>
 				</div>
 			</div>
@@ -87,8 +74,7 @@
 				<c:out value="${message}" />
 			</div>
 			<div class="form-book-data">
-				<form action="FrontController" method="post">
-					<input type="hidden" name="command" value="addBook"/>
+				<form action="${pageContext.request.contextPath}/adding-book" method="post">
 					<b><c:out value="${author}" /></b>:<br/>
 					<div id="DynamicFieldsContainer">
 						<div class="DynamicField">

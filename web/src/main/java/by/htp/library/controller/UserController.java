@@ -160,4 +160,84 @@ public class UserController {
         return "account/admin/TableWithUsers";
     }
 
+    @RequestMapping(value = "/search-user", method = RequestMethod.GET)
+    public String searchUserPage() {
+        return "account/admin/SearchUserPage";
+    }
+
+    @RequestMapping(value = "/found-user", method = RequestMethod.GET)
+    public String foundUserPage() {
+        return "account/admin/FoundUserDataPage";
+    }
+
+    @RequestMapping(value = "/found-user", method = RequestMethod.POST)
+    public String findUser(HttpServletRequest request, ModelMap model) {
+        String login = request.getParameter(RequestParameters.USER_LOGIN);
+        User foundUser = null;
+        String errorMessage = "";
+        String command = request.getParameter("command");
+        try {
+            if (command != null) {
+                switch (command) {
+                    case "blockUnlockUser":
+                        blockUnlockUser(login);
+                        break;
+                    case "removeUser":
+                        removeUser(login);
+                        break;
+                }
+            }
+            foundUser = userService.findUserByLogin(login);
+            request.getSession().setAttribute(SessionAttributes.FOUND_USER, foundUser);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+            errorMessage = e.getMessage();
+            model.addAttribute("errorMessage", errorMessage);
+        }
+        return "account/admin/FoundUserDataPage";
+    }
+
+    private void blockUnlockUser(String login) throws ServiceException {
+        userService.blockUnlockUser(login);
+    }
+
+    private void removeUser(String login) throws ServiceException {
+        userService.removeUser(login);
+    }
+
+    @RequestMapping(value = "/basket", method = RequestMethod.GET)
+    public String getBasket() {
+        return "account/reader/Basket";
+    }
+
+    @RequestMapping(value = "/basket", method = RequestMethod.POST)
+    public String basketAction(HttpServletRequest request, ModelMap model) {
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+        String command = request.getParameter("command");
+        String message = "";
+        switch (command) {
+            case "clearBasket":
+                try {
+                    user = userService.clearBasket(user);
+                    request.getSession().setAttribute(SessionAttributes.USER, user);
+                    message = Messages.BASKET_CLEARED_SUCCESSFULLY;
+                } catch (ServiceException e) {
+                    message = e.getMessage();
+                }
+            case "removeBookFromBasket":
+                int bookID = Integer.parseInt(request.getParameter(RequestParameters.BOOK_ID));
+                try {
+                    user = userService.removeBookFromBasket(user, bookID);
+                    request.getSession().setAttribute(SessionAttributes.USER, user);
+                    message = Messages.BOOK_REMOVED_FROM_BASKET;
+                } catch (ServiceException e) {
+                    e.printStackTrace();
+                    message = Messages.BOOK_NOT_REMOVED_FROM_BASKET + " : " + e.getMessage();
+                }
+        }
+
+        model.addAttribute("message", message);
+
+        return "account/reader/Basket";
+    }
 }

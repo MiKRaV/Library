@@ -10,7 +10,9 @@ import by.htp.library.entity.User;
 import by.htp.library.service.BookService;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.helper.ServiceMessages;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BookServiceImpl implements BookService{
 
 	//ADDING A BOOK

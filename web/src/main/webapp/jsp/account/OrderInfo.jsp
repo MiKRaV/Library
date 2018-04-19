@@ -1,35 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
          pageEncoding="utf-8"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="../../css/total.css">
-    <link rel="stylesheet" href="../../css/table.css">
+    <link rel="stylesheet" href="<c:url value="/css/total.css"/>">
+    <link rel="stylesheet" href="<c:url value="/css/table.css"/>">
     <title>Order info</title>
 
-    <fmt:setLocale value="${sessionScope.local}" />
-    <fmt:setBundle basename="localization.local" var="loc" />
-    <fmt:message bundle="${loc}" key="local.locbutton.name.ru" var="ru_button" />
-    <fmt:message bundle="${loc}" key="local.locbutton.name.en" var="en_button" />
-    <fmt:message bundle="${loc}" key="local.orders.column.name.orderID" var="orderID" />
-    <fmt:message bundle="${loc}" key="local.orders.column.name.userID" var="userID" />
-    <fmt:message bundle="${loc}" key="local.orders.column.name.creationTime" var="creationTime" />
-    <fmt:message bundle="${loc}" key="local.orders.column.name.status" var="status" />
-    <fmt:message bundle="${loc}" key="local.orders.column.name.updateTime" var="updateTime" />
-    <fmt:message bundle="${loc}" key="local.field.name.actions" var="actions" />
-    <fmt:message bundle="${loc}" key="local.button.name.changeStatus" var="changeStatus_button" />
-    <fmt:message bundle="${loc}" key="local.ordersDetail.message.orderInfo" var="orderInfo" />
-    <fmt:message bundle="${loc}" key="local.ordersDetail.message.booksInOrder" var="booksInOrder" />
-    <fmt:message bundle="${loc}" key="local.tableWithAllBooks.column.name.title" var="title" />
-    <fmt:message bundle="${loc}" key="local.tableWithAllBooks.column.name.authors" var="authors" />
-    <fmt:message bundle="${loc}" key="local.tableWithAllBooks.column.name.genre" var="genre" />
-    <fmt:message bundle="${loc}" key="local.button.name.backToOrders" var="backToOrders_button" />
-    <fmt:message bundle="${loc}" key="local.button.name.goToAccount" var="goToAccount_button" />
-    <fmt:message bundle="${loc}" key="local.button.name.logOut" var="logOutButton" />
-    <fmt:message bundle="${loc}" key="local.button.name.editData" var="editDataButton" />
+    <spring:message code="local.locbutton.name.ru" var="ru_button" />
+    <spring:message code="local.locbutton.name.en" var="en_button" />
+    <spring:message code="local.orders.column.name.orderID" var="orderID" />
+    <spring:message code="local.orders.column.name.userID" var="userID" />
+    <spring:message code="local.orders.column.name.creationTime" var="creationTime" />
+    <spring:message code="local.orders.column.name.status" var="status" />
+    <spring:message code="local.orders.column.name.updateTime" var="updateTime" />
+    <spring:message code="local.field.name.actions" var="actions" />
+    <spring:message code="local.button.name.changeStatus" var="changeStatus_button" />
+    <spring:message code="local.ordersDetail.message.orderInfo" var="orderInfo" />
+    <spring:message code="local.ordersDetail.message.booksInOrder" var="booksInOrder" />
+    <spring:message code="local.tableWithAllBooks.column.name.title" var="title" />
+    <spring:message code="local.tableWithAllBooks.column.name.authors" var="authors" />
+    <spring:message code="local.tableWithAllBooks.column.name.genre" var="genre" />
+    <spring:message code="local.button.name.backToOrders" var="backToOrders_button" />
+    <spring:message code="local.button.name.goToAccount" var="goToAccount_button" />
+    <spring:message code="local.button.name.logOut" var="logOutButton" />
+    <spring:message code="local.button.name.editData" var="editDataButton" />
 
     <c:set var="url" value="jsp/account/OrderInfo.jsp" scope="session"/>
 </head>
@@ -39,27 +38,22 @@
             <div class="table-main-menu">
                 <div class="row-main-menu">
                     <div class="cell-main-menu">
-                        <form action="FrontController" method="post">
-                            <input type="hidden" name="command" value="logOutCommand"/>
+                        <form action="${pageContext.request.contextPath}/start-page" method="post">
                             <input type="submit" value="${logOutButton}">
                         </form>
                     </div>
                     <div class="cell-main-menu">
-                        <form action="FrontController" method="post">
-                            <input type="hidden" name="command" value="goToPage"/>
-                            <input type="hidden" name="goToPage" value="jsp/account/UserDataPage.jsp"/>
+                        <form action="${pageContext.request.contextPath}/user-data" method="get">
                             <input type="submit" value="${editDataButton}">
                         </form>
                     </div>
                     <div class="cell-main-menu">
-                        <form action="FrontController" method="post">
-                            <input type="hidden" name="command" value="goToAccount"/>
+                        <form action="${pageContext.request.contextPath}/main-page" method="get">
                             <input type="submit" value="${goToAccount_button}">
                         </form>
                     </div>
                     <div class="cell-main-menu">
-                        <form action="FrontController" method="post">
-                            <input type="hidden" name="command" value="getOrders"/>
+                        <form action="${pageContext.request.contextPath}/orders-list" method="get">
                             <input type="submit" value="${backToOrders_button}">
                         </form>
                     </div>
@@ -69,18 +63,10 @@
             <div class="table-local">
                 <div class="row-local">
                     <div class="cell-local">
-                        <form action="FrontController" method="get">
-                            <input type="hidden" name="command" value="changeLocal" />
-                            <input type="hidden" name="local" value="ru" />
-                            <input type="submit" value="${ru_button}" />
-                        </form>
+                        <a href="?lang=ru">${ru_button}</a>
                     </div>
                     <div class="cell-local">
-                        <form action="FrontController" method="get">
-                            <input type="hidden" name="command" value="changeLocal" />
-                            <input type="hidden" name="local" value="en" />
-                            <input type="submit" value="${en_button}" /><br />
-                        </form>
+                        <a href="?lang=en">${en_button}</a>
                     </div>
                 </div>
             </div>
@@ -115,8 +101,8 @@
                             <td class="cell-date">${order.orderUpdateTime}</td>
                             <c:if test="${user.type eq 'admin'}">
                                 <td class="cell-actions">
-                                    <form action="FrontController" method="post">
-                                        <input type="hidden" name="command" value="changeOrderStatus">
+                                    <form action="${pageContext.request.contextPath}/order-info" method="post">
+                                        <input type="hidden" name="orderID" value="${order.id}">
                                         <select name="orderStatus" required>
                                             <option value="accepted for execution">accepted for execution</option>
                                             <option value="awaits delivery">awaits delivery</option>

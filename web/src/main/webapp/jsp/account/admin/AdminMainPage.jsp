@@ -49,7 +49,6 @@
 					<div class="cell-local">
 						<a href="?lang=en">${en_button}</a>
 					</div>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -65,15 +64,12 @@
 
 			<div class="action-menu">
 				<div class="action-menu-item">
-					<form action="FrontController" method="post">
-						<input type="hidden" name="command" value="getOrders"/>
+					<form action="${pageContext.request.contextPath}/orders-list" method="get">
 						<input type="submit" value="${orders_button}">
 					</form>
 				</div>
 				<div class="action-menu-item">
-					<form action="FrontController" method="post">
-						<input type="hidden" name="command" value="goToPage"/>
-						<input type="hidden" name="goToPage" value="jsp/account/admin/SearchUserPage.jsp"/>
+					<form action="${pageContext.request.contextPath}/search-user" method="get">
 						<input type="submit" value="${findUserButton}">
 					</form>
 				</div>
@@ -83,14 +79,12 @@
 					</form>
 				</div>
 				<div class="action-menu-item">
-					<form action="FrontController" method="post">
-						<input type="hidden" name="command" value="getAllBooks"/>
+					<form action="${pageContext.request.contextPath}/books-list" method="get">
 						<input type="submit" value="${getAllBooksButton}">
 					</form>
 				</div>
 				<div class="action-menu-item">
-					<form action="FrontController" method="post">
-						<input type="hidden" name="command" value="goToAddingBookPage"/>
+					<form action="${pageContext.request.contextPath}/adding-book" method="get">
 						<input type="submit" value="${addBookButton}">
 					</form>
 				</div>

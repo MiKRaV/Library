@@ -12,11 +12,13 @@ import by.htp.library.entity.helper.UserHelper;
 import by.htp.library.service.OrderService;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.helper.ServiceMessages;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.FetchType;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class OrderServiceImpl implements OrderService{
     @Override
     public void createOrder(Order order) throws ServiceException {
