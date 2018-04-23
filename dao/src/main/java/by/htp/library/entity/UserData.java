@@ -13,17 +13,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity @Table(name = "T_USER_DATA")
+@Embeddable
 public class UserData {
-    @Id
-    @GenericGenerator(
-            name = "one-one",
-            strategy = "foreign",
-            parameters = @Parameter(name = "property", value = "user"))
-    @GeneratedValue(generator = "one-one")
-    @Column(name = "F_USER_ID")
-    private Integer id;
-
     @Column(name = "F_NAME")
     private String name;
 
@@ -32,10 +23,6 @@ public class UserData {
 
     @Column(name = "F_EMAIL", unique = true)
     private String email;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
-    private User user;
 
     @Override
     public boolean equals(Object obj) {
@@ -46,8 +33,6 @@ public class UserData {
         if (getClass() != obj.getClass())
             return false;
         UserData other = (UserData) obj;
-        if (!id.equals(other.id))
-            return false;
         if (!name.equals(other.name))
             return false;
         if (!surname.equals(other.surname))
@@ -61,7 +46,6 @@ public class UserData {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + id.hashCode();
         result = prime * result + name.hashCode();
         result = prime * result + surname.hashCode();
         result = prime * result + email.hashCode();
@@ -70,7 +54,7 @@ public class UserData {
 
     @Override
     public String toString() {
-        return "UserData[id=" + id + ", name=" + name + ", surname=" + surname +
+        return "UserData[name=" + name + ", surname=" + surname +
                 ", email=" + email + "]";
     }
 }

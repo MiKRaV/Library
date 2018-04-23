@@ -2,6 +2,7 @@ package by.htp.library.service.impl;
 
 import java.util.List;
 
+import by.htp.library.dao.AuthorDAO;
 import by.htp.library.entity.Book;
 import by.htp.library.dao.BookDAO;
 import by.htp.library.dao.DAOFactory;
@@ -10,13 +11,21 @@ import by.htp.library.entity.User;
 import by.htp.library.service.BookService;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.helper.ServiceMessages;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BookServiceImpl implements BookService{
 
+	@Autowired
+	private AuthorDAO authorDAO;
+	@Autowired
+	private BookDAO bookDAO;
+
 	//ADDING A BOOK
 	@Override
+	@Transactional
 	public void addBook(Book book) throws ServiceException {
 		//validation
 		if((book.getAuthors() == null || book.getAuthors().isEmpty()) || 
@@ -25,8 +34,6 @@ public class BookServiceImpl implements BookService{
 		}
 		
 		try {
-			DAOFactory daoFactory = DAOFactory.getInstance();
-			BookDAO bookDAO = daoFactory.getBookDAO();
 			bookDAO.addBook(book);
 		} catch (DAOException e) {
 			throw new ServiceException(ServiceMessages.FAILURE_ADDING_BOOK, e);
@@ -35,20 +42,19 @@ public class BookServiceImpl implements BookService{
 
 	//������ �����!!!
 	@Override
+	@Transactional
 	public List<Book> searchByTitle(String title) throws ServiceException {
 		//validation
 		if(title == null || title.isEmpty()) {
 			return null;
 		}
 		
-		List<Book> books = null;
+		List<Book> books;
 		
 		try {
-			DAOFactory daoFactory = DAOFactory.getInstance();
-			BookDAO bookDAO = daoFactory.getBookDAO();
 			books = bookDAO.searchBookByTitle(title);
 		} catch (DAOException e) {
-			throw new ServiceException("smth wrong", e);
+			throw new ServiceException("something wrong", e);
 		}
 		
 		return books;
@@ -56,10 +62,9 @@ public class BookServiceImpl implements BookService{
 
 	//GETTING A LIST OF ALL BOOKS
 	@Override
+	@Transactional
 	public List<Book> getAllBooks(int pageNumber, int pageSize) throws ServiceException {
-		List<Book> books = null;
-		DAOFactory daoFactory = DAOFactory.getInstance();
-		BookDAO bookDAO = daoFactory.getBookDAO();
+		List<Book> books;
 		try {
 			books = bookDAO.getAllBooks(pageNumber, pageSize);
 		} catch (DAOException e) {
@@ -76,12 +81,10 @@ public class BookServiceImpl implements BookService{
 
 	//GETTING BOOK COUNT
 	@Override
+	@Transactional
 	public long getBookCount() throws ServiceException {
 		long bookCount;
-		DAOFactory daoFactory;
 		try {
-			daoFactory = DAOFactory.getInstance();
-			BookDAO bookDAO = daoFactory.getBookDAO();
 			bookCount = bookDAO.getBookCount();
 		} catch (DAOException e) {
 			throw new ServiceException();
@@ -90,11 +93,9 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
+	@Transactional
 	public void addBookToBasket(Book book) throws ServiceException {
-		DAOFactory daoFactory;
 		try {
-			daoFactory = DAOFactory.getInstance();
-			BookDAO bookDAO = daoFactory.getBookDAO();
 			bookDAO.addBookToBasket(book);
 		} catch (DAOException e) {
 			throw new ServiceException();
@@ -102,17 +103,15 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
+	@Transactional
 	public void addBookToBasket(User user, Book book) throws ServiceException {
 		for (Book bookFromBasket : user.getBasket()) {
 			if (bookFromBasket.getId().equals(book.getId()))
 				throw new ServiceException(ServiceMessages.BOOK_ALREADY_IN_BASKET);
 		}
-		DAOFactory daoFactory;
 		book.setUser(user);
 		user.getBasket().add(book);
 		try {
-			daoFactory = DAOFactory.getInstance();
-			BookDAO bookDAO = daoFactory.getBookDAO();
 			bookDAO.updateBook(book);
 		} catch (DAOException e) {
 			throw new ServiceException();
@@ -122,11 +121,9 @@ public class BookServiceImpl implements BookService{
 
 
 	@Override
+	@Transactional
 	public void removeBookFromBasket(Book book) throws ServiceException {
-		DAOFactory daoFactory;
 		try {
-			daoFactory = DAOFactory.getInstance();
-			BookDAO bookDAO = daoFactory.getBookDAO();
 			bookDAO.addBookToBasket(book);
 		} catch (DAOException e) {
 			throw new ServiceException();

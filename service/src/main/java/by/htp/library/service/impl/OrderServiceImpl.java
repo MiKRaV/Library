@@ -1,56 +1,76 @@
 package by.htp.library.service.impl;
 
-import by.htp.library.dao.BaseDAO;
-import by.htp.library.dao.DAOFactory;
-import by.htp.library.dao.OrderDAO;
+import by.htp.library.dao.*;
 import by.htp.library.dao.exception.DAOException;
 import by.htp.library.entity.Book;
 import by.htp.library.entity.Order;
 import by.htp.library.entity.User;
+import by.htp.library.entity.helper.BookStatus;
 import by.htp.library.entity.helper.OrderStatus;
 import by.htp.library.entity.helper.UserHelper;
 import by.htp.library.service.OrderService;
 import by.htp.library.service.ServiceException;
+import by.htp.library.service.UserService;
 import by.htp.library.service.helper.ServiceMessages;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.FetchType;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService{
+
+    @Autowired
+    private OrderDAO orderDAO;
+    @Autowired
+    private BookDAO bookDAO;
+    @Autowired
+    private UserDAO userDAO;
+    @Autowired
+    private UserService userService;
+
     @Override
-    public void createOrder(Order order) throws ServiceException {
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        BaseDAO baseDAO = daoFactory.getBaseDAO();
-        List<Book> booksInOrder = order.getBooksInOrder();
+    @Transactional
+    public User createOrder(Order order) throws ServiceException {
+        int userID = order.getUser().getId();
+        User user = null;
         try {
-            baseDAO.add(order);
-            for (Book book : booksInOrder) {
+            user = userDAO.find(userID);
+            List<Book> basket = user.getBasket();
+            List<Book> bookInOrder = new ArrayList<>();
+            bookInOrder.addAll(basket);
+            user = userService.clearBasket(user);
+            order.setBooksInOrder(bookInOrder);
+            orderDAO.add(order);
+            for (Book book : basket) {
                 book.setOrder(order);
-                baseDAO.update(book);
+                bookDAO.update(book);
             }
+            user.getOrders().add(order);
+            user = userDAO.update(user);
         } catch (DAOException e) {
             throw new ServiceException(ServiceMessages.ORDER_NOT_CREATED, e);
         }
+        return user;
     }
 
     @Override
+    @Transactional
     public List<Order> getAllOrders(User user, int pageNumber, int pageSize) throws ServiceException {
         List<Order> orders = null;
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        BaseDAO baseDAO = daoFactory.getBaseDAO();
-        OrderDAO orderDAO = daoFactory.getOrderDAO();
         String userType = user.getType();
         try {
             switch (userType) {
                 case UserHelper.TYPE_ADMIN:
-                    orders = baseDAO.findAll(Order.class, pageNumber, pageSize);
+                    orders = orderDAO.findAll(pageNumber, pageSize);
                     break;
                 case UserHelper.TYPE_READER:
                     //orders = user.getOrders();
-                    orders = orderDAO.getUsersOrders(user);
+                    orders = orderDAO.getUsersOrders(user.getId(), pageNumber, pageSize);
                     break;
             }
 
@@ -61,28 +81,24 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
+    @Transactional
     public List<Order> getUsersOrders(int userID, int pageNumber, int pageSize) throws ServiceException {
         List<Order> orders = null;
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        OrderDAO orderDAO = daoFactory.getOrderDAO();
-
         try {
             orders = orderDAO.getUsersOrders(userID, pageNumber, pageSize);
         } catch (DAOException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return orders;
     }
 
     @Override
+    @Transactional
     public long getTotalOrderCount() throws ServiceException {
         long orderCount;
-        DAOFactory daoFactory;
         try {
-            daoFactory = DAOFactory.getInstance();
-            BaseDAO baseDAO = daoFactory.getBaseDAO();
-            orderCount = baseDAO.getCount(Order.class);
+            orderCount = orderDAO.getCount();
         } catch (DAOException e) {
             throw new ServiceException();
         }
@@ -90,12 +106,11 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
+    @Transactional
     public Order getOrder(int orderID) throws ServiceException {
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        BaseDAO baseDAO = daoFactory.getBaseDAO();
-        Order order = null;
+        Order order;
         try {
-            order = (Order) baseDAO.find(Order.class, orderID);
+            order = orderDAO.find(orderID);
         } catch (DAOException e) {
             throw new ServiceException(ServiceMessages.ORDER_NOT_RECEIVED, e);
         }
@@ -104,10 +119,8 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
+    @Transactional
     public void changeOrderStatus(int orderID, String newOrderStatus) throws ServiceException {
-        DAOFactory daoFactory = DAOFactory.getInstance();
-        BaseDAO baseDAO = daoFactory.getBaseDAO();
-
         Order order = getOrder(orderID);
         String orderStatus = order.getStatus();
 
@@ -127,7 +140,7 @@ public class OrderServiceImpl implements OrderService{
         order.setOrderUpdateTime(LocalDateTime.now());
 
         try {
-            baseDAO.update(order);
+            orderDAO.update(order);
         } catch (DAOException e) {
             throw new ServiceException(ServiceMessages.ORDER_STATUS_IS_NOT_CHANGED, e);
         }

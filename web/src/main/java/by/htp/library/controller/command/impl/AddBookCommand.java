@@ -13,6 +13,7 @@ import by.htp.library.controller.helper.*;
 import by.htp.library.entity.Author;
 import by.htp.library.entity.Book;
 import by.htp.library.controller.command.Command;
+import by.htp.library.entity.helper.BookStatus;
 import by.htp.library.service.BookService;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.ServiceFactory;

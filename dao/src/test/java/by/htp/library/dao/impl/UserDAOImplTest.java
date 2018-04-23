@@ -7,31 +7,41 @@ import by.htp.library.dao.util.EMUtil;
 import by.htp.library.entity.User;
 import by.htp.library.entity.UserData;
 import by.htp.library.entity.helper.UserHelper;
+import lombok.Getter;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:test-beans-dao.xml")
 public class UserDAOImplTest {
-    private static EntityManager em;
+    @Autowired
     private static UserDAO userDAO;
+    @PersistenceContext
+    @Getter
+    private static EntityManager em ;
 
     @BeforeClass
     public static void init() {
-        em = EMUtil.getEntityManager("by.htp.library.test");
-        userDAO = DAOFactory.getInstance().getUserDAO();
+        em = getEm();
 
         User user = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
                 UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
-        UserData data = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", user);
+        UserData data = new UserData("Stepan", "Stepanov", "stepchik@mail.ru");
         user.setUserData(data);
 
-        em.getTransaction().begin();
-        em.persist(user);
-        em.getTransaction().commit();
+        getEm().getTransaction().begin();
+        getEm().persist(user);
+        getEm().getTransaction().commit();
     }
 
     @Test
@@ -69,7 +79,7 @@ public class UserDAOImplTest {
     public void registartionTest() {
         User user = new User(null, "Ivanchik", "123456", UserHelper.TYPE_ADMIN,
                 UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
-        UserData data = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", user);
+        UserData data = new UserData("Ivan", "Ivanov", "ivanchik@mail.ru");
         user.setUserData(data);
 
         try {

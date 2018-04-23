@@ -112,15 +112,12 @@ public class OrderController {
     @RequestMapping(value = "/new-order", method = RequestMethod.POST)
     public String createOrder(HttpServletRequest request, ModelMap model) {
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
-        List<Book> basket = user.getBasket();
         String message = "";
 
-        Order order = new Order(null, LocalDateTime.now(), null, basket, user, OrderStatus.IN_PROCESSING);
+        Order order = new Order(null, LocalDateTime.now(), null, null, user, OrderStatus.IN_PROCESSING);
 
         try {
-            orderService.createOrder(order);
-            user.getOrders().add(order);
-            user = userService.clearBasket(user);
+            user = orderService.createOrder(order);
             request.getSession().setAttribute(SessionAttributes.USER, user);
             message = Messages.ORDER_IS_PROCESSED;
         } catch (ServiceException e) {

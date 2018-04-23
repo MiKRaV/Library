@@ -10,6 +10,7 @@ import by.htp.library.dao.util.EMUtil;
 import by.htp.library.entity.Author;
 import by.htp.library.entity.Book;
 import by.htp.library.entity.helper.AuthorHelper;
+import by.htp.library.entity.helper.BookStatus;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

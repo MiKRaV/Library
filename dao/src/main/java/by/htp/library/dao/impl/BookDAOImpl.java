@@ -13,21 +13,34 @@ import by.htp.library.dao.BookDAO;
 import by.htp.library.dao.db.ConnectionPool;
 import by.htp.library.dao.exception.DAOException;
 import by.htp.library.entity.helper.BookHelper;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-public class BookDAOImpl implements BookDAO {
+@Repository
+public class BookDAOImpl extends BaseDAOImpl<Book> implements BookDAO {
 
-	private EntityManager em = EMUtil.getEntityManager();
-	private CriteriaBuilder cb = em.getCriteriaBuilder();
+	@Autowired
+	private AuthorDAO authorDAO;
+
+	@PersistenceContext
+	@Getter
+	private EntityManager em;
+	private CriteriaBuilder cb;
+
+	public BookDAOImpl() {
+		super();
+		clazz = Book.class;
+	}
 
 	public void addBook(Book book) throws DAOException {
-        AuthorDAO authorDAO = DAOFactory.getInstance().getAuthorDAO();
-	    BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
 	    if (isBookExist(book.getTitle(), book.getAuthors())) {
 			throw new DAOException(BookDAOHelper.MESSAGE_BOOK_ALREADY_EXIST);
 		}
@@ -43,7 +56,7 @@ public class BookDAOImpl implements BookDAO {
 			}
 		}
 
-		baseDAO.update(book);
+		update(book);
 	}
 
 	public List<Book> searchBookByTitle(String title) throws DAOException {
@@ -53,8 +66,7 @@ public class BookDAOImpl implements BookDAO {
 
 	//GETTING A LIST OF ALL BOOKS
 	public List<Book> getAllBooks(int pageNumber, int pageSize) throws DAOException {
-        BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
-	    return baseDAO.findAll(Book.class, pageNumber, pageSize);
+	    return findAll(pageNumber, pageSize);
 	}
 
 
@@ -74,9 +86,9 @@ public class BookDAOImpl implements BookDAO {
 
 	//CHECK IF THE BOOK EXISTS
 	public boolean isBookExist(String title, List<Author> authors) throws DAOException {
-        AuthorDAO authorDAO = DAOFactory.getInstance().getAuthorDAO();
-	    CriteriaQuery<Book> criteria = cb.createQuery(Book.class);
-		Root<Book> root = criteria.from(Book.class);
+        cb = em.getCriteriaBuilder();
+		CriteriaQuery<Book> criteria = cb.createQuery(clazz);
+		Root<Book> root = criteria.from(clazz);
 		criteria.select(root)
 				.where(cb.equal(root.get(BookHelper.TITLE), title));
 		List<Book> books;
@@ -119,25 +131,21 @@ public class BookDAOImpl implements BookDAO {
 	//GETTING BOOK COUNT
 	@Override
 	public long getBookCount() throws DAOException {
-		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
-		return baseDAO.getCount(Book.class);
+		return getCount();
 	}
 
 	@Override
 	public void addBookToBasket(Book book) throws DAOException {
-		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
-		baseDAO.update(book);
+		update(book);
 	}
 
 	@Override
 	public void removeBookFromBasket(Book book) throws DAOException {
-		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
-		baseDAO.update(book);
+		update(book);
 	}
 
 	@Override
 	public Book updateBook(Book book) throws DAOException {
-		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
-		 return (Book) baseDAO.update(book);
+		return update(book);
 	}
 }

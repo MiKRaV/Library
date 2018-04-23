@@ -30,7 +30,7 @@ public class User implements Serializable{
     @Column(name = "F_STATUS")
     private String status;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @Embedded
     private UserData userData;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
@@ -75,6 +75,7 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return "User[id=" + id + ", login=" + login + ", type=" + type + ", status=" + status + "]";
+        return "User[id=" + id + ", login=" + login + ", type=" + type + ", status=" +
+                status + "userData[" + userData + "]";
     }
 }

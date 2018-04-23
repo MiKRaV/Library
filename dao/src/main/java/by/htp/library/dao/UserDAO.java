@@ -5,7 +5,7 @@ import by.htp.library.dao.exception.DAOException;
 
 import java.util.List;
 
-public interface UserDAO {
+public interface UserDAO extends BaseDAO<User> {
 
     User logination(String login, String password) throws DAOException;
     void registration(User user) throws DAOException;

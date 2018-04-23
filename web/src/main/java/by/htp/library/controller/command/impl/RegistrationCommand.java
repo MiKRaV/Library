@@ -43,7 +43,7 @@ public class RegistrationCommand implements Command {
 		
 		try {
 			user = new User(null, login, password, userType, userStatus, null, basket, orders);
-			UserData userData = new UserData(null, name, surname, email, user);
+			UserData userData = new UserData(name, surname, email);
 			user.setUserData(userData);
 			userService.registration(user);
 			goToPage = WebHelper.pageGenerator(Pages.REGISTRATION_MESSAGE);

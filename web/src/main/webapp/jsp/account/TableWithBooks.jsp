@@ -48,15 +48,12 @@
 					</div>
 					<c:if test="${user.type eq 'reader'}">
 						<div class="cell-main-menu">
-							<form action="FrontController" method="post">
-								<input type="hidden" name="command" value="goToPage"/>
-								<input type="hidden" name="goToPage" value="jsp/account/reader/Basket.jsp"/>
+							<form action="${pageContext.request.contextPath}/basket" method="get">
 								<input type="submit" value="${basket_button}: ${user.basket.size()}">
 							</form>
 						</div>
 						<div class="cell-main-menu">
-							<form action="FrontController" method="post">
-								<input type="hidden" name="command" value="getOrders"/>
+							<form action="${pageContext.request.contextPath}/orders-list" method="get">
 								<input type="submit" value="${orders_button}">
 							</form>
 						</div>
@@ -129,8 +126,7 @@
 										</form>
 									</c:if>
 									<c:if test="${user.type eq 'reader'}">
-										<form action="FrontController" method="post">
-											<input type="hidden" name="command" value="addBookToBasket"/>
+										<form action="${pageContext.request.contextPath}/books-list" method="post">
 											<input type="hidden" name="bookID" value="${book.id}">
 											<input type="hidden" name="pageSize" value="${pageSize}"/>
 											<input type="hidden" name="page" value="${currentPage}">

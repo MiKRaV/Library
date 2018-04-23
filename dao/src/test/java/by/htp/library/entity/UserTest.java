@@ -1,6 +1,7 @@
 package by.htp.library.entity;
 
 import by.htp.library.dao.util.EMUtil;
+import by.htp.library.entity.helper.BookStatus;
 import by.htp.library.entity.helper.UserHelper;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -17,8 +18,7 @@ public class UserTest {
         em.getTransaction().begin();
         User user = new User(null,"MiKRaV", "123456", UserHelper.TYPE_ADMIN,
                 UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
-        UserData userData = new UserData(null, "Mikhail", "Kravchenya",
-                "mkravchenya@mail.ru",  user);
+        UserData userData = new UserData("Mikhail", "Kravchenya","mkravchenya@mail.ru");
         user.setUserData(userData);
         em.persist(user);
         em.getTransaction().commit();

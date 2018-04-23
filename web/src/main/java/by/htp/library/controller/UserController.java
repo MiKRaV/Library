@@ -2,7 +2,11 @@ package by.htp.library.controller;
 
 import by.htp.library.controller.exception.WebException;
 import by.htp.library.controller.helper.*;
+import by.htp.library.entity.Book;
+import by.htp.library.entity.Order;
 import by.htp.library.entity.User;
+import by.htp.library.entity.UserData;
+import by.htp.library.entity.helper.UserHelper;
 import by.htp.library.entity.helper.UserParameters;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.UserService;
@@ -18,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -224,6 +229,7 @@ public class UserController {
                 } catch (ServiceException e) {
                     message = e.getMessage();
                 }
+                break;
             case "removeBookFromBasket":
                 int bookID = Integer.parseInt(request.getParameter(RequestParameters.BOOK_ID));
                 try {
@@ -234,10 +240,45 @@ public class UserController {
                     e.printStackTrace();
                     message = Messages.BOOK_NOT_REMOVED_FROM_BASKET + " : " + e.getMessage();
                 }
+                break;
         }
 
         model.addAttribute("message", message);
 
         return "account/reader/Basket";
+    }
+
+    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    public String registrationPage() {
+        return "registration";
+    }
+
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public String registration(HttpServletRequest request, ModelMap model) {
+        String login = request.getParameter(RequestParameters.USER_LOGIN);
+        String password = request.getParameter(RequestParameters.USER_PASSWORD);
+        String name = request.getParameter(RequestParameters.USER_NAME);
+        String surname = request.getParameter(RequestParameters.USER_SURNAME);
+        String email = request.getParameter(RequestParameters.USER_EMAIL);
+        String userType = request.getParameter(RequestParameters.USER_TYPE);
+        String userStatus = UserHelper.STATUS_ACTIVE;
+        List<Book> basket = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
+
+        User user = null;
+
+        try {
+            user = new User(null, login, password, userType, userStatus, null, basket, orders);
+            UserData userData = new UserData(name, surname, email);
+            user.setUserData(userData);
+            userService.registration(user);
+            request.getSession().setAttribute(SessionAttributes.USER, user);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", e.getMessage());
+            return "registration";
+        }
+
+        return getMainPage(request);
     }
 }

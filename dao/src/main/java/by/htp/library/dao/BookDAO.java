@@ -6,7 +6,7 @@ import by.htp.library.entity.Author;
 import by.htp.library.entity.Book;
 import by.htp.library.dao.exception.DAOException;
 
-public interface BookDAO {
+public interface BookDAO extends BaseDAO<Book> {
 	
 	void addBook(Book book)throws DAOException;
 	List<Book> searchBookByTitle(String title) throws DAOException;

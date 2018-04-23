@@ -3,8 +3,11 @@ package by.htp.library.controller;
 import by.htp.library.controller.helper.*;
 import by.htp.library.entity.Author;
 import by.htp.library.entity.Book;
+import by.htp.library.entity.User;
+import by.htp.library.entity.helper.BookStatus;
 import by.htp.library.service.BookService;
 import by.htp.library.service.ServiceException;
+import by.htp.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,6 +23,8 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/books-list", method = RequestMethod.GET)
     public String getAllBooks(HttpServletRequest request, ModelMap model) {
@@ -52,6 +57,36 @@ public class BookController {
             String errorMessage = e.getMessage();
             model.addAttribute("errorMessage", errorMessage);
         }
+        return "account/TableWithBooks";
+    }
+
+    @RequestMapping(value = "/books-list", method = RequestMethod.POST)
+    public String addBookToBasket(HttpServletRequest request, ModelMap model) {
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+
+        List<Book> bookList = (List<Book>) request.getSession().getAttribute(SessionAttributes.BOOK_LIST);
+        int bookID = Integer.parseInt(request.getParameter(RequestParameters.BOOK_ID));
+        int page = Integer.parseInt(request.getParameter(RequestParameters.PAGE));
+        int pageSize = Integer.parseInt(request.getParameter(RequestParameters.PAGE_SIZE));
+        int pageCount = Integer.parseInt(request.getParameter(RequestParameters.PAGE_COUNT));
+
+        String message = "";
+
+        try {
+            user = userService.addBookToBasket(user, bookID);
+            request.getSession().setAttribute(SessionAttributes.USER, user);
+            message = Messages.BOOK_ADDED_TO_BASKET;
+        } catch (ServiceException e) {
+            e.printStackTrace();
+            message = Messages.BOOK_NOT_ADDED_TO_BASKET + " : " + e.getMessage();
+        }
+
+        model.addAttribute("pageCount", pageCount);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("bookList", bookList);
+        model.addAttribute("pageSize", pageSize);
+
+        request.setAttribute(SessionAttributes.MESSAGE, message);
         return "account/TableWithBooks";
     }
 

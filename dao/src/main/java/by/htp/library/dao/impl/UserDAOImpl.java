@@ -11,30 +11,42 @@ import by.htp.library.dao.exception.DAOException;
 import by.htp.library.dao.helper.UserDAOHelper;
 import by.htp.library.entity.UserData;
 import by.htp.library.entity.helper.UserHelper;
+import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.*;
 
-public class UserDAOImpl implements UserDAO{
+@Repository
+public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 
-	private EntityManager em = EMUtil.getEntityManager();
-	private CriteriaBuilder cb = em.getCriteriaBuilder();
+	@PersistenceContext
+	@Getter
+	private EntityManager em ;
+	private CriteriaBuilder cb;
+
+	public UserDAOImpl() {
+		super();
+		clazz = User.class;
+	}
 
 	//LOGINATION
 	@Override
 	public User logination(String login, String password) throws DAOException {
-		User user;
+		cb = em.getCriteriaBuilder();
+		User user = null;
 
 		if(!isUserExist(login)) {
 			throw new DAOException(UserDAOHelper.MESSAGE_USER_DOES_NOT_EXIST);
 		}
 
-		CriteriaQuery<User> criteria = cb.createQuery(User.class);
-		Root<User> userRoot = criteria.from(User.class);
+		CriteriaQuery<User> criteria = cb.createQuery(clazz);
+		Root<User> userRoot = criteria.from(clazz);
 		Predicate predicate = cb.and(
 				cb.equal(userRoot.get(UserHelper.LOGIN), login),
 				cb.equal(userRoot.get(UserHelper.PASSWORD), password)
@@ -44,23 +56,20 @@ public class UserDAOImpl implements UserDAO{
 		try {
 			user = em.createQuery(criteria).getSingleResult();
 		} catch (NoResultException e) {
-			em.clear();
 			throw new DAOException(UserDAOHelper.MESSAGE_INVALID_PASSWORD);
 		}
-		em.clear();
 		return user;
 	}
 
 	//REGISTRATION
 	@Override
 	public void registration(User user) throws DAOException {
-		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
 		if(isUserExist(user.getLogin())) {
 			throw new DAOException(UserDAOHelper.MESSAGE_USER_EXIST);
 		}
 
-		CriteriaQuery<User> criteria = cb.createQuery(User.class);
-		Root<User> root = criteria.from(User.class);
+		CriteriaQuery<User> criteria = cb.createQuery(clazz);
+		Root<User> root = criteria.from(clazz);
 		Join<User, UserData> userDataJoin = root.join(UserHelper.USER_DATA);
 		criteria.where(cb.equal(userDataJoin.get(UserHelper.EMAIL) , user.getUserData().getEmail()));
 		List<User> users = em.createQuery(criteria).getResultList();
@@ -69,15 +78,17 @@ public class UserDAOImpl implements UserDAO{
 			em.clear();
 			throw new DAOException(UserDAOHelper.MESSAGE_EMAIL_REGISTERED);
 		}
-		baseDAO.add(user);
+		System.out.println(user);
+		add(user);
 		em.clear();
 	}
 
 	//CHEK IF THE USER EXISTS
 	@Override
 	public boolean isUserExist(String login) throws DAOException {
-		CriteriaQuery<User> criteria = cb.createQuery(User.class);
-		Root<User> userRoot = criteria.from(User.class);
+		cb = em.getCriteriaBuilder();
+		CriteriaQuery<User> criteria = cb.createQuery(clazz);
+		Root<User> userRoot = criteria.from(clazz);
 		criteria.select(userRoot)
 				.where(cb.equal(userRoot.get(UserHelper.LOGIN), login));
 		try {
@@ -104,15 +115,13 @@ public class UserDAOImpl implements UserDAO{
 	//CHANGING USER DATA
 	@Override
 	public User updateUser(User user) throws DAOException {
-		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
-		return (User) baseDAO.update(user);
+		return update(user);
 	}
 
 	//GETTING A LIST OF ALL USERS
 	@Override
 	public List<User> getAllUsersList(int pageNumber, int pageSize) throws DAOException {
-		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
-		return baseDAO.findAll(User.class, pageNumber, pageSize);
+		return findAll(pageNumber, pageSize);
 	}
 
 	//REMOVING USER
@@ -143,8 +152,8 @@ public class UserDAOImpl implements UserDAO{
 
 		User user = null;
 
-		CriteriaQuery<User> criteria = cb.createQuery(User.class);
-		Root<User> userRoot = criteria.from(User.class);
+		CriteriaQuery<User> criteria = cb.createQuery(clazz);
+		Root<User> userRoot = criteria.from(clazz);
 		criteria.select(userRoot)
 				.where(cb.equal(userRoot.get(UserHelper.LOGIN), login));
 		try {
@@ -189,7 +198,6 @@ public class UserDAOImpl implements UserDAO{
 	//GETTING USER COUNT
 	@Override
 	public long getUserCount() throws DAOException {
-		BaseDAO baseDAO = DAOFactory.getInstance().getBaseDAO();
-		return baseDAO.getCount(User.class);
+		return getCount();
 	}
 }

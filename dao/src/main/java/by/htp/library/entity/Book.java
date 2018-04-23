@@ -1,5 +1,6 @@
 package by.htp.library.entity;
 
+import by.htp.library.entity.helper.BookStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

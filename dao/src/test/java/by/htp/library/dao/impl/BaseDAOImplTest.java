@@ -29,17 +29,17 @@ public class BaseDAOImplTest {
 
         User user1 = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
                 UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
-        UserData userData1 = new UserData(null, "Stepan", "Stepanov", "stepchik@mail.ru", user1);
+        UserData userData1 = new UserData("Stepan", "Stepanov", "stepchik@mail.ru");
         user1.setUserData(userData1);
 
         User user2 = new User(null, "Ivanchik", "123456", UserHelper.TYPE_READER,
                 UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
-        UserData userData2 = new UserData(null, "Ivan", "Ivanov", "ivanchik@mail.ru", user2);
+        UserData userData2 = new UserData("Ivan", "Ivanov", "ivanchik@mail.ru");
         user2.setUserData(userData2);
 
         User user3 = new User(null, "Vovchik", "123456", UserHelper.TYPE_READER,
                 UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
-        UserData userData3 = new UserData(null, "Vladimir", "Vladimirov", "vovchik@mail.ru", user3);
+        UserData userData3 = new UserData("Vladimir", "Vladimirov", "vovchik@mail.ru");
         user3.setUserData(userData3);
 
         em.getTransaction().begin();
@@ -87,7 +87,7 @@ public class BaseDAOImplTest {
         em.clear();
         Book bookFromDB;
         try {
-            bookFromDB = (Book) baseDao.find(Book.class, book.getId());
+            bookFromDB = (Book) baseDao.find(book.getId());
             Assert.assertNotNull(bookFromDB);
         } catch (DAOException e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class BaseDAOImplTest {
     public void findAllTest() {
         List<User> users = null;
         try {
-            users = baseDao.findAll(User.class, 1, 2);
+            users = baseDao.findAll(1, 2);
         } catch (DAOException e) {
             e.printStackTrace();
         }
@@ -170,7 +170,7 @@ public class BaseDAOImplTest {
     public void getCountTest() {
         long userCount = 0;
         try {
-            userCount = baseDao.getCount(User.class);
+            userCount = baseDao.getCount();
         } catch (DAOException e) {
             e.printStackTrace();
         }

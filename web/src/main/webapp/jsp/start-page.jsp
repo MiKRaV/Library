@@ -52,7 +52,7 @@
 							<input type="submit" value="${signIn_button}" form="formLogin">
 						</div>
 						<div class="cell-login registration">
-							<form action="${pageContext.request.contextPath}/registration-page" method="get">
+							<form action="${pageContext.request.contextPath}/registration" method="get">
 								<input type="hidden" name="command" value="goToPage"/>
 								<input type="hidden" name="goToPage" value="jsp/registration.jsp"/>
 								<input type="submit" value="${reg_button}">
