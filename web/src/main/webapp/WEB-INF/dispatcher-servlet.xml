@@ -19,10 +19,24 @@
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven/>
 
+    <bean id="tilesConfigurer"
+          class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <value>/WEB-INF/tiles.xml</value>
+        </property>
+    </bean>
+
+    <bean id="tilesViewResolver"
+          class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView"/>
+    </bean>
+
+    <!--
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-          p:prefix="/jsp/"
+          p:prefix="/WEB-INF/jsp/"
           p:suffix=".jsp"/>
+          -->
 
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">

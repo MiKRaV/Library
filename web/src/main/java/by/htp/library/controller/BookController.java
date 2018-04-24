@@ -57,7 +57,7 @@ public class BookController {
             String errorMessage = e.getMessage();
             model.addAttribute("errorMessage", errorMessage);
         }
-        return "account/TableWithBooks";
+        return "books";
     }
 
     @RequestMapping(value = "/books-list", method = RequestMethod.POST)
@@ -87,12 +87,12 @@ public class BookController {
         model.addAttribute("pageSize", pageSize);
 
         request.setAttribute(SessionAttributes.MESSAGE, message);
-        return "account/TableWithBooks";
+        return "books";
     }
 
     @RequestMapping(value = "/adding-book", method = RequestMethod.GET)
     public String getAddingBookPage() {
-        return "account/admin/AddingBook";
+        return "adding-book";
     }
 
     @RequestMapping(value = "/adding-book", method = RequestMethod.POST)
@@ -129,6 +129,6 @@ public class BookController {
 
         model.addAttribute("message", message);
 
-        return "account/admin/AddingBook";
+        return "adding-book";
     }
 }

@@ -36,28 +36,6 @@
     </listener>
 
     <!--
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-        <welcome-file>index.htm</welcome-file>
-        <welcome-file>index.jsp</welcome-file>
-        <welcome-file>default.html</welcome-file>
-        <welcome-file>default.htm</welcome-file>
-        <welcome-file>default.jsp</welcome-file>
-    </welcome-file-list>
-
-    <servlet>
-        <description></description>
-        <display-name>FrontController</display-name>
-        <servlet-name>FrontController</servlet-name>
-        <servlet-class>by.htp.library.controller.FrontController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>FrontController</servlet-name>
-        <url-pattern>/FrontController</url-pattern>
-    </servlet-mapping>
-    -->
-
-    <!--
     <filter>
         <filter-name>FormEncodingSetterFilter</filter-name>
         <filter-class>by.htp.library.controller.FormEncodingSetterFilter</filter-class>
@@ -68,7 +46,7 @@
     </filter>
     <filter-mapping>
         <filter-name>FormEncodingSetterFilter</filter-name>
-        <url-pattern>/FrontController</url-pattern>
+        <url-pattern>/dispatcher</url-pattern>
     </filter-mapping>
     -->
 

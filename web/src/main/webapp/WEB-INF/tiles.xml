@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <definition name="default" template="/WEB-INF/jsp/layouts/default.jsp">
+        <put-attribute name="header" value=""/>
+        <put-attribute name="body" value=""/>
+        <put-attribute name="title" value=""/>
+    </definition>
+
+    <definition name="user" template="/WEB-INF/jsp/layouts/default.jsp">
+        <put-attribute name="header" value="/WEB-INF/jsp/common/user-header.jsp"/>
+        <put-attribute name="body" value=""/>
+        <put-attribute name="title" value=""/>
+    </definition>
+    
+    <definition name="start-page" extends="default">
+        <put-attribute name="header" value="/WEB-INF/jsp/common/default-header.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/jsp/start-page.jsp"/>
+        <put-attribute name="title" value="title.startPage"/>
+    </definition>
+
+    <definition name="registration-page" extends="default">
+        <put-attribute name="header" value="/WEB-INF/jsp/common/registration-header.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/jsp/registration.jsp"/>
+        <put-attribute name="title" value="title.registrationPage"/>
+    </definition>
+
+    <definition name="admin-main-page" extends="user">
+        <put-attribute name="header" value="/WEB-INF/jsp/common/user-default-header.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/jsp/account/admin/admin-main-page.jsp"/>
+        <put-attribute name="title" value="title.adminMainPage"/>
+    </definition>
+
+    <definition name="reader-main-page" extends="user">
+        <put-attribute name="header" value="/WEB-INF/jsp/common/user-default-header.jsp"/>
+        <put-attribute name="body" value="/WEB-INF/jsp/account/reader/reader-main-page.jsp"/>
+        <put-attribute name="title" value="title.readerMainPage"/>
+    </definition>
+
+    <definition name="user-data" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/user-data.jsp"/>
+        <put-attribute name="title" value="title.profile"/>
+    </definition>
+
+    <definition name="adding-book" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/admin/adding-book.jsp"/>
+        <put-attribute name="title" value="title.addingBook"/>
+    </definition>
+
+    <definition name="books" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/books.jsp"/>
+        <put-attribute name="title" value="title.books"/>
+    </definition>
+
+    <definition name="basket" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/reader/basket.jsp"/>
+        <put-attribute name="title" value="title.basket"/>
+    </definition>
+    
+    <definition name="orders" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/orders.jsp"/>
+        <put-attribute name="title" value="title.orders"/>
+    </definition>
+
+    <definition name="order-info" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/order-info.jsp"/>
+        <put-attribute name="title" value="title.orderInfo"/>
+    </definition>
+
+    <definition name="search-user" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/admin/search-user-page.jsp"/>
+        <put-attribute name="title" value="title.searchUser"/>
+    </definition>
+
+    <definition name="found-user-data" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/admin/found-user-data.jsp"/>
+        <put-attribute name="title" value="title.foundUserData"/>
+    </definition>
+
+    <definition name="users" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/admin/users.jsp"/>
+        <put-attribute name="title" value="title.foundUserData"/>
+    </definition>
+</tiles-definitions>

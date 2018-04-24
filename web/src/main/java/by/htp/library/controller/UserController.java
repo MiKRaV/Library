@@ -49,9 +49,9 @@ public class UserController {
             e.printStackTrace();
         }
         if (userType.equals("admin"))
-            return "account/admin/AdminMainPage";
+            return "admin-main-page";
         else if (userType.equals("reader"))
-            return "account/reader/ReaderMainPage";
+            return "reader-main-page";
         else
             return "start-page";
     }
@@ -61,9 +61,9 @@ public class UserController {
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         if (user != null) {
             if (user.getType().equals("admin"))
-                return "account/admin/AdminMainPage";
+                return "admin-main-page";
             else if (user.getType().equals("reader"))
-                return "account/reader/ReaderMainPage";
+                return "reader-main-page";
         }
         return HttpStatus.valueOf(404).toString();
     }
@@ -76,7 +76,7 @@ public class UserController {
 
     @RequestMapping(value = "/user-data", method = RequestMethod.GET)
     public String userData(HttpServletRequest request) {
-        return "account/UserDataPage";
+        return "user-data";
     }
 
     @RequestMapping(value = "/user-data", method = RequestMethod.POST)
@@ -127,7 +127,7 @@ public class UserController {
 
         model.addObject("message", message);
 
-        return "account/UserDataPage";
+        return "user-data";
     }
 
     @RequestMapping(value = "/users-list", method = RequestMethod.GET)
@@ -162,17 +162,17 @@ public class UserController {
             model.addAttribute("errorMessage", errorMessage);
         }
 
-        return "account/admin/TableWithUsers";
+        return "users";
     }
 
     @RequestMapping(value = "/search-user", method = RequestMethod.GET)
     public String searchUserPage() {
-        return "account/admin/SearchUserPage";
+        return "search-user";
     }
 
     @RequestMapping(value = "/found-user", method = RequestMethod.GET)
     public String foundUserPage() {
-        return "account/admin/FoundUserDataPage";
+        return "found-user-data";
     }
 
     @RequestMapping(value = "/found-user", method = RequestMethod.POST)
@@ -199,7 +199,7 @@ public class UserController {
             errorMessage = e.getMessage();
             model.addAttribute("errorMessage", errorMessage);
         }
-        return "account/admin/FoundUserDataPage";
+        return "found-user-data";
     }
 
     private void blockUnlockUser(String login) throws ServiceException {
@@ -212,7 +212,7 @@ public class UserController {
 
     @RequestMapping(value = "/basket", method = RequestMethod.GET)
     public String getBasket() {
-        return "account/reader/Basket";
+        return "basket";
     }
 
     @RequestMapping(value = "/basket", method = RequestMethod.POST)
@@ -245,12 +245,12 @@ public class UserController {
 
         model.addAttribute("message", message);
 
-        return "account/reader/Basket";
+        return "basket";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registrationPage() {
-        return "registration";
+        return "registration-page";
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
@@ -276,7 +276,7 @@ public class UserController {
         } catch (ServiceException e) {
             e.printStackTrace();
             model.addAttribute("errorMessage", e.getMessage());
-            return "registration";
+            return "registration-page";
         }
 
         return getMainPage(request);

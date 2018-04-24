@@ -60,7 +60,7 @@ public class OrderController {
             model.addAttribute("errorMessage", errorMessage);
         }
 
-        return "account/Orders";
+        return "orders";
     }
 
     @RequestMapping(value = "/order-info", method = RequestMethod.GET)
@@ -87,7 +87,7 @@ public class OrderController {
             model.addAttribute("message", message);
         }
 
-        return "account/OrderInfo";
+        return "order-info";
     }
 
     @RequestMapping(value = "/order-info", method = RequestMethod.POST)
@@ -106,7 +106,7 @@ public class OrderController {
             request.setAttribute(RequestAttributes.ERROR_MESSAGE, errorMessage);
         }
 
-        return "account/OrderInfo";
+        return "order-info";
     }
 
     @RequestMapping(value = "/new-order", method = RequestMethod.POST)
@@ -126,6 +126,6 @@ public class OrderController {
 
         model.addAttribute("message", message);
 
-        return "account/reader/Basket";
+        return "basket";
     }
 }
