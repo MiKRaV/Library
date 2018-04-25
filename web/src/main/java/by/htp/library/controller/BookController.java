@@ -3,6 +3,7 @@ package by.htp.library.controller;
 import by.htp.library.controller.helper.*;
 import by.htp.library.entity.Author;
 import by.htp.library.entity.Book;
+import by.htp.library.entity.Note;
 import by.htp.library.entity.User;
 import by.htp.library.entity.helper.BookStatus;
 import by.htp.library.service.BookService;
@@ -57,7 +58,7 @@ public class BookController {
             String errorMessage = e.getMessage();
             model.addAttribute("errorMessage", errorMessage);
         }
-        return "books";
+        return Pages.BOOKS;
     }
 
     @RequestMapping(value = "/books-list", method = RequestMethod.POST)
@@ -87,12 +88,12 @@ public class BookController {
         model.addAttribute("pageSize", pageSize);
 
         request.setAttribute(SessionAttributes.MESSAGE, message);
-        return "books";
+        return Pages.BOOKS;
     }
 
     @RequestMapping(value = "/adding-book", method = RequestMethod.GET)
     public String getAddingBookPage() {
-        return "adding-book";
+        return Pages.ADDING_BOOK;
     }
 
     @RequestMapping(value = "/adding-book", method = RequestMethod.POST)
@@ -100,7 +101,8 @@ public class BookController {
         List<Book> books = new ArrayList<>();
         String title = request.getParameter(RequestParameters.BOOK_TITLE);
         String genre = request.getParameter(RequestParameters.BOOK_GENRE);
-        Book book = new Book(null,  title, genre, null, null, null);
+        List<Note> register = new ArrayList<>();
+        Book book = new Book(null,  title, genre, BookStatus.AVAILABLE, null, null, null, register);
         books.add(book);
 
         List<Author> authors = new ArrayList<>();
@@ -129,6 +131,6 @@ public class BookController {
 
         model.addAttribute("message", message);
 
-        return "adding-book";
+        return Pages.ADDING_BOOK;
     }
 }

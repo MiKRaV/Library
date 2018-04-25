@@ -2,7 +2,7 @@ package by.htp.library.entity.helper;
 
 public enum BookStatus {
 
-    AVAILABLE(1), NOT_AVAILABLE(2);
+    AVAILABLE(1), UNAVAILABLE(2);
 
     private int value;
 

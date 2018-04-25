@@ -10,6 +10,8 @@ import by.htp.library.entity.Book;
 import by.htp.library.entity.User;
 import by.htp.library.entity.UserData;
 import by.htp.library.entity.helper.UserHelper;
+import by.htp.library.entity.helper.UserStatus;
+import by.htp.library.entity.helper.UserType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,18 +29,18 @@ public class BaseDAOImplTest {
         em = EMUtil.getEntityManager("by.htp.library.test");
         baseDao = DAOFactory.getInstance().getBaseDAO();
 
-        User user1 = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
+        User user1 = new User(null, "Stepchik", "123456", UserType.ADMIN,
+                UserStatus.ACTIVE, null, new ArrayList<>(), null, null);
         UserData userData1 = new UserData("Stepan", "Stepanov", "stepchik@mail.ru");
         user1.setUserData(userData1);
 
-        User user2 = new User(null, "Ivanchik", "123456", UserHelper.TYPE_READER,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
+        User user2 = new User(null, "Ivanchik", "123456", UserType.READER,
+                UserStatus.ACTIVE, null, new ArrayList<>(), null, null);
         UserData userData2 = new UserData("Ivan", "Ivanov", "ivanchik@mail.ru");
         user2.setUserData(userData2);
 
-        User user3 = new User(null, "Vovchik", "123456", UserHelper.TYPE_READER,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
+        User user3 = new User(null, "Vovchik", "123456", UserType.READER,
+                UserStatus.ACTIVE, null, new ArrayList<>(), null, null);
         UserData userData3 = new UserData("Vladimir", "Vladimirov", "vovchik@mail.ru");
         user3.setUserData(userData3);
 

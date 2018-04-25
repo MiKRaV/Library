@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface BaseDAO<T> {
-    void add(T obj) throws DAOException;
+    T add(T obj) throws DAOException;
     T find(Serializable obj) throws DAOException;
     List<T> findAll(int pageNumber, int pageSize) throws DAOException;
     T update(T obj) throws DAOException;

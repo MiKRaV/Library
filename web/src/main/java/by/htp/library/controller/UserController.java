@@ -2,25 +2,21 @@ package by.htp.library.controller;
 
 import by.htp.library.controller.exception.WebException;
 import by.htp.library.controller.helper.*;
-import by.htp.library.entity.Book;
-import by.htp.library.entity.Order;
-import by.htp.library.entity.User;
-import by.htp.library.entity.UserData;
-import by.htp.library.entity.helper.UserHelper;
+import by.htp.library.entity.*;
 import by.htp.library.entity.helper.UserParameters;
+import by.htp.library.entity.helper.UserStatus;
+import by.htp.library.entity.helper.UserType;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +29,14 @@ public class UserController {
 
     @RequestMapping(value = "/start-page", method = RequestMethod.GET)
     public String startPage() {
-        return "start-page";
+        return Pages.START_PAGE;
     }
 
     @RequestMapping(value = "/main-page", method = RequestMethod.POST)
     public String mainPage(@RequestParam("login") String login,
                            @RequestParam("password") String password,
                            HttpServletRequest request) {
-        String userType = "";
+        UserType userType = null;
         try {
             User user = userService.logination(login, password);
             userType = user.getType();
@@ -48,22 +44,22 @@ public class UserController {
         } catch (ServiceException e) {
             e.printStackTrace();
         }
-        if (userType.equals("admin"))
-            return "admin-main-page";
-        else if (userType.equals("reader"))
-            return "reader-main-page";
-        else
-            return "start-page";
+        switch (userType) {
+            case ADMIN: return Pages.ADMIN_MAIN_PAGE;
+            case READER: return Pages.READER_MAIN_PAGE;
+            default: return Pages.START_PAGE;
+        }
     }
 
     @RequestMapping(value = "/main-page", method = RequestMethod.GET)
     public String getMainPage(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         if (user != null) {
-            if (user.getType().equals("admin"))
-                return "admin-main-page";
-            else if (user.getType().equals("reader"))
-                return "reader-main-page";
+            UserType userType = user.getType();
+            switch (userType) {
+                case ADMIN: return Pages.ADMIN_MAIN_PAGE;
+                case READER: return Pages.READER_MAIN_PAGE;
+            }
         }
         return HttpStatus.valueOf(404).toString();
     }
@@ -71,12 +67,12 @@ public class UserController {
     @RequestMapping(value = "/start-page", method = RequestMethod.POST)
     public String logOut(HttpServletRequest request) {
         request.getSession().removeAttribute(SessionAttributes.USER);
-        return "start-page";
+        return Pages.START_PAGE;
     }
 
     @RequestMapping(value = "/user-data", method = RequestMethod.GET)
     public String userData(HttpServletRequest request) {
-        return "user-data";
+        return Pages.USER_DATA;
     }
 
     @RequestMapping(value = "/user-data", method = RequestMethod.POST)
@@ -127,7 +123,7 @@ public class UserController {
 
         model.addObject("message", message);
 
-        return "user-data";
+        return Pages.USER_DATA;
     }
 
     @RequestMapping(value = "/users-list", method = RequestMethod.GET)
@@ -162,17 +158,17 @@ public class UserController {
             model.addAttribute("errorMessage", errorMessage);
         }
 
-        return "users";
+        return Pages.USERS;
     }
 
     @RequestMapping(value = "/search-user", method = RequestMethod.GET)
     public String searchUserPage() {
-        return "search-user";
+        return Pages.SEARCH_USER;
     }
 
     @RequestMapping(value = "/found-user", method = RequestMethod.GET)
     public String foundUserPage() {
-        return "found-user-data";
+        return Pages.FOUND_USER_DATA;
     }
 
     @RequestMapping(value = "/found-user", method = RequestMethod.POST)
@@ -199,7 +195,7 @@ public class UserController {
             errorMessage = e.getMessage();
             model.addAttribute("errorMessage", errorMessage);
         }
-        return "found-user-data";
+        return Pages.FOUND_USER_DATA;
     }
 
     private void blockUnlockUser(String login) throws ServiceException {
@@ -212,7 +208,7 @@ public class UserController {
 
     @RequestMapping(value = "/basket", method = RequestMethod.GET)
     public String getBasket() {
-        return "basket";
+        return Pages.BASKET;
     }
 
     @RequestMapping(value = "/basket", method = RequestMethod.POST)
@@ -245,12 +241,12 @@ public class UserController {
 
         model.addAttribute("message", message);
 
-        return "basket";
+        return Pages.BASKET;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registrationPage() {
-        return "registration-page";
+        return Pages.REGISTRATION_PAGE;
     }
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
@@ -260,15 +256,16 @@ public class UserController {
         String name = request.getParameter(RequestParameters.USER_NAME);
         String surname = request.getParameter(RequestParameters.USER_SURNAME);
         String email = request.getParameter(RequestParameters.USER_EMAIL);
-        String userType = request.getParameter(RequestParameters.USER_TYPE);
-        String userStatus = UserHelper.STATUS_ACTIVE;
+        UserType userType = UserType.valueOf(request.getParameter(RequestParameters.USER_TYPE).toUpperCase());
+        UserStatus userStatus = UserStatus.ACTIVE;
         List<Book> basket = new ArrayList<>();
         List<Order> orders = new ArrayList<>();
+        List<Note> subscription = new ArrayList<>();
 
         User user = null;
 
         try {
-            user = new User(null, login, password, userType, userStatus, null, basket, orders);
+            user = new User(null, login, password, userType, userStatus, null, basket, orders, subscription);
             UserData userData = new UserData(name, surname, email);
             user.setUserData(userData);
             userService.registration(user);
@@ -276,9 +273,22 @@ public class UserController {
         } catch (ServiceException e) {
             e.printStackTrace();
             model.addAttribute("errorMessage", e.getMessage());
-            return "registration-page";
+            return Pages.REGISTRATION_PAGE;
         }
 
         return getMainPage(request);
+    }
+
+    @RequestMapping(value = "/reader-books", method = RequestMethod.GET)
+    public String readerBooks(HttpServletRequest request, ModelMap model) {
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+        try {
+            List<Note> subscription = userService.getSubscription(user);
+            request.getSession().setAttribute("subscription", subscription);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+        return Pages.READER_BOOKS;
     }
 }

@@ -41,11 +41,9 @@
 							<input type="text" id="name" name="names[]" value="" required/>
 						</div>
 					</div>
-                    <br>
 					<div id="addDynamicField">
 						<input type="button" id="addDynamicFieldButton" value="${addMoreAuthorButton}">
 					</div>
-					<br>
 					<b><c:out value="${title}" /></b>:<br/>
 					<input type="text" name="title" value="" required/><br/>
 					<br>
@@ -91,7 +89,6 @@
 	    	input.click(function() {
 	        	$(this).parent().remove();
 	    	});
-	    	var br = $('<br/>').appendTo(div);
 		}
 		//Удаление поля
 		$('.DeleteDynamicField').click(function(event) {

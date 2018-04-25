@@ -4,7 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <link rel="stylesheet" href="<c:url value="/css/total.css"/>">
+    <link rel="stylesheet" href="<c:url value="/assets/css/total.css"/>">
 
     <spring:message code="local.locbutton.name.ru" var="ru_button"/>
     <spring:message code="local.locbutton.name.en" var="en_button"/>

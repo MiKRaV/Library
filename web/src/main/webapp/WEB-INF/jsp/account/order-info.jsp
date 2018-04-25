@@ -22,6 +22,10 @@
     <spring:message code="local.tableWithAllBooks.column.name.title" var="title" />
     <spring:message code="local.tableWithAllBooks.column.name.authors" var="authors" />
     <spring:message code="local.tableWithAllBooks.column.name.genre" var="genre" />
+    <spring:message code="order.status.inProcessing" var="order_in_processing" />
+    <spring:message code="order.status.acceptedForExecution" var="order_accepted" />
+    <spring:message code="order.status.readyForIssue" var="order_ready" />
+    <spring:message code="order.status.fulfilled" var="order_fulfilled" />
 
 </head>
 <body>
@@ -33,32 +37,45 @@
                         <caption><c:out value="${orderInfo}"/></caption>
                         <tr class="row-header">
                             <th class="cell-id"><c:out value="${orderID}" /></th>
-                            <c:if test="${user.type eq 'admin'}">
+                            <c:if test="${user.type eq 'ADMIN'}">
                                 <th class="cell-id"><c:out value="${userID}" /></th>
                             </c:if>
                             <th class="cell-date"><c:out value="${creationTime}" /></th>
                             <th class="cell-order-status"><c:out value="${status}" /></th>
                             <th class="cell-date"><c:out value="${updateTime}" /></th>
-                            <c:if test="${user.type eq 'admin'}">
+                            <c:if test="${user.type eq 'ADMIN'}">
                                 <th class="cell-actions"><c:out value="${actions}" /></th>
                             </c:if>
                         </tr>
                         <tr class="row-data">
                             <td class="cell-id">${order.id}</td>
-                            <c:if test="${user.type eq 'admin'}">
+                            <c:if test="${user.type eq 'ADMIN'}">
                                 <td class="cell-id">${order.user.id}</td>
                             </c:if>
                             <td class="cell-date">${order.orderCreationTime}</td>
-                            <td class="cell-order-status">${order.status}</td>
+                            <td class="cell-order-status">
+                                <c:if test="${order.status eq 'IN_PROCESSING'}">
+                                    <c:out value="${order_in_processing}"/>
+                                </c:if>
+                                <c:if test="${order.status eq 'ACCEPTED_FOR_EXECUTION'}">
+                                    <c:out value="${order_accepted}"/>
+                                </c:if>
+                                <c:if test="${order.status eq 'READY_FOR_ISSUE'}">
+                                    <c:out value="${order_ready}"/>
+                                </c:if>
+                                <c:if test="${order.status eq 'FULFILLED'}">
+                                    <c:out value="${order_fulfilled}"/>
+                                </c:if>
+                            </td>
                             <td class="cell-date">${order.orderUpdateTime}</td>
-                            <c:if test="${user.type eq 'admin'}">
+                            <c:if test="${user.type eq 'ADMIN'}">
                                 <td class="cell-actions">
                                     <form action="${pageContext.request.contextPath}/order-info" method="post">
                                         <input type="hidden" name="orderID" value="${order.id}">
                                         <select name="orderStatus" required>
-                                            <option value="accepted for execution">accepted for execution</option>
-                                            <option value="awaits delivery">awaits delivery</option>
-                                            <option value="fulfilled">fulfilled</option>
+                                            <option value="ACCEPTED_FOR_EXECUTION">${order_accepted}</option>
+                                            <option value="READY_FOR_ISSUE">${order_ready}</option>
+                                            <option value="FULFILLED">${order_fulfilled}</option>
                                         </select>
                                         <input type="submit" value="${changeStatus_button}">
                                     </form>

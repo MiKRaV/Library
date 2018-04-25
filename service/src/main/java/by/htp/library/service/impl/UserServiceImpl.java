@@ -1,9 +1,14 @@
 package by.htp.library.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import by.htp.library.dao.BookDAO;
+import by.htp.library.dao.NoteDAO;
 import by.htp.library.entity.Book;
+import by.htp.library.entity.Note;
+import by.htp.library.entity.Order;
 import by.htp.library.entity.User;
 import by.htp.library.dao.UserDAO;
 import by.htp.library.dao.exception.DAOException;
@@ -24,6 +29,8 @@ public class UserServiceImpl implements UserService {
 	private UserDAO userDAO;
 	@Autowired
 	private BookDAO bookDAO;
+	@Autowired
+	private NoteDAO noteDAO;
 
 	private Validator validator = new Validator();
 
@@ -269,5 +276,42 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return user;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public User addNoteToSubscriptionFromOrder(Order order) throws ServiceException {
+		User user = order.getUser();
+		List<Book> booksInOrder = order.getBooksInOrder();
+		LocalDateTime bookIssueTime = order.getOrderUpdateTime();
+		for (Book book : booksInOrder) {
+			Note note = new Note(null, user, book, bookIssueTime, false, null);
+			try {
+				note = noteDAO.add(note);
+				book.getRegister().add(note);
+				bookDAO.update(book);
+				user.getSubscription().add(note);
+				user = userDAO.update(user);
+			} catch (DAOException e) {
+				e.printStackTrace();
+			}
+		}
+		return user;
+	}
+
+	@Override
+	@Transactional
+	public List<Note> getSubscription(User user) throws ServiceException {
+		List<Note> subscription = new ArrayList<>();
+		try {
+			user = userDAO.find(user.getId());
+			for (Note note : user.getSubscription()) {
+			    note = noteDAO.find(note.getId());
+			    subscription.add(note);
+            }
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		return subscription;
 	}
 }

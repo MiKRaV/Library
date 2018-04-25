@@ -3,6 +3,8 @@ package by.htp.library.service;
 import java.util.List;
 
 import by.htp.library.entity.Book;
+import by.htp.library.entity.Note;
+import by.htp.library.entity.Order;
 import by.htp.library.entity.User;
 import by.htp.library.entity.helper.UserParameters;
 import org.springframework.stereotype.Service;
@@ -22,4 +24,6 @@ public interface UserService {
 	User addBookToBasket(User user, int bookID) throws ServiceException;
 	User removeBookFromBasket(User user, int bookID) throws ServiceException;
 	User clearBasket(User user) throws ServiceException;
+	User addNoteToSubscriptionFromOrder(Order order) throws ServiceException;
+	List<Note> getSubscription (User user) throws ServiceException;
 }

@@ -12,6 +12,7 @@ body {
     background-image:
             linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),
             linear-gradient(#eee .1em, transparent .1em);
+    /*background-image: url("/assets/images/background.jpg");*/
     background-size: 100% 1.2em;
 }
 
@@ -43,7 +44,16 @@ input[type="password"]{
     outline: none;
 }
 
-input[type="submit"]{
+input[type="text"]:active,
+input[type="text"]:focus,
+input[type="password"]:active,
+input[type="password"]:focus {
+    box-shadow: 0 0 5px chartreuse;
+    outline: none;
+}
+
+input[type="submit"],
+input[type="button"]{
     display: block;
     margin-top: 1em;
     padding: 5px 15px;
@@ -57,19 +67,43 @@ input[type="submit"]{
     text-shadow: 0 1px 1px white;
 }
 
-input[type="submit"],
-input[type="submit"]:active,
-input[type="submit"]:focus {
+input[type="submit"]:focus,
+input[type="button"]:focus{
     outline: none;
 }
 
-input[type="submit"]:hover {
+input[type="submit"]:hover,
+input[type="button"]:hover{
+    color: darkgreen;
     box-shadow: 0 0 2px 3px chartreuse;
     cursor: pointer;
 }
 
-input[type="submit"]:active {
+input[type="submit"]:active,
+input[type="button"]:active{
     background-image: linear-gradient(to top, #fff, #d59925);
+}
+
+select {
+    border: 1px solid orange;
+    padding: 4px 5px;
+    background: white;
+    border-radius: 5px;
+}
+
+select:focus {
+    outline: none;
+}
+
+select option {
+    border: 1px solid orange;
+    padding: 4px 5px;
+    background: white;
+    border-radius: 5px;
+}
+
+select option:hover {
+    background: darkcyan;
 }
 
 .layout-positioner {
@@ -86,6 +120,7 @@ input[type="submit"]:active {
     background: orange;
     padding-top: 10px;
     padding-bottom: 10px;
+    height: 60px;
 }
 
 .table-local {
@@ -128,6 +163,7 @@ input[type="submit"]:active {
 }
 
 .table-local a:hover {
+    color: darkgreen;
     box-shadow: 0 0 2px 3px chartreuse;
     cursor: pointer;
 }

@@ -20,8 +20,8 @@
 	<spring:message code="local.button.name.edit" var="edit_button" />
 	<spring:message code="local.button.name.previous" var="previous_button" />
 	<spring:message code="local.button.name.next" var="next_button" />
+    <spring:message code="local.message.bookUnavailable" var="book_unavailable" />
 
-	<c:set var="url" value="jsp/account/TableWithBooks.jsp" scope="session"/>
 </head>
 <body>
 	<div class="container-content">
@@ -64,20 +64,25 @@
 								</td>
 								<td>${book.genre}</td>
 								<td class="cell-actions">
-									<c:if test="${user.type eq 'admin'}">
+									<c:if test="${user.type eq 'ADMIN'}">
 										<form action="FrontController" method="post">
 											<input type="hidden" name="command" value=""/>
 											<input type="submit" value="${edit_button}">
 										</form>
 									</c:if>
-									<c:if test="${user.type eq 'reader'}">
-										<form action="${pageContext.request.contextPath}/books-list" method="post">
-											<input type="hidden" name="bookID" value="${book.id}">
-											<input type="hidden" name="pageSize" value="${pageSize}"/>
-											<input type="hidden" name="page" value="${currentPage}">
-											<input type="hidden" name="pageCount" value="${pageCount}">
-											<input type="submit" value="${addToBasket_button}">
-										</form>
+									<c:if test="${user.type eq 'READER'}">
+										<c:if test="${book.status eq 'AVAILABLE'}">
+											<form action="${pageContext.request.contextPath}/books-list" method="post">
+												<input type="hidden" name="bookID" value="${book.id}">
+												<input type="hidden" name="pageSize" value="${pageSize}"/>
+												<input type="hidden" name="page" value="${currentPage}">
+												<input type="hidden" name="pageCount" value="${pageCount}">
+												<input type="submit" value="${addToBasket_button}">
+											</form>
+										</c:if>
+                                        <c:if test="${book.status eq 'UNAVAILABLE'}">
+                                            <c:out value="${book_unavailable}"/>
+                                        </c:if>
 									</c:if>
 								</td>
 							</tr>

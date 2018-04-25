@@ -1,7 +1,6 @@
 package by.htp.library.controller;
 
 import by.htp.library.controller.helper.*;
-import by.htp.library.entity.Book;
 import by.htp.library.entity.Order;
 import by.htp.library.entity.User;
 import by.htp.library.entity.helper.OrderStatus;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -60,7 +58,7 @@ public class OrderController {
             model.addAttribute("errorMessage", errorMessage);
         }
 
-        return "orders";
+        return Pages.ORDERS;
     }
 
     @RequestMapping(value = "/order-info", method = RequestMethod.GET)
@@ -81,19 +79,18 @@ public class OrderController {
         try {
             order = orderService.getOrder(orderID);
             request.getSession().setAttribute(SessionAttributes.ORDER, order);
-            //model.addAttribute("order", order);
         } catch (ServiceException e) {
             message = e.getMessage();
             model.addAttribute("message", message);
         }
 
-        return "order-info";
+        return Pages.ORDER_INFO;
     }
 
     @RequestMapping(value = "/order-info", method = RequestMethod.POST)
     public String changeOrderStatus(HttpServletRequest request, ModelMap model) {
         int orderID = Integer.parseInt(request.getParameter(RequestParameters.ORDER_ID));
-        String orderStatus = request.getParameter(RequestParameters.ORDER_STATUS);
+        OrderStatus orderStatus = OrderStatus.valueOf(request.getParameter(RequestParameters.ORDER_STATUS).toUpperCase());
         Order order = null;
 
         try {
@@ -106,7 +103,7 @@ public class OrderController {
             request.setAttribute(RequestAttributes.ERROR_MESSAGE, errorMessage);
         }
 
-        return "order-info";
+        return Pages.ORDER_INFO;
     }
 
     @RequestMapping(value = "/new-order", method = RequestMethod.POST)
@@ -114,10 +111,8 @@ public class OrderController {
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
         String message = "";
 
-        Order order = new Order(null, LocalDateTime.now(), null, null, user, OrderStatus.IN_PROCESSING);
-
         try {
-            user = orderService.createOrder(order);
+            user = orderService.createOrder(user);
             request.getSession().setAttribute(SessionAttributes.USER, user);
             message = Messages.ORDER_IS_PROCESSED;
         } catch (ServiceException e) {
@@ -126,6 +121,6 @@ public class OrderController {
 
         model.addAttribute("message", message);
 
-        return "basket";
+        return Pages.BASKET;
     }
 }

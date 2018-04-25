@@ -3,6 +3,8 @@ package by.htp.library.entity;
 import by.htp.library.dao.util.EMUtil;
 import by.htp.library.entity.helper.BookStatus;
 import by.htp.library.entity.helper.UserHelper;
+import by.htp.library.entity.helper.UserStatus;
+import by.htp.library.entity.helper.UserType;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,8 +18,8 @@ public class UserTest {
     public void crudTest() {
         EntityManager em = EMUtil.getEntityManager("by.htp.library.test");
         em.getTransaction().begin();
-        User user = new User(null,"MiKRaV", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
+        User user = new User(null,"MiKRaV", "123456", UserType.ADMIN,
+                UserStatus.ACTIVE, null, new ArrayList<>(), null, null);
         UserData userData = new UserData("Mikhail", "Kravchenya","mkravchenya@mail.ru");
         user.setUserData(userData);
         em.persist(user);
@@ -34,7 +36,7 @@ public class UserTest {
         em.clear();
         Assert.assertEquals("Gosha", userFromDB.getUserData().getName());
 
-        userFromDB.getBasket().add(new Book(null, "1", "fiction", null, null, null));
+        userFromDB.getBasket().add(new Book(null, "1", "fiction", BookStatus.AVAILABLE, null, null, null, null));
         em.getTransaction().begin();
         em.merge(userFromDB);
         em.getTransaction().commit();

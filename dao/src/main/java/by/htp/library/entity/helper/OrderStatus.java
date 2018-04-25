@@ -1,9 +1,11 @@
 package by.htp.library.entity.helper;
 
-public class OrderStatus {
+public enum OrderStatus {
+    IN_PROCESSING(0), ACCEPTED_FOR_EXECUTION(1), READY_FOR_ISSUE(2), FULFILLED(3);
 
-    public static final String IN_PROCESSING = "in processing";
-    public static final String ACCEPTED_FOR_EXECUTION = "accepted for execution";
-    public static final String AWAITS_DELIVERY = "awaits delivery";
-    public static final String FULFILLED = "fulfilled";
+    private int status;
+
+    OrderStatus(int status) {
+        this.status = status;
+    }
 }

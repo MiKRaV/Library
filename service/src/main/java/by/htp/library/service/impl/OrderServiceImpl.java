@@ -7,7 +7,7 @@ import by.htp.library.entity.Order;
 import by.htp.library.entity.User;
 import by.htp.library.entity.helper.BookStatus;
 import by.htp.library.entity.helper.OrderStatus;
-import by.htp.library.entity.helper.UserHelper;
+import by.htp.library.entity.helper.UserType;
 import by.htp.library.service.OrderService;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.UserService;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.FetchType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,19 +34,20 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     @Transactional
-    public User createOrder(Order order) throws ServiceException {
-        int userID = order.getUser().getId();
-        User user = null;
+    public User createOrder(User user) throws ServiceException {
+        Order order = new Order(null, LocalDateTime.now(), null, null, user, OrderStatus.IN_PROCESSING);
         try {
-            user = userDAO.find(userID);
-            List<Book> basket = user.getBasket();
             List<Book> bookInOrder = new ArrayList<>();
-            bookInOrder.addAll(basket);
-            user = userService.clearBasket(user);
+            bookInOrder.addAll(user.getBasket());
+            userService.clearBasket(user);
             order.setBooksInOrder(bookInOrder);
-            orderDAO.add(order);
-            for (Book book : basket) {
+            user = userDAO.find(user.getId());
+            order.setUser(user);
+            order = orderDAO.add(order);
+            for (Book book : bookInOrder) {
+                book = bookDAO.find(book.getId());
                 book.setOrder(order);
+                book.setStatus(BookStatus.UNAVAILABLE);
                 bookDAO.update(book);
             }
             user.getOrders().add(order);
@@ -62,13 +62,13 @@ public class OrderServiceImpl implements OrderService{
     @Transactional
     public List<Order> getAllOrders(User user, int pageNumber, int pageSize) throws ServiceException {
         List<Order> orders = null;
-        String userType = user.getType();
+        UserType userType = user.getType();
         try {
             switch (userType) {
-                case UserHelper.TYPE_ADMIN:
+                case ADMIN:
                     orders = orderDAO.findAll(pageNumber, pageSize);
                     break;
-                case UserHelper.TYPE_READER:
+                case READER:
                     //orders = user.getOrders();
                     orders = orderDAO.getUsersOrders(user.getId(), pageNumber, pageSize);
                     break;
@@ -120,18 +120,18 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     @Transactional
-    public void changeOrderStatus(int orderID, String newOrderStatus) throws ServiceException {
+    public void changeOrderStatus(int orderID, OrderStatus newOrderStatus) throws ServiceException {
         Order order = getOrder(orderID);
-        String orderStatus = order.getStatus();
+        OrderStatus orderStatus = order.getStatus();
 
         switch (newOrderStatus) {
-            case OrderStatus.ACCEPTED_FOR_EXECUTION:
+            case ACCEPTED_FOR_EXECUTION:
                 orderStatus = OrderStatus.ACCEPTED_FOR_EXECUTION;
                 break;
-            case OrderStatus.AWAITS_DELIVERY:
-                orderStatus = OrderStatus.AWAITS_DELIVERY;
+            case READY_FOR_ISSUE:
+                orderStatus = OrderStatus.READY_FOR_ISSUE;
                 break;
-            case OrderStatus.FULFILLED:
+            case FULFILLED:
                 orderStatus = OrderStatus.FULFILLED;
                 break;
         }
@@ -141,6 +141,8 @@ public class OrderServiceImpl implements OrderService{
 
         try {
             orderDAO.update(order);
+            if (order.getStatus() == OrderStatus.FULFILLED)
+                userService.addNoteToSubscriptionFromOrder(order);
         } catch (DAOException e) {
             throw new ServiceException(ServiceMessages.ORDER_STATUS_IS_NOT_CHANGED, e);
         }

@@ -1,11 +1,14 @@
 package by.htp.library.entity;
 
+import by.htp.library.entity.helper.UserStatus;
+import by.htp.library.entity.helper.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -25,10 +28,10 @@ public class User implements Serializable{
     private String password;
 
     @Column(name = "F_TYPE")
-    private String type;
+    private UserType type;
 
     @Column(name = "F_STATUS")
-    private String status;
+    private UserStatus status;
 
     @Embedded
     private UserData userData;
@@ -38,6 +41,9 @@ public class User implements Serializable{
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Order> orders;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Note> subscription;
 
     @Override
     public boolean equals(Object obj) {
@@ -76,6 +82,6 @@ public class User implements Serializable{
     @Override
     public String toString() {
         return "User[id=" + id + ", login=" + login + ", type=" + type + ", status=" +
-                status + "userData[" + userData + "]";
+                status + ", userData[" + userData + "]";
     }
 }

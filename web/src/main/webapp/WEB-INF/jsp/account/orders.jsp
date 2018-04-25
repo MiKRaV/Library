@@ -20,6 +20,10 @@
     <spring:message code="local.button.name.view" var="view_button" />
     <spring:message code="local.button.name.previous" var="previous_button" />
     <spring:message code="local.button.name.next" var="next_button" />
+    <spring:message code="order.status.inProcessing" var="order_in_processing" />
+    <spring:message code="order.status.acceptedForExecution" var="order_accepted" />
+    <spring:message code="order.status.readyForIssue" var="order_ready" />
+    <spring:message code="order.status.fulfilled" var="order_fulfilled" />
 
 </head>
 <body>
@@ -42,7 +46,7 @@
                     <table>
                         <tr class="row-header">
                             <th class="cell-id"><c:out value="${orderID}" /></th>
-                            <c:if test="${user.type eq 'admin'}">
+                            <c:if test="${user.type eq 'ADMIN'}">
                                 <th class="cell-id"><c:out value="${userID}" /></th>
                             </c:if>
                             <th class="cell-date"><c:out value="${creationTime}" /></th>
@@ -58,11 +62,24 @@
                                         <input type="submit" value="${order.id}">
                                     </form>
                                 </td>
-                                <c:if test="${user.type eq 'admin'}">
+                                <c:if test="${user.type eq 'ADMIN'}">
                                     <td class="cell-id">${order.user.id}</td>
                                 </c:if>
                                 <td class="cell-date">${order.orderCreationTime}</td>
-                                <td class="cell-order-status">${order.status}</td>
+                                <td class="cell-order-status">
+                                    <c:if test="${order.status eq 'IN_PROCESSING'}">
+                                        <c:out value="${order_in_processing}"/>
+                                    </c:if>
+                                    <c:if test="${order.status eq 'ACCEPTED_FOR_EXECUTION'}">
+                                        <c:out value="${order_accepted}"/>
+                                    </c:if>
+                                    <c:if test="${order.status eq 'READY_FOR_ISSUE'}">
+                                        <c:out value="${order_ready}"/>
+                                    </c:if>
+                                    <c:if test="${order.status eq 'FULFILLED'}">
+                                        <c:out value="${order_fulfilled}"/>
+                                    </c:if>
+                                </td>
                                 <td class="cell-date">${order.orderUpdateTime}</td>
                             </tr>
                         </c:forEach>

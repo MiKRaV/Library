@@ -26,6 +26,9 @@ public class Book implements Serializable{
     @Column(name = "F_GENRE")
     private String genre;
 
+    @Column(name = "F_STATUS")
+    private BookStatus status;
+
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "books", cascade = CascadeType.ALL)
     private List<Author> authors = new ArrayList<>();
 
@@ -36,6 +39,9 @@ public class Book implements Serializable{
     @ManyToOne
     @JoinColumn(name = "F_ORDER_ID")
     private Order order;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    private List<Note> register;
 
     public Book(String title) {
         this.title = title;

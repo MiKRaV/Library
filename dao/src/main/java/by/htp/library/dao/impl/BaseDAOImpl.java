@@ -28,12 +28,13 @@ public class BaseDAOImpl<T> implements by.htp.library.dao.BaseDAO<T> {
     private CriteriaBuilder cb;
 
     @Override
-    public void add(T obj) throws DAOException {
+    public T add(T obj) throws DAOException {
         try {
             em.persist(obj);
         } catch (RollbackException e) {
             throw new DAOException(BaseDAOHelper.MESSAGE_ADD_ERROR);
         }
+        return obj;
     }
 
     @Override

@@ -11,6 +11,7 @@ import by.htp.library.dao.exception.DAOException;
 import by.htp.library.dao.helper.UserDAOHelper;
 import by.htp.library.entity.UserData;
 import by.htp.library.entity.helper.UserHelper;
+import by.htp.library.entity.helper.UserStatus;
 import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -107,9 +108,9 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 		Session session = em.unwrap(Session.class);
 		Query query = session.createQuery(UserDAOHelper.SELECT_STATUS_BY_LOGIN);
 		query.setParameter(UserHelper.LOGIN, login);
-		String status = (String) query.getSingleResult();
+		UserStatus status = (UserStatus) query.getSingleResult();
 		em.clear();
-		return status.equals(UserHelper.STATUS_DELETED);
+		return status.equals(UserStatus.DELETED);
 	}
 
 	//CHANGING USER DATA
@@ -176,22 +177,20 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 		}
 
 		Session session = em.unwrap(Session.class);
-		Transaction transaction = session.beginTransaction();
 		Query query = session.createQuery(UserDAOHelper.SELECT_STATUS_BY_LOGIN);
 		query.setParameter(UserHelper.LOGIN, login);
-		String status = (String) query.getSingleResult();
+		UserStatus userStatus = (UserStatus) query.getSingleResult();
 		query = session.createQuery(UserDAOHelper.UPDATE_USER_STATUS_BY_LOGIN);
 		query.setParameter(UserHelper.LOGIN, login);
 
-		switch (status) {
-			case UserHelper.STATUS_ACTIVE :
-				query.setParameter(UserHelper.STATUS, UserHelper.STATUS_BLOCKED);
+		switch (userStatus) {
+			case ACTIVE:
+				query.setParameter(UserHelper.STATUS, UserStatus.BLOCKED);
 				break;
-			case UserHelper.STATUS_BLOCKED :
-				query.setParameter(UserHelper.STATUS, UserHelper.STATUS_ACTIVE);
+			case BLOCKED:
+				query.setParameter(UserHelper.STATUS, UserStatus.ACTIVE);
 		}
 		query.executeUpdate();
-		transaction.commit();
 		em.clear();
 	}
 

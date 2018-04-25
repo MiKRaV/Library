@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -36,6 +35,5 @@ public class Order implements Serializable {
     private User user;
 
     @Column(name = "F_STATUS")
-    private String status;
-
+    private OrderStatus status;
 }

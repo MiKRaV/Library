@@ -7,6 +7,8 @@ import by.htp.library.dao.util.EMUtil;
 import by.htp.library.entity.User;
 import by.htp.library.entity.UserData;
 import by.htp.library.entity.helper.UserHelper;
+import by.htp.library.entity.helper.UserStatus;
+import by.htp.library.entity.helper.UserType;
 import lombok.Getter;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -34,8 +36,8 @@ public class UserDAOImplTest {
     public static void init() {
         em = getEm();
 
-        User user = new User(null, "Stepchik", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
+        User user = new User(null, "Stepchik", "123456", UserType.ADMIN,
+                UserStatus.ACTIVE, null, new ArrayList<>(), null, null);
         UserData data = new UserData("Stepan", "Stepanov", "stepchik@mail.ru");
         user.setUserData(data);
 
@@ -77,8 +79,8 @@ public class UserDAOImplTest {
 
     @Test
     public void registartionTest() {
-        User user = new User(null, "Ivanchik", "123456", UserHelper.TYPE_ADMIN,
-                UserHelper.STATUS_ACTIVE, null, new ArrayList<>(), null);
+        User user = new User(null, "Ivanchik", "123456", UserType.ADMIN,
+                UserStatus.ACTIVE, null, new ArrayList<>(), null, null);
         UserData data = new UserData("Ivan", "Ivanov", "ivanchik@mail.ru");
         user.setUserData(data);
 

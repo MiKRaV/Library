@@ -83,4 +83,9 @@
         <put-attribute name="body" value="/WEB-INF/jsp/account/admin/users.jsp"/>
         <put-attribute name="title" value="title.foundUserData"/>
     </definition>
+
+    <definition name="reader-books" extends="user">
+        <put-attribute name="body" value="/WEB-INF/jsp/account/reader/reader-books.jsp"/>
+        <put-attribute name="title" value="title.myBooks"/>
+    </definition>
 </tiles-definitions>
