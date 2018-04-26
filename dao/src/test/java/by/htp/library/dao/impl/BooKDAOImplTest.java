@@ -11,6 +11,7 @@ import by.htp.library.entity.Author;
 import by.htp.library.entity.Book;
 import by.htp.library.entity.helper.AuthorHelper;
 import by.htp.library.entity.helper.BookStatus;
+import by.htp.library.entity.helper.Genre;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -54,7 +55,7 @@ public class BooKDAOImplTest {
     @Test
     public void addBookTest() {
         List<Book> pushkinBooks = new ArrayList<>();
-        Book mciry = new Book(null, "Mciry", "fiction", BookStatus.AVAILABLE, null, null, null, null);
+        Book mciry = new Book(null, "Mciry", Genre.FICTION, BookStatus.AVAILABLE, null, null, null, null);
         pushkinBooks.add(mciry);
         List<Author> authors = new ArrayList<>();
         Author pushkin = new Author(null, "Pushkin", "Aleksandr", pushkinBooks);

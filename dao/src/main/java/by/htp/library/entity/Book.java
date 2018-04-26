@@ -1,6 +1,7 @@
 package by.htp.library.entity;
 
 import by.htp.library.entity.helper.BookStatus;
+import by.htp.library.entity.helper.Genre;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class Book implements Serializable{
     private String title;
 
     @Column(name = "F_GENRE")
-    private String genre;
+    private Genre genre;
 
     @Column(name = "F_STATUS")
     private BookStatus status;

@@ -123,6 +123,14 @@ select option:hover {
     height: 60px;
 }
 
+.header .layout-positioner {
+    background: orange;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+}
+
 .table-local {
     display: table;
     border-collapse: collapse;

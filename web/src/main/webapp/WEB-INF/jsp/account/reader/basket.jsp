@@ -65,7 +65,15 @@
                                         ${author.name}<br>
                                     </c:forEach>
                                 </td>
-                                <td>${book.genre}</td>
+                                <td>
+                                    <c:set var="local" value="${pageContext.response.locale}"/>
+                                    <c:if test="${local eq 'en'}">
+                                        <c:out value="${book.genre.en}"/>
+                                    </c:if>
+                                    <c:if test="${local eq 'ru'}">
+                                        <c:out value="${book.genre.ru}"/>
+                                    </c:if>
+                                </td>
                                 <td class="cell-actions">
                                     <form action="${pageContext.request.contextPath}/basket" method="post">
                                         <input type="hidden" name="command" value="removeBookFromBasket"/>

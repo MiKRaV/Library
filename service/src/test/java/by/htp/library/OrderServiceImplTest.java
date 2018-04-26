@@ -7,6 +7,7 @@ import by.htp.library.entity.Book;
 import by.htp.library.entity.User;
 import by.htp.library.entity.UserData;
 import by.htp.library.entity.helper.BookStatus;
+import by.htp.library.entity.helper.Genre;
 import by.htp.library.entity.helper.UserStatus;
 import by.htp.library.entity.helper.UserType;
 import by.htp.library.service.OrderService;
@@ -39,7 +40,7 @@ public class OrderServiceImplTest {
         UserData data = new UserData("Stepan", "Stepanov", "stepchik@mail.ru");
         user.setUserData(data);
 
-        Book book = new Book(null, "War and peace", "fiction", BookStatus.AVAILABLE, new ArrayList<>(), null, null, null);
+        Book book = new Book(null, "War and peace", Genre.FICTION, BookStatus.AVAILABLE, new ArrayList<>(), null, null, null);
 
         try {
             userDAO.add(user);

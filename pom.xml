@@ -25,6 +25,7 @@
     <h2.version>1.4.196</h2.version>
     <compiler.version>3.7.0</compiler.version>
     <spring.version>5.0.5.RELEASE</spring.version>
+    <springSecurity.version>5.0.4.RELEASE</springSecurity.version>
     <aspectj.version>1.8.13</aspectj.version>
     <tiles.version>3.0.8</tiles.version>
     <log4j.version>2.9.1</log4j.version>
@@ -46,172 +47,190 @@
   </build>
 
   <dependencies>
+    <!-- HIBERNATE -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
       <version>${hibernate.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+
+    <!-- MYSQL -->
+    <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>${jdbc.version}</version>
     </dependency>
+
+    <!-- LOMBOK -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
     </dependency>
+
+    <!-- JUNIT -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-    <!--EhCache-->
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-ehcache</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
+
+    <!-- EHCACHE -->
     <dependency>
       <groupId>net.sf.ehcache</groupId>
       <artifactId>ehcache-core</artifactId>
       <version>${ehcache.version}</version>
     </dependency>
+
+    <!-- COMPILER -->
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-compiler-plugin</artifactId>
       <version>${compiler.version}</version>
     </dependency>
+
+    <!-- H2 -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>${h2.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- JBOSS -->
     <dependency>
       <groupId>org.jboss.logging</groupId>
       <artifactId>jboss-logging</artifactId>
       <version>3.3.0.Final</version>
     </dependency>
-    <!--Spring-->
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
+
+    <!--SPRING-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
       <version>${spring.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
       <version>${spring.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <version>${spring.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-expression -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-expression</artifactId>
       <version>${spring.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <version>${spring.version}</version>
       <scope>test</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-aop -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-aop</artifactId>
       <version>${spring.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
       <version>${spring.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-framework-bom -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-framework-bom</artifactId>
       <version>${spring.version}</version>
       <type>pom</type>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-jpa</artifactId>
       <version>2.0.6.RELEASE</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
+
+    <!-- SPRING SECURITY -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+      <version>${springSecurity.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+      <version>${springSecurity.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
+      <version>${springSecurity.version}</version>
+    </dependency>
+
+    <!-- ASPECTj -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
       <version>${aspectj.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+
+    <!-- SERVLET -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>4.0.0</version>
       <scope>provided</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
+
+    <!-- DBCP2 -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-dbcp2</artifactId>
       <version>2.0</version>
     </dependency>
+
     <!-- TILES -->
-    <!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-core -->
     <dependency>
       <groupId>org.apache.tiles</groupId>
       <artifactId>tiles-core</artifactId>
       <version>${tiles.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-jsp -->
     <dependency>
       <groupId>org.apache.tiles</groupId>
       <artifactId>tiles-jsp</artifactId>
       <version>${tiles.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-servlet -->
     <dependency>
       <groupId>org.apache.tiles</groupId>
       <artifactId>tiles-servlet</artifactId>
       <version>${tiles.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-template -->
     <dependency>
       <groupId>org.apache.tiles</groupId>
       <artifactId>tiles-template</artifactId>
       <version>${tiles.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-el -->
     <dependency>
       <groupId>org.apache.tiles</groupId>
       <artifactId>tiles-el</artifactId>
       <version>${tiles.version}</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+
+    <!-- LOG4J -->
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <version>2.11.0</version>
     </dependency>
-
-
-
-
-
   </dependencies>
 
 </project>

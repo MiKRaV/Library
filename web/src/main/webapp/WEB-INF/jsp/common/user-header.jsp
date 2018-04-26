@@ -11,7 +11,6 @@
     <spring:message code="local.button.name.editData" var="editDataButton"/>
     <spring:message code="local.button.name.goToAccount" var="goToAccount_button" />
     <spring:message code="local.button.name.basket" var="basket_button" />
-    <spring:message code="local.button.name.orders" var="orders_button" />
 
 </head>
 <body>
@@ -39,11 +38,6 @@
                         <div class="cell-main-menu">
                             <form action="${pageContext.request.contextPath}/basket" method="get">
                                 <input type="submit" value="${basket_button}: ${user.basket.size()}">
-                            </form>
-                        </div>
-                        <div class="cell-main-menu">
-                            <form action="${pageContext.request.contextPath}/orders-list" method="get">
-                                <input type="submit" value="${orders_button}">
                             </form>
                         </div>
                     </c:if>

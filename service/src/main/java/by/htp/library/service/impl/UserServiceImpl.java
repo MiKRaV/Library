@@ -247,6 +247,7 @@ public class UserServiceImpl implements UserService {
 		Book book;
 
 		try {
+			user = userDAO.find(user.getId());
 			book = bookDAO.find(bookID);
 			List<Book> basket = user.getBasket();
 			basket.remove(basket.indexOf(book));

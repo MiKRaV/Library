@@ -2,14 +2,11 @@ package by.htp.library.dao.impl;
 
 import java.util.List;
 
-import by.htp.library.dao.AuthorDAO;
-import by.htp.library.dao.BaseDAO;
-import by.htp.library.dao.DAOFactory;
+import by.htp.library.dao.*;
 import by.htp.library.dao.helper.BookDAOHelper;
 import by.htp.library.dao.util.EMUtil;
 import by.htp.library.entity.Author;
 import by.htp.library.entity.Book;
-import by.htp.library.dao.BookDAO;
 import by.htp.library.dao.db.ConnectionPool;
 import by.htp.library.dao.exception.DAOException;
 import by.htp.library.entity.helper.BookHelper;

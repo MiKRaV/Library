@@ -18,6 +18,7 @@
 	<spring:message code="local.addBookPage.select.option.name.genreSelection" var="genreSelection" />
 	<spring:message code="local.addBookPage.select.option.name.fiction" var="fiction" />
 	<spring:message code="local.addBookPage.select.option.name.technical" var="technical" />
+	<spring:message code="local.addBookPage.select.option.name.psychology" var="psychology" />
 	<spring:message code="local.button.name.addBook" var="addBookButton" />
 	<spring:message code="local.button.name.addMoreAuthor" var="addMoreAuthorButton" />
 	<spring:message code="local.button.name.remove" var="removeButton" />
@@ -50,8 +51,9 @@
 					<b><c:out value="${genre}" /></b>:<br/>
 					<select name="genre" required>
 						<option selected disabled><c:out value="${genreSelection}" /></option>
-						<option value="fiction"><c:out value="${fiction}" /></option>
-						<option value="technical"><c:out value="${technical}" /></option>
+						<option value="FICTION"><c:out value="${fiction}" /></option>
+						<option value="TECHNICAL"><c:out value="${technical}" /></option>
+						<option value="PSYCHOLOGY"><c:out value="${psychology}" /></option>
 					</select>
 					<input type="submit" value="${addBookButton}">
 				</form>

@@ -5,6 +5,7 @@ import java.util.List;
 import by.htp.library.entity.Book;
 import by.htp.library.entity.Note;
 import by.htp.library.entity.User;
+import by.htp.library.entity.helper.Genre;
 
 public interface BookService {
 	
@@ -18,4 +19,6 @@ public interface BookService {
 	void removeBookFromBasket(Book book) throws ServiceException;
 	void removeBookFromBasket(User user, Book book) throws ServiceException;
 	void returnBook(int noteID, int bookID) throws ServiceException;
+	List<Book> getBooksByGenre(Genre genre, int pageNumber, int pageSize) throws ServiceException;
+	int countBookByGenre(Genre genre);
 }

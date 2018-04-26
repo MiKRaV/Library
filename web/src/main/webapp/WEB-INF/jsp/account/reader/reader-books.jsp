@@ -69,7 +69,15 @@
                                     ${author.name}<br>
                                 </c:forEach>
                             </td>
-                            <td>${note.book.genre}</td>
+                            <td>
+                                <c:set var="local" value="${pageContext.response.locale}"/>
+                                <c:if test="${local eq 'en'}">
+                                    <c:out value="${note.book.genre.en}"/>
+                                </c:if>
+                                <c:if test="${local eq 'ru'}">
+                                    <c:out value="${note.book.genre.ru}"/>
+                                </c:if>
+                            </td>
                             <td class="cell-date">${note.bookIssueTime}</td>
                             <td class="cell-date">
                                 <c:if test="${note.returned eq false}">

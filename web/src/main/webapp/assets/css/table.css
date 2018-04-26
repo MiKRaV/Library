@@ -4,9 +4,25 @@ body {
     padding: 0;
 }
 
-.select-page-size {
+.select-genre {
     display: inline-block;
     text-align: left;
+    padding: 10px;
+    margin: 10px;
+}
+
+.select-genre select {
+    display: inline;
+}
+
+.select-genre input[type="submit"]{
+    display: inline;
+    width: 130px;
+}
+
+.select-page-size {
+    display: inline-block;
+    text-align: right;
     padding: 10px;
     margin: 10px;
 }
@@ -151,7 +167,7 @@ body {
 }
 
 .table-pagination .cell-pagination input[type="submit"]{
-    width: 70px;
+    width: 90px;
     height: 30px;
 }
 

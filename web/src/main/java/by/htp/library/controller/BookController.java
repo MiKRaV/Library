@@ -6,6 +6,7 @@ import by.htp.library.entity.Book;
 import by.htp.library.entity.Note;
 import by.htp.library.entity.User;
 import by.htp.library.entity.helper.BookStatus;
+import by.htp.library.entity.helper.Genre;
 import by.htp.library.service.BookService;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.UserService;
@@ -29,6 +30,8 @@ public class BookController {
 
     @RequestMapping(value = "/books-list", method = RequestMethod.GET)
     public String getAllBooks(HttpServletRequest request, ModelMap model) {
+        String stringGenre = request.getParameter(RequestParameters.BOOK_GENRE);
+        Genre genre = null;
         List<Book> bookList = null;
         int pageSize = 10;
         int page = 1;
@@ -44,9 +47,17 @@ public class BookController {
             if (request.getParameter(RequestParameters.PAGE_SIZE) != null)
                 pageSize = Integer.parseInt(request.getParameter(RequestParameters.PAGE_SIZE));
 
-            bookList = bookService.getAllBooks(page, pageSize);
+            if (stringGenre != null) {
+                genre = Genre.valueOf(stringGenre);
+                bookList = bookService.getBooksByGenre(genre, page, pageSize);
+                bookCount = bookService.countBookByGenre(genre);
+                model.addAttribute("bookGenre", stringGenre);
+            } else {
+                bookList = bookService.getAllBooks(page, pageSize);
+                bookCount = bookService.getBookCount(); //total book count
+            }
 
-            bookCount = bookService.getBookCount(); //total book count
+
             pageCount = (int) Math.ceil((bookCount * 1.0 ) / pageSize);
 
             model.addAttribute("pageCount", pageCount);
@@ -100,7 +111,7 @@ public class BookController {
     public String addBook(HttpServletRequest request, ModelMap model) {
         List<Book> books = new ArrayList<>();
         String title = request.getParameter(RequestParameters.BOOK_TITLE);
-        String genre = request.getParameter(RequestParameters.BOOK_GENRE);
+        Genre genre = Genre.valueOf(request.getParameter(RequestParameters.BOOK_GENRE).toUpperCase());
         List<Note> register = new ArrayList<>();
         Book book = new Book(null,  title, genre, BookStatus.AVAILABLE, null, null, null, register);
         books.add(book);

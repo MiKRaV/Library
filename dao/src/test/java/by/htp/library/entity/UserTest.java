@@ -1,10 +1,7 @@
 package by.htp.library.entity;
 
 import by.htp.library.dao.util.EMUtil;
-import by.htp.library.entity.helper.BookStatus;
-import by.htp.library.entity.helper.UserHelper;
-import by.htp.library.entity.helper.UserStatus;
-import by.htp.library.entity.helper.UserType;
+import by.htp.library.entity.helper.*;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,7 +33,7 @@ public class UserTest {
         em.clear();
         Assert.assertEquals("Gosha", userFromDB.getUserData().getName());
 
-        userFromDB.getBasket().add(new Book(null, "1", "fiction", BookStatus.AVAILABLE, null, null, null, null));
+        userFromDB.getBasket().add(new Book(null, "1", Genre.FICTION, BookStatus.AVAILABLE, null, null, null, null));
         em.getTransaction().begin();
         em.merge(userFromDB);
         em.getTransaction().commit();

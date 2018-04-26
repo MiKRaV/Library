@@ -105,7 +105,15 @@
                                         ${author.name}<br>
                                     </c:forEach>
                                 </td>
-                                <td class="cell-book-genre">${book.genre}</td>
+                                <td class="cell-book-genre">
+                                    <c:set var="local" value="${pageContext.response.locale}"/>
+                                    <c:if test="${local eq 'en'}">
+                                        <c:out value="${book.genre.en}"/>
+                                    </c:if>
+                                    <c:if test="${local eq 'ru'}">
+                                        <c:out value="${book.genre.ru}"/>
+                                    </c:if>
+                                </td>
                             </tr>
                         </c:forEach>
                     </table>

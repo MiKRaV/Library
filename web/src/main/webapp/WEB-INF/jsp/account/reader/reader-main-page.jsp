@@ -11,6 +11,7 @@
 
 	<spring:message code="local.readerMainPage.message" var="message" />
 	<spring:message code="local.readerMainPage.button.name.getAllBooks" var="getAllBooksButton" />
+	<spring:message code="local.button.name.myOrders" var="my_orders_button" />
 	<spring:message code="local.button.name.myBooks" var="my_books_button" />
 
 </head>
@@ -26,6 +27,11 @@
 				<div class="action-menu-item">
 					<form action="${pageContext.request.contextPath}/books-list" method="get">
 						<input type="submit" value="${getAllBooksButton}">
+					</form>
+				</div>
+				<div class="action-menu-item">
+					<form action="${pageContext.request.contextPath}/orders-list" method="get">
+						<input type="submit" value="${my_orders_button}">
 					</form>
 				</div>
 				<div class="action-menu-item">
