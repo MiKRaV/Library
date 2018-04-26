@@ -3,6 +3,7 @@ package by.htp.library.service;
 import java.util.List;
 
 import by.htp.library.entity.Book;
+import by.htp.library.entity.Note;
 import by.htp.library.entity.User;
 
 public interface BookService {
@@ -16,4 +17,5 @@ public interface BookService {
 	void addBookToBasket(User user, Book book) throws ServiceException;
 	void removeBookFromBasket(Book book) throws ServiceException;
 	void removeBookFromBasket(User user, Book book) throws ServiceException;
+	void returnBook(int noteID, int bookID) throws ServiceException;
 }

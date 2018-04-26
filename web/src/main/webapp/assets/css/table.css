@@ -40,6 +40,7 @@ body {
 
 .table-data .row-data {
     height: 50px;
+    box-sizing: border-box;
 }
 
 .table-data th {
@@ -53,11 +54,16 @@ body {
 
 .table-data td {
     width: 150px;
-    padding: 5px;
     text-align: center;
     vertical-align: middle;
     border: 1px solid black;
     box-sizing: border-box;
+}
+
+.table-data td input[type="submit"]{
+    padding: 5px;
+    margin: 10px auto;
+    vertical-align: center;
 }
 
 .table-data .cell-id {
@@ -76,28 +82,24 @@ body {
 
 .table-data .cell-actions {
     width: 300px;
-    padding: 5px;
     box-sizing: border-box;
 }
 
 .table-data .cell-actions select {
     display: inline-block;
+    margin-top: 10px;
 }
 
 .table-data .cell-actions input[type="submit"]{
     display: inline-block;
+    margin-top: 20px;
     width: 120px;
     height: 30px;
-    padding: 5px;
-    margin: 5px auto;
 }
 
 .table-data .block-unlock input[type="submit"]{
-    display: block;
     width: 120px;
     height: 30px;
-    padding: 5px;
-    margin: 5px auto;
 }
 
 .table-data .cell-book-title {
@@ -118,8 +120,6 @@ body {
 .table-data .cell-submit input[type="submit"]{
     width: 30px;
     height: 30px;
-    padding: 5px;
-    margin: 5px auto;
 }
 
 .table-data tr:nth-child(2n) {
@@ -153,7 +153,6 @@ body {
 .table-pagination .cell-pagination input[type="submit"]{
     width: 70px;
     height: 30px;
-    padding: 5px;
 }
 
 .table-basket-action {

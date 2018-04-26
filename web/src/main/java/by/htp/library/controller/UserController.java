@@ -278,17 +278,4 @@ public class UserController {
 
         return getMainPage(request);
     }
-
-    @RequestMapping(value = "/reader-books", method = RequestMethod.GET)
-    public String readerBooks(HttpServletRequest request, ModelMap model) {
-        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
-        try {
-            List<Note> subscription = userService.getSubscription(user);
-            request.getSession().setAttribute("subscription", subscription);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            model.addAttribute("errorMessage", e.getMessage());
-        }
-        return Pages.READER_BOOKS;
-    }
 }

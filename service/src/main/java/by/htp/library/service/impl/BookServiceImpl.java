@@ -1,13 +1,17 @@
 package by.htp.library.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import by.htp.library.dao.AuthorDAO;
+import by.htp.library.dao.NoteDAO;
 import by.htp.library.entity.Book;
 import by.htp.library.dao.BookDAO;
 import by.htp.library.dao.DAOFactory;
 import by.htp.library.dao.exception.DAOException;
+import by.htp.library.entity.Note;
 import by.htp.library.entity.User;
+import by.htp.library.entity.helper.BookStatus;
 import by.htp.library.service.BookService;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.helper.ServiceMessages;
@@ -22,6 +26,8 @@ public class BookServiceImpl implements BookService{
 	private AuthorDAO authorDAO;
 	@Autowired
 	private BookDAO bookDAO;
+	@Autowired
+	private NoteDAO noteDAO;
 
 	//ADDING A BOOK
 	@Override
@@ -124,7 +130,7 @@ public class BookServiceImpl implements BookService{
 	@Transactional
 	public void removeBookFromBasket(Book book) throws ServiceException {
 		try {
-			bookDAO.addBookToBasket(book);
+			bookDAO.removeBookFromBasket(book);
 		} catch (DAOException e) {
 			throw new ServiceException();
 		}
@@ -138,6 +144,24 @@ public class BookServiceImpl implements BookService{
 			if (basket.get(i).getId().equals(book.getId())) {
 
 			}
+		}
+	}
+
+	@Override
+	@Transactional
+	public void returnBook(int noteID, int bookID) throws ServiceException {
+		Note note;
+		Book book;
+		try {
+			note = noteDAO.find(noteID);
+			note.setReturned(true);
+			note.setBookReturnedTime(LocalDateTime.now());
+			noteDAO.update(note);
+			book = bookDAO.find(bookID);
+			book.setStatus(BookStatus.AVAILABLE);
+			bookDAO.update(book);
+		} catch (DAOException e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -21,6 +21,11 @@
     <spring:message code="local.button.name.previous" var="previous_button" />
     <spring:message code="local.button.name.next" var="next_button" />
     <spring:message code="local.message.bookUnavailable" var="book_unavailable" />
+    <spring:message code="local.button.name.returnBook" var="return_book_button" />
+    <spring:message code="local.message.bookReturned" var="book_returned" />
+    <spring:message code="local.message.bookNotReturned" var="book_not_returned" />
+    <spring:message code="books.column.issueTime" var="issue_time" />
+    <spring:message code="books.column.returnTime" var="return_time" />
 
 </head>
 <body>
@@ -50,6 +55,8 @@
                         <th><c:out value="${title}" /></th>
                         <th><c:out value="${authors}" /></th>
                         <th><c:out value="${genre}" /></th>
+                        <th class="cell-date">${issue_time}</th>
+                        <th class="cell-date">${return_time}</th>
                         <th class="cell-actions"><c:out value="${actions}" /></th>
                     </tr>
                     <c:set var="subscription" scope="session" value="${subscription}"/>
@@ -63,18 +70,28 @@
                                 </c:forEach>
                             </td>
                             <td>${note.book.genre}</td>
+                            <td class="cell-date">${note.bookIssueTime}</td>
+                            <td class="cell-date">
+                                <c:if test="${note.returned eq false}">
+                                    <c:out value="${book_not_returned}"/>
+                                </c:if>
+                                <c:if test="${note.returned eq true}">
+                                    ${note.bookReturnedTime}
+                                </c:if>
+                            </td>
                             <td class="cell-actions">
                                 <c:if test="${note.returned eq false}">
                                     <form action="" method="post">
-                                        <input type="hidden" name="bookID" value="${book.id}">
+                                        <input type="hidden" name="noteID" value="${note.id}">
+                                        <input type="hidden" name="bookID" value="${note.book.id}">
                                         <input type="hidden" name="pageSize" value="${pageSize}"/>
                                         <input type="hidden" name="page" value="${currentPage}">
                                         <input type="hidden" name="pageCount" value="${pageCount}">
-                                        <input type="submit" value="Вернуть книгу">
+                                        <input type="submit" value="${return_book_button}">
                                     </form>
                                 </c:if>
                                 <c:if test="${note.returned eq true}">
-                                    <c:out value="Книга возвращена"/>
+                                    <c:out value="${book_returned}"/>
                                 </c:if>
                             </td>
                         </tr>

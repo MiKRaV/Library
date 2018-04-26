@@ -1,9 +1,7 @@
 package by.htp.library.entity;
 
 import by.htp.library.entity.helper.BookStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +11,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "authors,user,order, register")
+@ToString(exclude = "authors,user,order, register")
 @Entity @Table(name = "T_BOOK")
 public class Book implements Serializable{
     @Id
@@ -45,39 +45,6 @@ public class Book implements Serializable{
 
     public Book(String title) {
         this.title = title;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Book other = (Book) obj;
-        if (!id.equals(other.id))
-            return false;
-        if (!title.equals(other.title))
-            return false;
-        if (!genre.equals(other.genre))
-            return false;
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id.hashCode();
-        result = prime * result + title.hashCode();
-        result = prime * result + genre.hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Book[id=" + id.toString() + ", title=" + title + "]";
     }
 
 }

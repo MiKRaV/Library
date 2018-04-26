@@ -27,6 +27,7 @@
     <spring.version>5.0.5.RELEASE</spring.version>
     <aspectj.version>1.8.13</aspectj.version>
     <tiles.version>3.0.8</tiles.version>
+    <log4j.version>2.9.1</log4j.version>
   </properties>
 
   <build>
@@ -200,6 +201,13 @@
       <artifactId>tiles-el</artifactId>
       <version>${tiles.version}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.11.0</version>
+    </dependency>
+
 
 
 

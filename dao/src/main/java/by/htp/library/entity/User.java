@@ -37,7 +37,7 @@ public class User implements Serializable{
     private UserData userData;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    private List<Book> basket;
+    private List<Book> basket = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Order> orders;

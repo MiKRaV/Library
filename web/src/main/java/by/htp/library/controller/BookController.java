@@ -133,4 +133,32 @@ public class BookController {
 
         return Pages.ADDING_BOOK;
     }
+
+    @RequestMapping(value = "/reader-books", method = RequestMethod.GET)
+    public String readerBooks(HttpServletRequest request, ModelMap model) {
+        User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+
+        try {
+            List<Note> subscription = userService.getSubscription(user);
+            request.getSession().setAttribute("subscription", subscription);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+        return Pages.READER_BOOKS;
+    }
+
+    @RequestMapping(value = "/reader-books", method = RequestMethod.POST)
+    public void returnBooks(HttpServletRequest request, ModelMap model) {
+        int noteID = Integer.parseInt(request.getParameter("noteID"));
+        int bookID = Integer.parseInt(request.getParameter("bookID"));
+
+        try {
+            bookService.returnBook(noteID, bookID);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+        readerBooks(request, model);
+    }
 }

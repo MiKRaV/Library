@@ -1,7 +1,6 @@
 package by.htp.library;
 
 import by.htp.library.dao.BookDAO;
-import by.htp.library.dao.OrderDAO;
 import by.htp.library.dao.UserDAO;
 import by.htp.library.dao.exception.DAOException;
 import by.htp.library.entity.Book;
@@ -11,9 +10,7 @@ import by.htp.library.entity.helper.BookStatus;
 import by.htp.library.entity.helper.UserStatus;
 import by.htp.library.entity.helper.UserType;
 import by.htp.library.service.OrderService;
-import lombok.Getter;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +18,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:test-beans-services.xml")
+@Transactional
 public class OrderServiceImplTest {
 
     @Autowired
@@ -60,8 +56,8 @@ public class OrderServiceImplTest {
         Book book = null;
         User user = null;
         try {
-            book = bookDAO.find(new Integer(1));
-            user = userDAO.find(new Integer(1));
+            book = bookDAO.find(1);
+            user = userDAO.find(1);
             user.getBasket().add(book);
             userDAO.add(user);
         } catch (DAOException e) {
