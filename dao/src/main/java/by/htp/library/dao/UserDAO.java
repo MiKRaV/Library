@@ -12,7 +12,7 @@ public interface UserDAO extends BaseDAO<User> {
     boolean isUserExist(String login) throws DAOException;
     boolean isUserRemoved(String login) throws DAOException;
     User updateUser(User user) throws DAOException;
-    List<User> getAllUsersList(int pageNumber, int pageSize) throws DAOException;
+    List<User> getAllUsers(int pageNumber, int pageSize) throws DAOException;
     void removeUser(String login) throws DAOException;
     User findUserByLogin(String login) throws DAOException;
     void blockUnlockUser(String login) throws DAOException;

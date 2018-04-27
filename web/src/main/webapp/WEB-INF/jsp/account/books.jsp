@@ -24,6 +24,7 @@
     <spring:message code="local.message.bookUnavailable" var="book_unavailable" />
     <spring:message code="local.message.bookInBasket" var="book_in_basket" />
 	<spring:message code="local.addBookPage.select.option.name.genreSelection" var="genreSelection" />
+	<spring:message code="local.addBookPage.select.option.name.all" var="all_genres" />
 	<spring:message code="local.addBookPage.select.option.name.fiction" var="fiction" />
 	<spring:message code="local.addBookPage.select.option.name.technical" var="technical" />
 	<spring:message code="local.addBookPage.select.option.name.psychology" var="psychology" />
@@ -33,7 +34,7 @@
 	<div class="container-content">
 		<div class="layout-positioner">
 			<div class="message">
-				<c:out value="${message}" />
+				<c:out value="${message}" /><br>
 				<c:out value="${errorMessage}" />
 			</div>
 			<div class="table-data-container">
@@ -42,6 +43,7 @@
 						<c:out value="${genre}" />:
 						<select name="genre" required>
 							<option selected disabled><c:out value="${genreSelection}" /></option>
+							<option value="ALL"><c:out value="${all_genres}" /></option>
 							<option value="FICTION"><c:out value="${fiction}" /></option>
 							<option value="TECHNICAL"><c:out value="${technical}" /></option>
 							<option value="PSYCHOLOGY"><c:out value="${psychology}" /></option>
@@ -133,7 +135,9 @@
 									<form action="${pageContext.request.contextPath}/books-list" method="get">
 										<input type="hidden" name="pageSize" value="${pageSize}"/>
 										<input type="hidden" name="page" value="${currentPage - 1}">
-                                        <input type="hidden" name="genre" value="${bookGenre}">
+                                        <c:if test="${bookGenre ne null}">
+											<input type="hidden" name="genre" value="${bookGenre}">
+										</c:if>
 										<input type="submit" value="${previous_button}">
 									</form>
 								</td>
@@ -149,7 +153,9 @@
 									<form action="${pageContext.request.contextPath}/books-list" method="get">
 										<input type="hidden" name="pageSize" value="${pageSize}"/>
 										<input type="hidden" name="page" value="${currentPage + 1}">
-                                        <input type="hidden" name="genre" value="${bookGenre}">
+										<c:if test="${bookGenre ne null}">
+											<input type="hidden" name="genre" value="${bookGenre}">
+										</c:if>
 										<input type="submit" value="${next_button}">
 									</form>
 								</td>

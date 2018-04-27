@@ -20,6 +20,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -31,13 +32,12 @@ public class OrderDAOImpl extends BaseDAOImpl<Order> implements OrderDAO {
     private CriteriaBuilder cb;
 
     public OrderDAOImpl() {
-        super();
         clazz = Order.class;
     }
 
     @Override
     public List<Order> getAllOrders() throws DAOException {
-        return null;
+        return Collections.EMPTY_LIST;
     }
 
     @Override

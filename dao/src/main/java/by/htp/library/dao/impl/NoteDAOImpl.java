@@ -18,7 +18,6 @@ public class NoteDAOImpl extends BaseDAOImpl<Note> implements NoteDAO {
     private CriteriaBuilder cb;
 
     public NoteDAOImpl() {
-        super();
         clazz = Note.class;
     }
 }

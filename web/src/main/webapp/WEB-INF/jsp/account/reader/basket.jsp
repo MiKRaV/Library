@@ -24,7 +24,7 @@
     <div class="container-content">
         <div class="layout-positioner">
             <div class="message">
-                <c:out value="${message}" />
+                <c:out value="${message}" /><br>
                 <c:if test="${user.basket.size() eq 0}">
                     <c:out value="${emptyBasket}" />
                 </c:if>

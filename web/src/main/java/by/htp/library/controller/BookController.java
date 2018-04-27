@@ -11,6 +11,7 @@ import by.htp.library.service.BookService;
 import by.htp.library.service.ServiceException;
 import by.htp.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,7 @@ public class BookController {
             if (request.getParameter(RequestParameters.PAGE_SIZE) != null)
                 pageSize = Integer.parseInt(request.getParameter(RequestParameters.PAGE_SIZE));
 
-            if (stringGenre != null) {
+            if (stringGenre != null && !stringGenre.equals("ALL")) {
                 genre = Genre.valueOf(stringGenre);
                 bookList = bookService.getBooksByGenre(genre, page, pageSize);
                 bookCount = bookService.countBookByGenre(genre);
@@ -74,7 +75,11 @@ public class BookController {
 
     @RequestMapping(value = "/books-list", method = RequestMethod.POST)
     public String addBookToBasket(HttpServletRequest request, ModelMap model) {
+        String stringGenre = request.getParameter(RequestParameters.BOOK_GENRE);
         User user = (User) request.getSession().getAttribute(SessionAttributes.USER);
+        //int bookID = Integer.parseInt(request.getParameter(RequestParameters.BOOK_ID));
+        //String message = "";
+
 
         List<Book> bookList = (List<Book>) request.getSession().getAttribute(SessionAttributes.BOOK_LIST);
         int bookID = Integer.parseInt(request.getParameter(RequestParameters.BOOK_ID));
@@ -83,6 +88,11 @@ public class BookController {
         int pageCount = Integer.parseInt(request.getParameter(RequestParameters.PAGE_COUNT));
 
         String message = "";
+
+        if (stringGenre != null) {
+            model.addAttribute("bookGenre", stringGenre);
+        }
+
 
         try {
             user = userService.addBookToBasket(user, bookID);
@@ -93,10 +103,12 @@ public class BookController {
             message = Messages.BOOK_NOT_ADDED_TO_BASKET + " : " + e.getMessage();
         }
 
+
         model.addAttribute("pageCount", pageCount);
         model.addAttribute("currentPage", page);
         model.addAttribute("bookList", bookList);
         model.addAttribute("pageSize", pageSize);
+
 
         request.setAttribute(SessionAttributes.MESSAGE, message);
         return Pages.BOOKS;

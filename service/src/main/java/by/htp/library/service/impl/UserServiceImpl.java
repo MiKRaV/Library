@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 	public List<User> getAllUsersList(int pageNumber, int pageSize) throws ServiceException {
 		List<User> users;
 		try {
-			users = userDAO.getAllUsersList(pageNumber, pageSize);
+			users = userDAO.getAllUsers(pageNumber, pageSize);
 		} catch (DAOException e) {
 			throw new ServiceException(ServiceMessages.USERS_LIST_NOT_RECEIVED);
 		}

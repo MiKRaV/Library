@@ -66,10 +66,8 @@ public class AuthorDAOImpl extends BaseDAOImpl<Author> implements AuthorDAO{
         try {
             author = em.createQuery(criteria).getSingleResult();
         } catch (NoResultException e) {
-            em.clear();
             throw new DAOException(DAOMessages.ERROR_AUTHOR_EXTRACTING);
         }
-        em.clear();
         return author;
     }
 }

@@ -119,9 +119,16 @@ public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO{
 		return update(user);
 	}
 
-	//GETTING A LIST OF ALL USERS
+
+	/**
+	 * GETTING A LIST OF ALL USERS
+	 * @param pageNumber
+	 * @param pageSize
+	 * @return
+	 * @throws DAOException
+	 */
 	@Override
-	public List<User> getAllUsersList(int pageNumber, int pageSize) throws DAOException {
+	public List<User> getAllUsers(int pageNumber, int pageSize) throws DAOException {
 		return findAll(pageNumber, pageSize);
 	}
 

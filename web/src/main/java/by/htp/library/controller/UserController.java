@@ -175,7 +175,6 @@ public class UserController {
     public String findUser(HttpServletRequest request, ModelMap model) {
         String login = request.getParameter(RequestParameters.USER_LOGIN);
         User foundUser = null;
-        String errorMessage = "";
         String command = request.getParameter("command");
         try {
             if (command != null) {
@@ -192,8 +191,7 @@ public class UserController {
             request.getSession().setAttribute(SessionAttributes.FOUND_USER, foundUser);
         } catch (ServiceException e) {
             e.printStackTrace();
-            errorMessage = e.getMessage();
-            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("errorMessage", e.getMessage());
         }
         return Pages.FOUND_USER_DATA;
     }
